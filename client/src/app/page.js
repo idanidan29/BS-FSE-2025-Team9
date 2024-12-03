@@ -15,7 +15,7 @@ export default function Home() {
                 />
             </div>
 
-            <div className="bg-[#fff] rounded-2xl box-border h-[450px] w-[520px]">
+            <div className="bg-[#fff] rounded-2xl box-border h-[450px] p-5 w-[520px]">
                 <div className="text-[#eee] font-sans text-4xl font-semibold mt-8 text-center text-green-500">
                     Sign In
                 </div>
