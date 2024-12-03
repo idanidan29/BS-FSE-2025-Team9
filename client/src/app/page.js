@@ -7,7 +7,7 @@ export default function Home() {
 
         <div className="flex items-center justify-center h-screen bg-[#fff]">
             <div className="bg-[#fff] rounded-2xl box-border h-[450px] p-5 w-[520px]">
-                <div className="text-[#eee] font-sans text-4xl font-semibold mt-8 text-center">Sing In</div>
+                <div className="text-[#eee] font-sans text-4xl font-semibold mt-8 text-center text-green-500">Sing In</div>
 
 
                 <div className="relative w-full mt-10">
@@ -33,9 +33,10 @@ export default function Home() {
                 <button className="bg-green-500 rounded-full border-0 text-[#eee] text-lg h-[50px] mt-9 w-full hover:bg-green-600">
                     Login
                 </button>
-                <button className="bg-[rgb(209,213,219) rounded-xl border-0 text-[#eee] text-lg h-[50px] mt-9 w-full hover:rgb(48 50 69)">
-                    I Dont Have A User
+                <button className="bg-[#fff] text-green-500 rounded-full border border-green-500 text-lg h-[50px] mt-9 w-full hover:bg-green-500 hover:text-white">
+                    I Don’t Have A User
                 </button>
+
             </div>
         </div>
 
