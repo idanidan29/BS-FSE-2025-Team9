@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// MongoDB Atlas Connection - Manually input connection details
+
 const MONGO_URI = 'mongodb+srv://system:NzEo6pKiK9Kq9d9O@filesystem.5cw90.mongodb.net/File_System';
 
 // Connect to MongoDB
@@ -12,9 +12,8 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB Connected to File_System database'))
   .catch(err => console.error('Error connecting to MongoDB:', err));
 
-app.use(express.json());  // Middleware to parse JSON request bodies
+app.use(express.json());  // Middleware
 
-// Define User Model for the 'Users' collection inside the 'File_System' database
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
@@ -40,7 +39,7 @@ app.post('/users', async (req, res) => {
   }
 });
 
-// Route to fetch all users
+// Route to get all users
 app.get('/users', async (req, res) => {
   try {
     const users = await User.find();  // Retrieve all users from 'Users' collection
