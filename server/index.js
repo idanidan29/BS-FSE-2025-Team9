@@ -5,7 +5,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // MongoDB Atlas Connection - Manually input connection details
-const MONGO_URI = 'mongodb+srv://system:<db_password>@filesystem.5cw90.mongodb.net/';  // Replace with your MongoDB Atlas URI
+const MONGO_URI = 'mongodb+srv://idanidan29:K2Nt7H_hvEKr-zd@filesystem.5cw90.mongodb.net/';
 
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB Connected'))
@@ -13,12 +13,12 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 app.use(express.json());  // Middleware to parse JSON request bodies
 
-// Define User Model
+// Define User Model with explicit collection name 'Users'
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true }
-});
+}, { collection: 'Users' });  // Explicitly set collection name to 'Users'
 
 const User = mongoose.model('User', userSchema);
 
@@ -39,14 +39,18 @@ app.post('/users', async (req, res) => {
 });
 
 // Route to fetch all users
+
+// Route to fetch all users
 app.get('/users', async (req, res) => {
   try {
-    const users = await User.find();  // Retrieve all users
-    res.status(200).json(users);
+    const users = await User.find();  // Fetch all users from the Users collection
+    res.status(200).json(users);  // Return users as JSON response
   } catch (err) {
     res.status(400).json({ message: 'Error fetching users', error: err });
   }
 });
+
+
 
 // Route to fetch a user by email
 app.get('/users/:email', async (req, res) => {
@@ -62,4 +66,4 @@ app.get('/users/:email', async (req, res) => {
 });
 
 // Start the server
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`)); 
