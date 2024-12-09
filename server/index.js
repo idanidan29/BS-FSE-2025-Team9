@@ -15,9 +15,12 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 app.use(express.json());  // Middleware
 
 const userSchema = new mongoose.Schema({
-  username: { type: String, required: true },
+  username: { type: String, required: true,unique: true  },
+  first_name: { type: String, required: true },
+  last_name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
+  student_id: { type: Number, required: true ,unique: true}
 });
 
 // The third parameter specifies the collection name in MongoDB ('Users')
@@ -28,10 +31,10 @@ app.get('/', (req, res) => res.send('API is running'));
 
 // Route to create a new user
 app.post('/users', async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username,first_name,last_name, email, password,student_id  } = req.body;
 
   try {
-    const newUser = new User({ username, email, password });
+    const newUser = new User({ username,first_name,last_name, email, password,student_id });
     await newUser.save(); // Save the new user to the 'Users' collection
     res.status(201).json(newUser);  // Respond with the newly created user
   } catch (err) {
