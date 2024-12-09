@@ -1,8 +1,16 @@
+"use client";
 import Image from "next/image";
 import Navbar from "./components/NavBar";
 import Layout from "./components/layout";
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+
+    const router = useRouter();
+    const Navigation = () =>{
+        router.push('/Sign');
+    }
+
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-[#fff]">
             <div className="mb-10"> 
@@ -41,7 +49,7 @@ export default function Home() {
                 <button className="bg-green-500 rounded-full border-0 text-[#eee] text-lg h-[50px] mt-9 w-full hover:bg-green-600">
                     Login
                 </button>
-                <button className="bg-[#fff] text-green-500 rounded-full border border-green-500 text-lg h-[50px] mt-9 w-full hover:bg-green-500 hover:text-white">
+                <button onClick={Navigation} className="bg-[#fff] text-green-500 rounded-full border border-green-500 text-lg h-[50px] mt-9 w-full hover:bg-green-500 hover:text-white">
                     I Don’t Have A User
                 </button>
             </div>
