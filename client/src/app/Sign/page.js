@@ -11,10 +11,10 @@ export default function page() {
     }
     
     const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        studentId: '',
-        userName: '',
+        first_name: '',
+        last_name: '',
+        student_id: '',
+        username: '',
         password: '',
         email: '',
     });
@@ -28,22 +28,22 @@ export default function page() {
     };
 
     const handleSignUp = async () => {
-        const { firstName, lastName, studentId, userName, password, email } = formData;
+        const { first_name, last_name, student_id, username, password, email } = formData;
 
         
-        if (!firstName || !lastName || !studentId || !userName || !password || !email) {
+        if (!first_name || !last_name || !student_id || !username || !password || !email) {
             alert("Please fill in all fields!");
             return;
         }
 
        
         try {
-            const response = await fetch('/api/signup', {
+            const response = await fetch('http://localhost:5000/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ firstName, lastName, studentId, userName, password, email }),
+                body: JSON.stringify({ username,first_name, last_name,email,password,student_id }),
             });
 
             if (response.ok) {
@@ -77,8 +77,8 @@ export default function page() {
 
                 <div className="relative w-full mt-10">
                     <input
-                        id="firstName"
-                        value={formData.firstName}
+                        id="first_name"
+                        value={formData.first_name}
                         onChange={handleChange}
                         className="bg-[#fff] h-[70px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="text"
@@ -88,8 +88,8 @@ export default function page() {
 
                 <div className="relative w-full mt-10">
                     <input
-                        id="lastName"
-                        value={formData.lastName}
+                        id="last_name"
+                        value={formData.last_name}
                         onChange={handleChange}
                         className="bg-[#fff] h-[70px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="text"
@@ -99,8 +99,8 @@ export default function page() {
 
                 <div className="relative w-full mt-10">
                     <input
-                        id="studentId"
-                        value={formData.studentId}
+                        id="student_id"
+                        value={formData.student_id}
                         onChange={handleChange}
                         className="bg-[#fff] h-[70px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="text"
@@ -110,8 +110,8 @@ export default function page() {
 
                 <div className="relative w-full mt-10">
                     <input
-                        id="userName"
-                        value={formData.userName}
+                        id="username"
+                        value={formData.username}
                         onChange={handleChange}
                         className="bg-[#fff] h-[70px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="text"
