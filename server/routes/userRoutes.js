@@ -3,7 +3,7 @@ const User = require('../models/user');  // Import the User model
 
 const router = express.Router();
 
-// Route to create a new user (e.g., for registration)
+// Route to create a new user 
 router.post('/users', async (req, res) => {
   const { username, first_name, last_name, email, password, student_id } = req.body;
 
@@ -19,30 +19,30 @@ router.post('/users', async (req, res) => {
   }
 });
 
-// Route to get a user by email
-router.get('/users/:email', async (req, res) => {
+router.get('/users/:username', async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.params.email });
+
+    const user = await User.findOne({ username: req.params.username });
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
     res.status(200).json(user);
-  } catch (err) {
+  } 
+    catch (err) {
     res.status(400).json({ message: 'Error fetching user', error: err });
   }
 });
 
+
 // Route to get all users
 router.get('/users', async (req, res) => {
   try {
-    const users = await User.find();  // Retrieve all users from the 'Users' collection
+    const users = await User.find();  // return all users
     res.status(200).json(users);
   } catch (err) {
     res.status(400).json({ message: 'Error fetching users', error: err });
   }
 });
-
-
-
 
 module.exports = router;

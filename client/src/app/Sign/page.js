@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-
+import { VscRegex } from "react-icons/vsc";
 export default function page() {
     const router = useRouter();
 
@@ -35,6 +35,11 @@ export default function page() {
             alert("Please fill in all fields!");
             return;
         }
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@.*sce.*\.[a-zA-Z]{2,}$/;
+        if (!emailPattern.test(email)) {
+        alert("Email must contain 'sce'!");
+        return;
+    }
 
        
         try {
@@ -75,7 +80,7 @@ export default function page() {
                     Sign Up
                 </div>
 
-                <div className="relative w-full mt-10">
+                <div className="relative w-full mt-7">
                     <input
                         id="first_name"
                         value={formData.first_name}
@@ -86,7 +91,7 @@ export default function page() {
                     />
                 </div>
 
-                <div className="relative w-full mt-10">
+                <div className="relative w-full mt-7">
                     <input
                         id="last_name"
                         value={formData.last_name}
@@ -97,7 +102,7 @@ export default function page() {
                     />
                 </div>
 
-                <div className="relative w-full mt-10">
+                <div className="relative w-full mt-7">
                     <input
                         id="student_id"
                         value={formData.student_id}
@@ -108,7 +113,7 @@ export default function page() {
                     />
                 </div>
 
-                <div className="relative w-full mt-10">
+                <div className="relative w-full mt-7">
                     <input
                         id="username"
                         value={formData.username}
