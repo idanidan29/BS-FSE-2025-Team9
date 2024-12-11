@@ -2,7 +2,6 @@
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { VscRegex } from "react-icons/vsc";
 export default function page() {
     const router = useRouter();
 

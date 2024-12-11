@@ -25,22 +25,25 @@ export default function Home() {
 
     const handleCheckUser = async () => {
         const { username, password } = formData;
-
+    
         // Validate input
         if (!username || !password) {
             alert("Please fill in both fields!");
             return;
         }
-
+    
         try {
             const response = await fetch(`http://localhost:5000/users/${username}`);
-
+    
             if (response.ok) {
                 const data = await response.json();
+    
                 if (data) {
-                    // Compare password here if necessary (using bcrypt or some other method)
-                    // Redirect to /username if the user exists
-                    router.push(`/${username}`);
+                    if (data.password === password) {
+                        router.push(`/${username}`); //direct to next page
+                    } else {
+                        alert("Incorrect password. Please try again.");
+                    }
                 } else {
                     alert("User does not exist. Please sign up.");
                 }
@@ -51,6 +54,7 @@ export default function Home() {
             alert("An unexpected error occurred. Please try again.");
         }
     };
+    
 
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-[#fff]">

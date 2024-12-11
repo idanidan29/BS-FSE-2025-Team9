@@ -1,7 +1,8 @@
 "use client";
+import { use } from 'react';
 
 export default function Page({ params }) {
-  const { username } = params; // Get the username from the URL parameters
+  const { username } = use(params);
 
   return (
     <div>

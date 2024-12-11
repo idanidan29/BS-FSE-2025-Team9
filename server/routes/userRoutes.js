@@ -1,5 +1,5 @@
 const express = require('express');
-const User = require('../models/user');  // Import the User model
+const User = require('../models/user');  
 
 const router = express.Router();
 
@@ -12,7 +12,6 @@ router.post('/users', async (req, res) => {
     const newUser = new User({ username, first_name, last_name, email, password, student_id });
     await newUser.save();
 
-    // Respond with the newly created user (without the password for security reasons)
     res.status(201).json({ username, first_name, last_name, email, student_id });
   } catch (err) {
     res.status(400).json({ message: 'Error creating user', error: err });
