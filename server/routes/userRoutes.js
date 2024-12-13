@@ -5,15 +5,16 @@ const router = express.Router();
 
 // Route to create a new user (e.g., for registration)
 router.post('/users', async (req, res) => {
-  const { username, first_name, last_name, email, password, student_id } = req.body;
+  const { username, first_name, last_name, email, password, student_id, is_admin } = req.body;
 
   try {
     // Create and save the new user
-    const newUser = new User({ username, first_name, last_name, email, password, student_id });
+    is_admin = false;
+    const newUser = new User({ username, first_name, last_name, email, password, student_id, is_admin });
     await newUser.save();
 
     // Respond with the newly created user (without the password for security reasons)
-    res.status(201).json({ username, first_name, last_name, email, student_id });
+    res.status(201).json({ username, first_name, last_name, email, student_id, is_admin });
   } catch (err) {
     res.status(400).json({ message: 'Error creating user', error: err });
   }
