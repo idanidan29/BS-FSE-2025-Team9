@@ -29,7 +29,7 @@ export default function page() {
     };
 
     const handleSignUp = async () => {
-        const { username,first_name, last_name,email,password,student_id, is_admin } = formData;
+        const { username,first_name, last_name,email,password,student_id } = formData;
 
         
         if (!first_name || !last_name || !student_id || !username || !password || !email) {
@@ -44,7 +44,7 @@ export default function page() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username,first_name, last_name,email,password,student_id, is_admin: false }),
+                body: JSON.stringify({ username,first_name, last_name,email,password,student_id}),
             });
 
             if (response.ok) {
