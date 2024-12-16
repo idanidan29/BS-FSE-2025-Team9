@@ -38,6 +38,12 @@ export default function Page({ params }) {
             alert("Please fill in all fields!");
             return;
         }
+        const carNumberLength = carNumber.length;
+
+        if (carNumberLength !== 7 && carNumberLength !== 8) {
+          alert("Car Number must be exactly 7 or 8 digits!");
+          return;
+      }
 
         try {
             const response = await fetch('localhost:5000/documents', {
@@ -159,7 +165,7 @@ export default function Page({ params }) {
                 <label htmlFor="driversLicense" className="text-lg">Driver's License:</label>
                     <input
                         id="driversLicense"
-                        value={formData.carNumber}
+                        //value={formData.carNumber}//
                         onChange={handleChange}
                         className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="file"
