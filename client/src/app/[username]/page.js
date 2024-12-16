@@ -21,6 +21,35 @@ export default function Page({ params }) {
         carType: '',
         carNumber: ''
     });
+    // Function to validate Israeli ID number
+const isValidId = (id) => {
+  // Remove any non-digit characters from the ID
+  id = id.replace(/\D/g, '');
+
+  // Check if the ID length is exactly 9 digits
+  if (id.length !== 9) {
+      return false; // Invalid ID length
+  }
+
+  // Convert ID string into an array of digits
+  const digits = id.split('').map(Number);
+  
+  // Calculate the checksum using the algorithm
+  const checksum = digits.reduce((sum, digit, index) => {
+      // Double every second digit from the right (index 1, 3, 5, 7)
+      if (index % 2 === 1) {
+          digit *= 2;
+          // If doubling results in a number greater than 9, subtract 9
+          if (digit > 9) {
+              digit -= 9;
+          }
+      }
+      return sum + digit; // Accumulate the sum
+  }, 0);
+  
+  // The ID is valid if the checksum modulo 10 is 0
+  return checksum % 10 === 0;
+};
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -44,6 +73,11 @@ export default function Page({ params }) {
           alert("Car Number must be exactly 7 or 8 digits!");
           return;
       }
+      if (!isValidId(idNumber)) {
+        alert ("ID NOT VALID!");
+        return;
+      }
+      
 
         try {
             const response = await fetch('localhost:5000/documents', {
