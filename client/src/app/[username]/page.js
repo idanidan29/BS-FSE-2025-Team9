@@ -51,7 +51,13 @@ const isValidId = (id) => {
     };
 
     const handleSignUp = async () => {
-        const { first_name, last_name, email, student_id, phone_number, Study_Department, car_type, car_number } = formData;
+        const { first_name, last_name, email, student_id, phone_number, Study_Department, car_type, car_number } = {
+            ...formData,
+            student_id: Number(formData.student_id),   // Convert student_id to a number
+            phone_number: Number(formData.phone_number), // Convert phone_number to a number
+            car_number: Number(formData.car_number)   // Convert car_number to a number
+        };
+    
         
 
         // Validation check
@@ -61,14 +67,12 @@ const isValidId = (id) => {
         }
         const carNumberLength = car_number.length;
 
-        if (carNumberLength !== 7 && carNumberLength !== 8) {
-          alert("Car Number must be exactly 7 or 8 digits!");
-          return;
-      }
-      if (!isValidId(student_id)) {
-        alert ("ID NOT VALID!");
-        return;
-      }
+        //if (carNumberLength !== 7 && carNumberLength !== 8) {
+          //alert("Car Number must be exactly 7 or 8 digits!");
+          //return;}
+      //if (!isValidId(student_id)) {
+      //  alert ("ID NOT VALID!");
+      //  return;}
       
 
         try {
@@ -78,11 +82,11 @@ const isValidId = (id) => {
                     'Content-Type': 'application/json',
                 },
                 // Sending the entire form data object
-                body: JSON.stringify(formData),
+                body: JSON.stringify({ first_name, last_name, email, student_id, phone_number, Study_Department, car_type, car_number }),
             });
 
             if (response.ok) {
-                alert('Sign-up successful!');
+                alert('document uplouded successful!');
                 router.push('/');  
             } else {
                 const error = await response.json();

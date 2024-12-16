@@ -4,12 +4,12 @@ const mongoose = require('mongoose');
 const DocumentSchema = new mongoose.Schema({
   first_name: { type: String, required: true },
   last_name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  student_id: { type: Number, required: true, unique: true },
+  email: { type: String, required: true},
+  student_id: { type: Number, required: true },
   phone_number: { type: Number, required: true },
   Study_Department:{ type: String, required: true},
   car_type: { type: String, required: true },
-  car_number: { type: Number, required: true, unique: true }
+  car_number: { type: Number, required: true }
 });
 
 // Create a model from the schema
