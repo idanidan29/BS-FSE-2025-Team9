@@ -7,8 +7,8 @@ const DocumentSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   student_id: { type: Number, required: true, unique: true },
   phon_number: { type: Number, required: true, unique: true },
-  Study_Department:{ type: Number, required: true, unique: true },
-  car_type: { type: Number, required: true, unique: true },
+  Study_Department:{ type: String, required: true, unique: true },
+  car_type: { type: String, required: true, unique: true },
   car_number: { type: Number, required: true, unique: true }
 });
 
