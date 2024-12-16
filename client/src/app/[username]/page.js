@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function Page({ params }) {
+
   const router = useRouter();
 
     const Navigation = () => {
@@ -39,7 +40,7 @@ export default function Page({ params }) {
         }
 
         try {
-            const response = await fetch('/api/submit-form', {
+            const response = await fetch('localhost:5000/documents', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -62,114 +63,115 @@ export default function Page({ params }) {
 
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-[#fff] rtl">
-            <div className="bg-[#fff] rounded-2xl box-border h-auto p-5 w-[520px]">
-                <div className="text-[#eee] font-sans text-4xl font-semibold mt-8 text-center text-green-500">
-                    טופס רישום
+<div className="bg-[#fff] rounded-2xl box-border min-h-[600px] p-5 w-[520px]">
+<div className="text-[#eee] font-sans text-4xl font-semibold mt-8 text-center text-green-500">
+                   Application Form 
                 </div>
 
-                <div className="relative w-full mt-10">
+                <div className="relative w-full mt-4">
                     <input
                         id="firstName"
                         value={formData.firstName}
                         onChange={handleChange}
-                        className="bg-[#fff] h-[70px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+                        className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="text"
-                        placeholder="שם פרטי"
+                        placeholder="First Name"
                     />
                 </div>
 
-                <div className="relative w-full mt-10">
+                <div className="relative w-full mt-4">
                     <input
                         id="lastName"
                         value={formData.lastName}
                         onChange={handleChange}
-                        className="bg-[#fff] h-[70px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+                        className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="text"
-                        placeholder="שם משפחה"
+                        placeholder="Last name"
                     />
                 </div>
 
-                <div className="relative w-full mt-10">
+                <div className="relative w-full mt-4">
                     <input
                         id="idNumber"
                         value={formData.idNumber}
                         onChange={handleChange}
-                        className="bg-[#fff] h-[70px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+                        className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="text"
-                        placeholder="תעודת זהות"
+                        placeholder="ID"
                     />
                 </div>
 
-                <div className="relative w-full mt-10">
+                <div className="relative w-full mt-4">
                     <input
                         id="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className="bg-[#fff] h-[70px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+                        className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="email"
-                        placeholder="כתובת מייל"
+                        placeholder="Email"
                     />
                 </div>
 
-                <div className="relative w-full mt-10">
+                <div className="relative w-full mt-4">
                     <input
                         id="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className="bg-[#fff] h-[70px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+                        className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="tel"
-                        placeholder="פלאפון נייד"
+                        placeholder="Phone Number"
                     />
                 </div>
 
-                <div className="relative w-full mt-10">
+                <div className="relative w-full mt-4">
                     <input
                         id="department"
                         value={formData.department}
                         onChange={handleChange}
-                        className="bg-[#fff] h-[70px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+                        className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="text"
-                        placeholder="מחלקה"
+                        placeholder="Department"
                     />
                 </div>
 
-                <div className="relative w-full mt-10">
+                <div className="relative w-full mt-4">
                     <input
                         id="carType"
                         value={formData.carType}
                         onChange={handleChange}
-                        className="bg-[#fff] h-[70px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+                        className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="text"
-                        placeholder="סוג רכב"
+                        placeholder="Car Type"
                     />
                 </div>
 
-                <div className="relative w-full mt-10">
+                <div className="relative w-full mt-4">
                     <input
                         id="carNumber"
                         value={formData.carNumber}
                         onChange={handleChange}
-                        className="bg-[#fff] h-[70px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+                        className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="text"
-                        placeholder="מספר הרכב"
+                        placeholder="Car Number"
                     />
                 </div>
-                <div className="relative w-full mt-10">
+                <div className="relative w-full mt-4">
+                <label htmlFor="driversLicense" className="text-lg">Driver's License:</label>
                     <input
-                        id="driverlicenc"
+                        id="driversLicense"
                         value={formData.carNumber}
                         onChange={handleChange}
-                        className="bg-[#fff] h-[70px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+                        className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="file"
-                        placeholder="driver licnc"
+                        placeholder="Driver's License"
                     />
                 </div>
 
                 <button onClick={handleSignUp} className="bg-green-500 rounded-full border-0 text-[#eee] text-lg h-[50px] mt-9 w-full hover:bg-green-600">
                     Send
                 </button>
-                <button onClick={Navigation} className="bg-[#fff] text-green-500 rounded-full border border-green-500 text-lg h-[50px] mt-9 w-full hover:bg-green-500 hover:text-white">
-                    חזרה
+                <button onClick={Navigation} className="bg-[#fff] text-green-500 rounded-full border border-green-500 text-lg h-[50px] mt-5 w-full hover:bg-green-500 hover:text-white">
+                    back
                 </button>
             </div>
         </div>
