@@ -31,7 +31,7 @@ export default function Page({ params }) {
     };
 
     const handleSignUp = async () => {
-        const { firstName, lastName, idNumber, email, phone, department, carType, carNumber } = formData;
+        const { firstName, lastName,email, idNumber, phone, department, carType, carNumber } = formData;
 
         // Validation check
         if (!firstName || !lastName || !idNumber || !email || !phone || !department || !carType || !carNumber) {
@@ -159,7 +159,7 @@ export default function Page({ params }) {
                 <label htmlFor="driversLicense" className="text-lg">Driver's License:</label>
                     <input
                         id="driversLicense"
-                        value={formData.carNumber}
+                        
                         onChange={handleChange}
                         className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="file"
