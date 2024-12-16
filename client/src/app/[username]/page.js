@@ -12,42 +12,33 @@ export default function Page({ params }) {
     }
    
     const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        idNumber: '',
+        first_name: '',
+        last_name: '',
         email: '',
-        phone: '',
-        department: '',
-        carType: '',
-        carNumber: ''
+        student_id: '',
+        phone_number: '',
+        Study_Department: '',
+        car_type: '',
+        car_number: ''
     });
-    // Function to validate Israeli ID number
-const isValidId = (id) => {
-  // Remove any non-digit characters from the ID
-  id = id.replace(/\D/g, '');
 
-  // Check if the ID length is exactly 9 digits
+const isValidId = (id) => {
+  id = id.replace(/\D/g, '');
   if (id.length !== 9) {
       return false; // Invalid ID length
   }
 
-  // Convert ID string into an array of digits
   const digits = id.split('').map(Number);
-  
-  // Calculate the checksum using the algorithm
   const checksum = digits.reduce((sum, digit, index) => {
-      // Double every second digit from the right (index 1, 3, 5, 7)
       if (index % 2 === 1) {
           digit *= 2;
-          // If doubling results in a number greater than 9, subtract 9
           if (digit > 9) {
               digit -= 9;
           }
       }
-      return sum + digit; // Accumulate the sum
+      return sum + digit; 
   }, 0);
   
-  // The ID is valid if the checksum modulo 10 is 0
   return checksum % 10 === 0;
 };
 
@@ -60,27 +51,28 @@ const isValidId = (id) => {
     };
 
     const handleSignUp = async () => {
-        const { firstName, lastName,email, idNumber, phone, department, carType, carNumber } = formData;
+        const { first_name, last_name, email, student_id, phone_number, Study_Department, car_type, car_number } = formData;
+        
 
         // Validation check
-        if (!firstName || !lastName || !idNumber || !email || !phone || !department || !carType || !carNumber) {
+        if (!first_name || !last_name || !student_id || !email || !phone_number || !Study_Department || !car_type || !car_number) {
             alert("Please fill in all fields!");
             return;
         }
-        const carNumberLength = carNumber.length;
+        const carNumberLength = car_number.length;
 
         if (carNumberLength !== 7 && carNumberLength !== 8) {
           alert("Car Number must be exactly 7 or 8 digits!");
           return;
       }
-      if (!isValidId(idNumber)) {
+      if (!isValidId(student_id)) {
         alert ("ID NOT VALID!");
         return;
       }
       
 
         try {
-            const response = await fetch('localhost:5000/documents', {
+            const response = await fetch('http://localhost:5000/documents', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -110,8 +102,8 @@ const isValidId = (id) => {
 
                 <div className="relative w-full mt-4">
                     <input
-                        id="firstName"
-                        value={formData.firstName}
+                        id="first_name"
+                        value={formData.first_name}
                         onChange={handleChange}
                         className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="text"
@@ -121,8 +113,8 @@ const isValidId = (id) => {
 
                 <div className="relative w-full mt-4">
                     <input
-                        id="lastName"
-                        value={formData.lastName}
+                        id="last_name"
+                        value={formData.last_name}
                         onChange={handleChange}
                         className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="text"
@@ -132,8 +124,8 @@ const isValidId = (id) => {
 
                 <div className="relative w-full mt-4">
                     <input
-                        id="idNumber"
-                        value={formData.idNumber}
+                        id="student_id"
+                        value={formData.student_id}
                         onChange={handleChange}
                         className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="text"
@@ -154,19 +146,19 @@ const isValidId = (id) => {
 
                 <div className="relative w-full mt-4">
                     <input
-                        id="phone"
-                        value={formData.phone}
+                        id="phone_number"
+                        value={formData.phone_number}
                         onChange={handleChange}
                         className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
-                        type="tel"
+                        type="text"
                         placeholder="Phone Number"
                     />
                 </div>
 
                 <div className="relative w-full mt-4">
                     <input
-                        id="department"
-                        value={formData.department}
+                        id="Study_Department"
+                        value={formData.Study_Department}
                         onChange={handleChange}
                         className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="text"
@@ -176,8 +168,8 @@ const isValidId = (id) => {
 
                 <div className="relative w-full mt-4">
                     <input
-                        id="carType"
-                        value={formData.carType}
+                        id="car_type"
+                        value={formData.car_type}
                         onChange={handleChange}
                         className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="text"
@@ -187,8 +179,8 @@ const isValidId = (id) => {
 
                 <div className="relative w-full mt-4">
                     <input
-                        id="carNumber"
-                        value={formData.carNumber}
+                        id="car_number"
+                        value={formData.car_number}
                         onChange={handleChange}
                         className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="text"

@@ -1,23 +1,24 @@
 const express = require('express');
-const Document = require('../models/Document');  // Import the User model
+const Document = require('../models/Document'); 
 
 const router = express.Router();
 
 // Route to create a new document (e.g., for registration)
 router.post('/documents', async (req, res) => {
-  const { first_name, last_name, email, student_id, phon_number, Study_Department, car_type, car_number } = req.body;
+  const { first_name, last_name, email, student_id, phone_number, Study_Department, car_type, car_number } = req.body;
 
   try {
     // Create and save the new document
-    const newDocument = new Document({ first_name, last_name, email, student_id, phon_number, Study_Department, car_type, car_number });
+    const newDocument = new Document({ first_name, last_name, email, student_id, phone_number, Study_Department, car_type, car_number });
     await newDocument.save();
 
     // Respond with the newly created user (without the password for security reasons)
-    res.status(201).json({ first_name, last_name, email, student_id, phon_number, Study_Department, car_type, car_number });
+    res.status(201).json({ first_name, last_name, email, student_id, phone_number, Study_Department, car_type, car_number });
   } catch (err) {
-    res.status(400).json({ message: 'Error creating user', error: err });
+    res.status(400).json({ message: 'Error creating document', error: err });
   }
 });
+
 
 // Route to get a user by email
 router.get('/documents/:student_id', async (req, res) => {
