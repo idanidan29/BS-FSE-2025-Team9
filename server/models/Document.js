@@ -13,5 +13,5 @@ const DocumentSchema = new mongoose.Schema({
 });
 
 // Create a model from the schema
-const User = mongoose.model('Document', userSchema, 'Documents');
+const Document = mongoose.model('Document', DocumentSchema, 'Documents');
 module.exports = Document;

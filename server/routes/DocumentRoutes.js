@@ -20,9 +20,9 @@ router.post('/documents', async (req, res) => {
 });
 
 // Route to get a user by email
-router.get('/documents/:email', async (req, res) => {
+router.get('/documents/:student_id', async (req, res) => {
   try {
-    const document = await Document.findOne({ email: req.params.email });
+    const document = await Document.findOne({ student_id: req.params.student_id });
     if (!document) {
       return res.status(404).json({ message: 'Document not found' });
     }
