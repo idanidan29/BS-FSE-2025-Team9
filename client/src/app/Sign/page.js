@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+
 export default function page() {
     const router = useRouter();
 
@@ -28,27 +29,20 @@ export default function page() {
     };
 
     const handleSignUp = async () => {
-        const { username,first_name, last_name,email,password,student_id } = formData;
+        const { username, first_name, last_name, email, password, student_id } = formData;
 
-        
         if (!first_name || !last_name || !student_id || !username || !password || !email) {
             alert("Please fill in all fields!");
             return;
         }
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@.*sce.*\.[a-zA-Z]{2,}$/;
-        if (!emailPattern.test(email)) {
-        alert("Email must contain 'sce'!");
-        return;
-    }
 
-       
         try {
             const response = await fetch('http://localhost:5000/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username,first_name, last_name,email,password,student_id}),
+                body: JSON.stringify({ username, first_name, last_name, email, password, student_id }),
             });
 
             if (response.ok) {
@@ -153,6 +147,6 @@ export default function page() {
                     Login
                 </button>
             </div>
-        </div>
-    );
+        </div>
+    );
 }
