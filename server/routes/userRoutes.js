@@ -9,6 +9,7 @@ router.post('/users', async (req, res) => {
 
   try {
     // Create and save the new user
+    is_admin = false;
     const newUser = new User({ username, first_name, last_name, email, password, student_id });
     await newUser.save();
 

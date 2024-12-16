@@ -9,7 +9,7 @@ const app = express();
 const PORT = 5000;
 const MONGO_URI = 'mongodb+srv://system:NzEo6pKiK9Kq9d9O@filesystem.5cw90.mongodb.net/File_System';
 app.use(cors({
-  origin: 'http://localhost:3000', // Allow requests only from the frontend
+  origin: '*'  // Allow all origins
 }));
 // Connect to MongoDB
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
