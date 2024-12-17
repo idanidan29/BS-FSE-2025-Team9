@@ -1,5 +1,5 @@
 "use client";
-
+import NavBar from '../components/NavBar';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -99,10 +99,12 @@ const isValidId = (id) => {
 
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-[#fff] rtl">
+             <NavBar />
 <div className="bg-[#fff] rounded-2xl box-border min-h-[600px] p-5 w-[520px]">
 <div className="text-[#eee] font-sans text-4xl font-semibold mt-8 text-center text-green-500">
                    Application Form 
                 </div>
+
 
                 <div className="relative w-full mt-4">
                     <input
