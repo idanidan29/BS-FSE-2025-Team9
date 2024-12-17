@@ -67,12 +67,12 @@ const isValidId = (id) => {
         }
         const carNumberLength = car_number.length;
 
-        //if (carNumberLength !== 7 && carNumberLength !== 8) {
-          //alert("Car Number must be exactly 7 or 8 digits!");
-          //return;}
-      //if (!isValidId(student_id)) {
-      //  alert ("ID NOT VALID!");
-      //  return;}
+        if (carNumberLength !== 7 && carNumberLength !== 8) {
+          alert("Car Number must be exactly 7 or 8 digits!");
+          return;}
+      if (!isValidId(student_id)) {
+        alert ("ID NOT VALID!");
+        return;}
       
 
         try {
