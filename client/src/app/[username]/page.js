@@ -1,11 +1,27 @@
 "use client";
 import NavBar from '../components/NavBar';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Page({ params }) {
 
     const router = useRouter();
+
+    const [isAuthorized, setIsAuthorized] = useState(false);
+
+    // Load and compare the username from localStorage with params
+    useEffect(() => {
+        (async () => {
+            const userLoggedIn = localStorage.getItem('username');
+            const resolvedParams = await params;
+            if (userLoggedIn === resolvedParams.username) {
+                setIsAuthorized(true);
+            } else {
+                router.push('/'); // Redirect to login if not authorized
+            }
+        })();
+    }, [params, router]);
+
 
     const Navigation = () => {
         router.push('/');
@@ -103,6 +119,7 @@ export default function Page({ params }) {
         <div className="flex flex-col items-center justify-center h-screen bg-[#fff] rtl">
             <NavBar />
             <div className="bg-[#fff] rounded-2xl box-border min-h-[600px] p-5 w-[520px]">
+            
                 <div className="text-[#eee] font-sans text-4xl font-semibold mt-8 text-center text-green-500">
                     Application Form
                 </div>
