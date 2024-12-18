@@ -9,14 +9,15 @@ import { FaFileDownload } from "react-icons/fa";
 import { FaChartSimple } from "react-icons/fa6";
 import { FaSignOutAlt } from "react-icons/fa";
 
-const Navbar = () => {
+const Navbar = ({ children }) => {
     const [isOpen, setIsOpen] = useState(false);
+    
 
     const sideList = [
         {
-            icon: <VscAccount className="text-2xl mr-2" />,
-            title: "Sign In",
-            path: "/Sign",
+            icon: <FaRegFilePowerpoint className="text-2xl mr-2" />,
+            title: "Parking File",
+            path: "/",
         },
         {
             icon: <FaFileDownload  className="text-2xl mr-2" />,
@@ -29,23 +30,15 @@ const Navbar = () => {
             path: "/Data",
         },
         {
-            icon: <FaSignOutAlt   className="text-2xl mr-2" />,
-            title: "Sing Out",
-            path: "/Out",
-        }
+            //icon: <FaSignOutAlt   className="text-2xl mr-2" />,
+            title: "",
+            path: "",
+        },
+        
     ];
 
     const navList = [
-        {
-            icon: <FaRegFilePowerpoint className="text-2xl mr-2" />,
-            title: "Parking File",
-            path: "/",
-        },
-        {
-            icon: <FaRegUser className="text-2xl mr-2" />,
-            title: "Sign In",
-            path: "/Sign",
-        },
+        
     ];
 
     const handleDrawer = () => {
@@ -80,7 +73,7 @@ const Navbar = () => {
                 </button>
 
                 <img
-                    src="/images/SCE_logo.png"
+                    src="/SCE_logo.png"
                     alt="Logo"
                     className="h-auto w-24"
                 />
@@ -120,7 +113,7 @@ const Navbar = () => {
             >
                 <span className="flex w-full items-center p-4 border-b border-gray-700">
                     <img
-                        src="/images/SCE_logo.png"
+                        src="/SCE_logo.png"
                         alt="Logo"
                         className="h-auto w-32 mx-auto"
                     />
@@ -135,6 +128,7 @@ const Navbar = () => {
                     );
                 })}
             </aside>
+            <div>{children}</div>
         </nav>
     );
 };
