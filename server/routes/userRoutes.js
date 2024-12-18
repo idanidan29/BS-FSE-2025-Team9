@@ -1,5 +1,4 @@
 const express = require('express');
-//const bcrypt = require('bcrypt'); // For password hashing
 const User = require('../models/user');
 
 const router = express.Router();
@@ -52,28 +51,22 @@ router.get('/users', async (req, res) => {
   }
 });
 
-// Route to get a specific user by username
-router.get('/users/:username', async (req, res) => {
+// Route to log in and get a specific user by username
+router.post('/users/login', async (req, res) => {
   try {
-    // Extract password from the request body
-    const { password } = req.body;
+    const { username, password } = req.body;
 
-    // Find the user in the database by their username
-    const user = await User.findOne({ username: req.params.username });
+    const user = await User.findOne({ username });
 
-    // If the user is not found, return a 404 error
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Compare the provided password with the stored password
-    // If the password doesn't match, return a 401 Unauthorized error
+    // Check if the password matches
     if (user.password !== password) {
       return res.status(401).json({ message: 'Invalid password' });
     }
 
-    // If authentication is successful, return the user's details
-    // We exclude the password from the response
     const { password: _, ...userDetails } = user.toObject(); // Removing the password from the response
     res.status(200).json(userDetails); // Send the user's details without the password
   } catch (err) {
@@ -81,6 +74,5 @@ router.get('/users/:username', async (req, res) => {
     res.status(400).json({ message: 'Error fetching user', error: err });
   }
 });
-
 
 module.exports = router;

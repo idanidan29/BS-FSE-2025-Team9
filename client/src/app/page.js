@@ -33,26 +33,34 @@ export default function Home() {
         }
     
         try {
-            const response = await fetch(`http://localhost:5000/users/${username}`);
-    
+            const response = await fetch("http://localhost:5000/users/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, password }),
+            });
+        
             if (response.ok) {
                 const data = await response.json();
-    
+        
                 if (data) {
-                    if (data.password === password) {
-                        router.push(`/${username}`); //direct to next page
-                    } else {
-                        alert("Incorrect password. Please try again.");
-                    }
+                    // Store the username in localStorage or context
+                    localStorage.setItem("username", username);
+        
+                    // Direct to the user's page after successful login
+                    router.push(`/${username}`);
                 } else {
                     alert("User does not exist. Please sign up.");
                 }
             } else {
-                alert("Failed to connect to the server. Please try again later.");
+                const errorData = await response.json();
+                alert(errorData.message || "Failed to connect to the server. Please try again later.");
             }
         } catch (err) {
             alert("An unexpected error occurred. Please try again.");
         }
+        
     };
     
 

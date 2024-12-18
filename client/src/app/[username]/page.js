@@ -5,12 +5,12 @@ import { useState } from 'react';
 
 export default function Page({ params }) {
 
-  const router = useRouter();
+    const router = useRouter();
 
     const Navigation = () => {
         router.push('/');
     }
-   
+
     const [formData, setFormData] = useState({
         first_name: '',
         last_name: '',
@@ -22,25 +22,25 @@ export default function Page({ params }) {
         car_number: ''
     });
 
-const isValidId = (id) => {
-  id = id.replace(/\D/g, '');
-  if (id.length !== 9) {
-      return false; // Invalid ID length
-  }
+    const isValidId = (id) => {
+        id = id.replace(/\D/g, '');
+        if (id.length !== 9) {
+            return false; // Invalid ID length
+        }
 
-  const digits = id.split('').map(Number);
-  const checksum = digits.reduce((sum, digit, index) => {
-      if (index % 2 === 1) {
-          digit *= 2;
-          if (digit > 9) {
-              digit -= 9;
-          }
-      }
-      return sum + digit; 
-  }, 0);
-  
-  return checksum % 10 === 0;
-};
+        const digits = id.split('').map(Number);
+        const checksum = digits.reduce((sum, digit, index) => {
+            if (index % 2 === 1) {
+                digit *= 2;
+                if (digit > 9) {
+                    digit -= 9;
+                }
+            }
+            return sum + digit;
+        }, 0);
+
+        return checksum % 10 === 0;
+    };
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -53,12 +53,12 @@ const isValidId = (id) => {
     const handleSignUp = async () => {
         const { first_name, last_name, email, student_id, phone_number, Study_Department, car_type, car_number } = {
             ...formData,
-            student_id: Number(formData.student_id),   // Convert student_id to a number
-            phone_number: Number(formData.phone_number), // Convert phone_number to a number
-            car_number: Number(formData.car_number)   // Convert car_number to a number
+            student_id: Number(formData.student_id),   
+            phone_number: Number(formData.phone_number), 
+            car_number: Number(formData.car_number)  
         };
-    
-        
+
+
 
         // Validation check
         if (!first_name || !last_name || !student_id || !email || !phone_number || !Study_Department || !car_type || !car_number) {
@@ -68,12 +68,14 @@ const isValidId = (id) => {
         const carNumberLength = car_number.length;
 
         if (carNumberLength !== 7 && carNumberLength !== 8) {
-          alert("Car Number must be exactly 7 or 8 digits!");
-          return;}
-      if (!isValidId(student_id)) {
-        alert ("ID NOT VALID!");
-        return;}
-      
+            alert("Car Number must be exactly 7 or 8 digits!");
+            return;
+        }
+        if (!isValidId(student_id)) {
+            alert("ID NOT VALID!");
+            return;
+        }
+
 
         try {
             const response = await fetch('http://localhost:5000/documents', {
@@ -87,7 +89,7 @@ const isValidId = (id) => {
 
             if (response.ok) {
                 alert('document uplouded successful!');
-                router.push('/');  
+                router.push('/');
             } else {
                 const error = await response.json();
                 alert(`Error: ${error.message}`);
@@ -99,10 +101,10 @@ const isValidId = (id) => {
 
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-[#fff] rtl">
-             <NavBar />
-<div className="bg-[#fff] rounded-2xl box-border min-h-[600px] p-5 w-[520px]">
-<div className="text-[#eee] font-sans text-4xl font-semibold mt-8 text-center text-green-500">
-                   Application Form 
+            <NavBar />
+            <div className="bg-[#fff] rounded-2xl box-border min-h-[600px] p-5 w-[520px]">
+                <div className="text-[#eee] font-sans text-4xl font-semibold mt-8 text-center text-green-500">
+                    Application Form
                 </div>
 
 
@@ -194,9 +196,9 @@ const isValidId = (id) => {
                     />
                 </div>
                 <div className="relative w-full mt-4">
-                <label htmlFor="driversLicense" className="text-lg">Driver's License:</label>
+                    <label htmlFor="driversLicense" className="text-lg">Driver's License:</label>
                     <input
-                        id="driversLicense"       
+                        id="driversLicense"
                         onChange={handleChange}
                         className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
                         type="file"
