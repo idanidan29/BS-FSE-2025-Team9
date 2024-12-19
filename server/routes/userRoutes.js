@@ -38,6 +38,28 @@ router.post('/users', async (req, res) => {
   }
 });
 
+router.post('/users/login', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Check if the password matches
+    if (user.password !== password) {
+      return res.status(401).json({ message: 'Invalid password' });
+    }
+
+    const { password: _, ...userDetails } = user.toObject(); // Removing the password from the response
+    res.status(200).json(userDetails); // Send the user's details without the password
+  } catch (err) {
+    // If there is any error, return a 400 Bad Request with the error details
+    res.status(400).json({ message: 'Error fetching user', error: err });
+  }
+});
 
 // Route to get all users
 router.get('/users', async (req, res) => {
