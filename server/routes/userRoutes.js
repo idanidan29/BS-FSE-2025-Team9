@@ -1,5 +1,9 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const User = require('../models/user');
+
+
+
 
 const router = express.Router();
 
@@ -74,5 +78,21 @@ router.post('/users/login', async (req, res) => {
     res.status(400).json({ message: 'Error fetching user', error: err });
   }
 });
+
+
+router.delete('/users/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+      const result = await User.findOneAndDelete({ student_id: id });
+      if (!result) {
+          return res.status(404).json({ message: 'User not found' });
+      }
+      res.status(200).json({ message: 'User deleted successfully', user: result });
+  } catch (error) {
+      res.status(400).json({ message: 'Error deleting user', error: error.message });
+  }
+});
+
+
 
 module.exports = router;
