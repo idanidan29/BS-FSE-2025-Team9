@@ -43,5 +43,27 @@ router.get('/documents', async (req, res) => {
   }
 });
 
+router.put('/documents/:student_id', async (req, res) => {
+  try {
+    const { student_id } = req.params;
+    const updatedData = req.body; // Data to update
+
+    // Find and update the document by student_id
+    const updatedDocument = await Document.findOneAndUpdate(
+      { student_id },
+      { $set: updatedData },
+      { new: true, runValidators: true } // Return the updated document and validate input
+    );
+
+    if (!updatedDocument) {
+      return res.status(404).json({ message: 'Document not found' });
+    }
+
+    res.status(200).json(updatedDocument);
+  } catch (err) {
+    res.status(400).json({ message: 'Error updating document', error: err });
+  }
+});
+
 
 module.exports = router;

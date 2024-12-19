@@ -8,18 +8,15 @@ router.post('/users', async (req, res) => {
   const { username, first_name, last_name, email, password, student_id, is_admin } = req.body;
 
   try {
-    // Basic validation to ensure all required fields are provided
     if (!username || !email || !password || !student_id) {
       return res.status(400).json({ message: 'All fields are required.' });
     }
 
-    // Check if the username already exists in the database
     const existingUser = await User.findOne({ username });
     if (existingUser) {
       return res.status(400).json({ message: 'Username already exists.' });
     }
 
-    // Create and save the new user
     const newUser = new User({
       username,
       first_name,
@@ -27,36 +24,33 @@ router.post('/users', async (req, res) => {
       email,
       password,
       student_id,
-      is_admin: is_admin || false,  // הגדרת ברירת מחדל אם לא נשלח is_admin
+      is_admin: is_admin || false,
     });
     await newUser.save();
 
-    // Respond with the newly created user's details (excluding the password)
     res.status(201).json({ username, first_name, last_name, email, student_id, is_admin });
   } catch (err) {
     res.status(400).json({ message: 'Error creating user', error: err });
   }
 });
 
+// Route to log in a user
 router.post('/users/login', async (req, res) => {
   try {
     const { username, password } = req.body;
-
     const user = await User.findOne({ username });
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Check if the password matches
     if (user.password !== password) {
       return res.status(401).json({ message: 'Invalid password' });
     }
 
-    const { password: _, ...userDetails } = user.toObject(); // Removing the password from the response
-    res.status(200).json(userDetails); // Send the user's details without the password
+    const { password: _, ...userDetails } = user.toObject();
+    res.status(200).json(userDetails);
   } catch (err) {
-    // If there is any error, return a 400 Bad Request with the error details
     res.status(400).json({ message: 'Error fetching user', error: err });
   }
 });
@@ -64,7 +58,6 @@ router.post('/users/login', async (req, res) => {
 // Route to get all users
 router.get('/users', async (req, res) => {
   try {
-    // Retrieve all users from the database
     const users = await User.find();
     res.status(200).json(users);
   } catch (err) {
@@ -72,35 +65,44 @@ router.get('/users', async (req, res) => {
   }
 });
 
-// Route to get a specific user by username
+// Route to get a user by username
 router.get('/users/:username', async (req, res) => {
   try {
-    // Extract password from the request body
-    const { password } = req.body;
-
-    // Find the user in the database by their username
     const user = await User.findOne({ username: req.params.username });
 
-    // If the user is not found, return a 404 error
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Compare the provided password with the stored password
-    // If the password doesn't match, return a 401 Unauthorized error
-    if (user.password !== password) {
-      return res.status(401).json({ message: 'Invalid password' });
-    }
-
-    // If authentication is successful, return the user's details
-    // We exclude the password from the response
-    const { password: _, ...userDetails } = user.toObject(); // Removing the password from the response
-    res.status(200).json(userDetails); // Send the user's details without the password
+    const { password, ...userDetails } = user.toObject();
+    res.status(200).json(userDetails);
   } catch (err) {
-    // If there is any error, return a 400 Bad Request with the error details
     res.status(400).json({ message: 'Error fetching user', error: err });
   }
 });
 
+// Route to update a user
+router.put('/users/:username', async (req, res) => {
+  try {
+    const { username } = req.params;
+    const { first_name, last_name, email, password, student_id, is_admin } = req.body;
+
+    // Find the user by username and update the provided fields
+    const updatedUser = await User.findOneAndUpdate(
+      { username },
+      { $set: { first_name, last_name, email, password, student_id, is_admin } },
+      { new: true, runValidators: true } // Return the updated document and validate input
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const { password: _, ...userDetails } = updatedUser.toObject();
+    res.status(200).json(userDetails);
+  } catch (err) {
+    res.status(400).json({ message: 'Error updating user', error: err });
+  }
+});
 
 module.exports = router;
