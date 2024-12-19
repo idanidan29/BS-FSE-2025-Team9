@@ -5,7 +5,7 @@ const router = express.Router();
 
 // Route to create a new user
 router.post('/users', async (req, res) => {
-  const { username, first_name, last_name, email, password, student_id } = req.body;
+  const { username, first_name, last_name, email, password, student_id, is_admin } = req.body;
 
   try {
     // Basic validation to ensure all required fields are provided
@@ -19,9 +19,6 @@ router.post('/users', async (req, res) => {
       return res.status(400).json({ message: 'Username already exists.' });
     }
 
-    // Hash the password before storing it in the database
-    //const hashedPassword = await bcrypt.hash(password, 10);
-
     // Create and save the new user
     const newUser = new User({
       username,
@@ -30,15 +27,17 @@ router.post('/users', async (req, res) => {
       email,
       password,
       student_id,
+      is_admin: is_admin || false,  // הגדרת ברירת מחדל אם לא נשלח is_admin
     });
     await newUser.save();
 
     // Respond with the newly created user's details (excluding the password)
-    res.status(201).json({ username, first_name, last_name, email, student_id });
+    res.status(201).json({ username, first_name, last_name, email, student_id, is_admin });
   } catch (err) {
     res.status(400).json({ message: 'Error creating user', error: err });
   }
 });
+
 
 // Route to get all users
 router.get('/users', async (req, res) => {
@@ -51,22 +50,28 @@ router.get('/users', async (req, res) => {
   }
 });
 
-// Route to log in and get a specific user by username
-router.post('/users/login', async (req, res) => {
+// Route to get a specific user by username
+router.get('/users/:username', async (req, res) => {
   try {
-    const { username, password } = req.body;
+    // Extract password from the request body
+    const { password } = req.body;
 
-    const user = await User.findOne({ username });
+    // Find the user in the database by their username
+    const user = await User.findOne({ username: req.params.username });
 
+    // If the user is not found, return a 404 error
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Check if the password matches
+    // Compare the provided password with the stored password
+    // If the password doesn't match, return a 401 Unauthorized error
     if (user.password !== password) {
       return res.status(401).json({ message: 'Invalid password' });
     }
 
+    // If authentication is successful, return the user's details
+    // We exclude the password from the response
     const { password: _, ...userDetails } = user.toObject(); // Removing the password from the response
     res.status(200).json(userDetails); // Send the user's details without the password
   } catch (err) {
@@ -74,5 +79,6 @@ router.post('/users/login', async (req, res) => {
     res.status(400).json({ message: 'Error fetching user', error: err });
   }
 });
+
 
 module.exports = router;

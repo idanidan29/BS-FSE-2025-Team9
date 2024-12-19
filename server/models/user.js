@@ -8,8 +8,9 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   student_id: { type: Number, required: true, unique: true },
-  is_admin: {type: String, required: false}
+  is_admin: { type: Boolean, default: false }  // הוספת השדה is_admin
 });
+
 
 // Create a model from the schema
 const User = mongoose.model('User', userSchema, 'Users');
