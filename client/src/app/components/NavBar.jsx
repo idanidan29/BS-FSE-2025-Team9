@@ -1,22 +1,24 @@
-"use client";
-import React, { useEffect, useState } from "react";
+'use client';  // Ensures the component runs on the client-side
+import { useRouter } from 'next/navigation';  // Correct import for useRouter
+import React, { useEffect, useState } from "react";  // Import React and hooks from 'react'
 import Link from "next/link";
 import { FaRegFilePowerpoint } from "react-icons/fa";
-import { FaRegUser } from "react-icons/fa";
-import { VscAccount } from "react-icons/vsc";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaFileDownload } from "react-icons/fa";
 import { FaChartSimple } from "react-icons/fa6";
 import { FaSignOutAlt } from "react-icons/fa";
+import { MdOutlineDeleteForever } from "react-icons/md";
 
-const Navbar = ({ children }) => {
+
+const Navbar = ({ children,userRole }) => {
     const [isOpen, setIsOpen] = useState(false);
-    
+    const router = useRouter();
 
-    const sideList = [
-        {
-            icon: <FaRegFilePowerpoint className="text-2xl mr-2" />,
-            title: "Parking File",
+   
+     const sideList = [
+            {
+             icon: <FaRegFilePowerpoint className="text-2xl mr-2" />,
+             title: "Parking File",
             path: "/",
         },
         {
@@ -27,15 +29,73 @@ const Navbar = ({ children }) => {
         {
             icon: <FaChartSimple  className="text-2xl mr-2" />,
             title: "Data",
-            path: "/Data",
+            path: "/username/serch",
         },
         {
-            //icon: <FaSignOutAlt   className="text-2xl mr-2" />,
-            title: "",
-            path: "",
+            icon: <FaSignOutAlt   className="text-2xl mr-2" />,
+            title: "sign out",
+            path: "/",
+        },
+    ];
+
+    
+
+
+    const handleDeleteAccount = async () => {
+        const userId = children;
+    
+        try {
+            const response = await fetch(`http://localhost:5000/users/${userId}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+            });
+    
+            console.log('Response status:', response.status);
+    
+            if (!response.ok) {
+                const errorDetails = await response.text();
+                console.error('Response error details:', errorDetails);
+                throw new Error('Failed to delete the account.');
+            }
+    
+            alert('Account deleted successfully!');
+            console.log('Redirecting to /Sign');
+            router.push('/Sign');
+        } catch (error) {
+            console.error('Error deleting account:', error.message);
+            alert('Error deleting account.');
+        }
+    };
+    
+
+    const sideListDelete = {
+        icon: <MdOutlineDeleteForever className="text-2xl mr-2" />,
+        title: "Delete Account",
+        onClick: async () => {
+            await handleDeleteAccount(children); // Perform delete
+            console.log('Delete account successful, redirecting to /Sign');
         },
         
-    ];
+    };
+
+    const sideListDeleteAll = {
+        icon: <MdOutlineDeleteForever className="text-2xl mr-2" />,
+        title: "Delete All Accounts",
+        onClick: async () => {
+            router.push('/Sign'); // Redirect after action
+            await handleDeleteAccount(children); // Perform delete
+           
+        },
+    };
+
+
+    const sideListSignoutStudent = {
+        icon: <FaSignOutAlt   className="text-2xl mr-2" />,
+        title: "sign out",
+        path: "/"
+    };
+
+    
 
     const navList = [
         
@@ -106,7 +166,7 @@ const Navbar = ({ children }) => {
                     ></div>
                 </div>
             )}
-
+        {userRole ? (
             <aside
                 className={`transform top-0 left-0 w-64 bg-gray-900 fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 ${isOpen ? "translate-x-0" : "-translate-x-full"
                     }`}
@@ -118,6 +178,7 @@ const Navbar = ({ children }) => {
                         className="h-auto w-32 mx-auto"
                     />
                 </span>
+            
                 {sideList.map(({ icon, title, path }, index) => {
                     return (
                         <Link key={index} href={path} passHref>
@@ -127,10 +188,60 @@ const Navbar = ({ children }) => {
                         </Link>
                     );
                 })}
+                <button
+                        title="Delete Account"
+                        onClick={sideListDelete.onClick} // Attach the delete handler
+                        className="flex items-center p-3 font-medium mr-2 text-center bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:bg-red-700"
+                    >
+                        <span>{sideListDelete.icon}</span> {/* Use the delete icon */}
+                        <span>{sideListDelete.title}</span> {/* Use the delete title */}
+                    </button>
+                    <button
+                        title="Delete All Accounts"
+                        onClick={sideListDelete.onClick} // Attach the delete handler
+                        className="flex items-center p-3 font-medium mr-2 text-center bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:bg-red-700"
+                    >
+                        <span>{sideListDeleteAll.icon}</span> {/* Use the delete icon */}
+                        <span>{sideListDeleteAll.title}</span> {/* Use the delete title */}
+                    </button>    
+
             </aside>
+        ) : (
+            <aside
+                className={`transform top-0 left-0 w-64 bg-gray-900 fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 ${isOpen ? "translate-x-0" : "-translate-x-full"
+                    }`}
+                    >
+           
+            <button
+                    title="Delete Account"
+                    onClick={sideListDelete.onClick} // Attach the delete handler
+                    className="flex items-center p-3 font-medium mr-2 text-center bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:bg-red-700"
+                >
+                    <span>{sideListDelete.icon}</span> {/* Use the delete icon */}
+                    <span>{sideListDelete.title}</span> {/* Use the delete title */}
+          </button>
+          <Link  href={sideListSignoutStudent.path} passHref>
+                <button
+                    title="Sign Out"
+                    
+                    className="flex items-center p-3 font-medium mr-2 text-center bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:bg-red-700"
+                >
+                    <span>{sideListSignoutStudent.icon}</span> {/* Use the delete icon */}
+                    <span>{sideListSignoutStudent.title}</span> {/* Use the delete title */}
+                </button>
+          </Link>
+
+           </aside>
+
+        )}
+
+        
+
             <div>{children}</div>
         </nav>
     );
+
+   
 };
 
 export default Navbar;
