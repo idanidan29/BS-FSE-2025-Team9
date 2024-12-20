@@ -24,6 +24,8 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 // Route handling
 app.use('/', userRoutes);  // Use user routes
 app.use('/', documentRoutes); // Use document routes (adjust as necessary)
+module.exports = app;
 
 // Start the server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
