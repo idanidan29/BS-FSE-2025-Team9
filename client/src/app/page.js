@@ -48,6 +48,7 @@ export default function Home() {
                     // Store the username in localStorage or context
                     localStorage.setItem("username", username);
                     localStorage.setItem("studentId", data.student_id);
+                    localStorage.setItem("userRole", data.is_admin);
         
                     // Direct to the user's page after successful login
                     router.push(`/${username}`);

@@ -58,37 +58,6 @@ export default function page() {
     };
 
 
-    const handleDeleteAccount = async (userId) => {
-        if (!userId) {
-            alert("User ID is required to delete the account!");
-            return;
-        }
-    
-        const confirmDelete = confirm("Are you sure you want to delete this account? This action cannot be undone.");
-        if (!confirmDelete) return;
-    
-        try {
-            const response = await fetch(`http://localhost:5000/users/${userId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-    
-            if (response.ok) {
-                alert('Account deleted successfully!');
-                router.push('/'); // Redirect the user after account deletion
-            } else {
-                const error = await response.json();
-                alert(`Error: ${error.message}`);
-            }
-        } catch (err) {
-            alert('An unexpected error occurred. Please try again later.');
-        }
-    };
-    
-
-
 
 
     return (
