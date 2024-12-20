@@ -85,6 +85,20 @@ router.get('/users/:username', async (req, res) => {
   }
 });
 
+// Route to delete all users
+router.delete('/users', async (req, res) => {
+  try {
+    const result = await User.deleteMany({});
+    res.status(200).json({
+      message: 'All users deleted successfully',
+      deletedCount: result.deletedCount, // Number of deleted users
+    });
+  } catch (error) {
+    res.status(400).json({ message: 'Error deleting all users', error: error.message });
+  }
+});
+
+
 
 // Route to update a user
 router.put('/users/:username', async (req, res) => {
