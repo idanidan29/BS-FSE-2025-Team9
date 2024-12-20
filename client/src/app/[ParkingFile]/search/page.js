@@ -25,6 +25,8 @@ export default function Page() {
             } catch (error) {
                 console.error("Error fetching users:", error);
             }
+            
+
         }
 
         fetchUsers();
@@ -54,23 +56,11 @@ export default function Page() {
         }
     };
 
-    const handleEdit = async (userId) => {
-        try {
-            // Check if a document exists for the given user ID
-            const response = await fetch(`http://localhost:5000/documents/${userId}`); // Assuming the endpoint for documents
-            if (!response.ok) {
-                throw new Error("Document not found");
-            }
-            const data = await response.json();
-            if (data) {
-                // If document exists, redirect to the edit page
-                router.push(`/edit-document/${userId}`); // Redirect to a page where you can edit the document
-            }
-        } catch (error) {
-            console.error("Error checking document:", error);
-            alert("No document found for this user.");
-        }
+    const handleEdit = (userId) => {
+        
+        router.push(`${localStorage.getItem('username')}/search/${userId}`);
     };
+    
 
     const displayedUsers = isSearchPerformed && filteredUser ? [filteredUser] : users;
 
