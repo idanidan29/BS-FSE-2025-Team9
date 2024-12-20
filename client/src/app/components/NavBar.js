@@ -29,7 +29,7 @@ const Navbar = ({ children,userRole }) => {
         {
             icon: <FaChartSimple  className="text-2xl mr-2" />,
             title: "Data",
-            path: "/username/serch",
+            path: "/username/search",
         },
         {
             icon: <FaSignOutAlt   className="text-2xl mr-2" />,
