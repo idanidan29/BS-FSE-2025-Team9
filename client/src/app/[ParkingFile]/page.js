@@ -60,62 +60,69 @@ export default function Page({ params }) {
     };
 
     const handleChange = (e) => {
-        const { id, value } = e.target;
+        const { id, value, type, files } = e.target;
         setFormData((prev) => ({
             ...prev,
-            [id]: value,
+            [id]: type === 'file' ? files[0] : value, 
         }));
     };
-
+    
+        
+       
+    
     const handleSignUp = async () => {
-        const { first_name, last_name, email, student_id, phone_number, Study_Department, car_type, car_number } = {
-            ...formData,
-            student_id: Number(formData.student_id),   
-            phone_number: Number(formData.phone_number), 
-            car_number: Number(formData.car_number)  
-        };
-
-
-
         // Validation check
-        if (!first_name || !last_name || !student_id || !email || !phone_number || !Study_Department || !car_type || !car_number) {
+        if (!formData.first_name || !formData.last_name || !formData.student_id || !formData.email || !formData.phone_number || !formData.Study_Department || !formData.car_type || !formData.car_number) {
             alert("Please fill in all fields!");
             return;
         }
         const carNumberLength = car_number.length;
 
-        if (carNumberLength !== 7 && carNumberLength !== 8) {
+       /* if (carNumberLength !== 7 && carNumberLength !== 8) {
             alert("Car Number must be exactly 7 or 8 digits!");
             return;
         }
         if (!isValidId(student_id)) {
             alert("ID NOT VALID!");
             return;
-        }
+        }*/
 
 
-        try {
-            const response = await fetch('http://localhost:5000/documents', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                // Sending the entire form data object
-                body: JSON.stringify({ first_name, last_name, email, student_id, phone_number, Study_Department, car_type, car_number }),
-            });
-
-            if (response.ok) {
-                alert('document uplouded successful!');
-                router.push('/');
-            } else {
-                const error = await response.json();
-                alert(`Error: ${error.message}`);
+            const formDataToSend = new FormData();
+            formDataToSend.append('first_name', formData.first_name);
+            formDataToSend.append('last_name', formData.last_name);
+            formDataToSend.append('email', formData.email);
+            formDataToSend.append('student_id', formData.student_id);
+            formDataToSend.append('phone_number', formData.phone_number);
+            formDataToSend.append('Study_Department', formData.Study_Department);
+            formDataToSend.append('car_type', formData.car_type);
+            formDataToSend.append('car_number', formData.car_number);
+           
+            // Get the file from the input
+            const licenseFile = document.getElementById('licenseImage').files[0];
+            if (!licenseFile) {
+                alert("Please select a license file!");
+                return;
             }
-        } catch (err) {
-            alert('An unexpected error occurred. Please try again later.');
-        }
-    };
-
+            formDataToSend.append('licenseImage', licenseFile);
+        
+            try {
+                const response = await fetch('http://localhost:5000/documents', {
+                    method: 'POST',
+                    body: formDataToSend  // Using formDataToSend instead of formData
+                });
+        
+                if (response.ok) {
+                    alert('document uploaded successful!');
+                    router.push('/');
+                } else {
+                    const error = await response.json();
+                    alert(`Error: ${error.message}`);
+                }
+            } catch (err) {
+                alert('An unexpected error occurred. Please try again later.');
+            }
+        };
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-[#fff] rtl">
             <NavBar children={localStorage.getItem('username')}></NavBar>
@@ -213,16 +220,20 @@ export default function Page({ params }) {
                         placeholder="Car Number"
                     />
                 </div>
-                <div className="relative w-full mt-4">
-                    <label htmlFor="driversLicense" className="text-lg">Driver's License:</label>
-                    <input
-                        id="driversLicense"
-                        onChange={handleChange}
-                        className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
-                        type="file"
-                        placeholder="Driver's License"
-                    />
-                </div>
+                <form action="/documents" method="post" encType="multipart/form-data">
+    <div className="relative w-full mt-4">
+        <label htmlFor="licenseImage" className="text-lg">Driver's License:</label>
+        <input
+            id="licenseImage"
+            name="licenseImage" 
+            onChange={handleChange}
+            className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+            type="file"
+            placeholder="licenseImage"
+        />
+    </div>
+</form>
+
 
                 <button onClick={handleSignUp} className="bg-green-500 rounded-full border-0 text-[#eee] text-lg h-[50px] mt-9 w-full hover:bg-green-600">
                     Send
@@ -234,5 +245,3 @@ export default function Page({ params }) {
         </div>
     );
 }
-
-
