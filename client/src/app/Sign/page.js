@@ -20,6 +20,8 @@ export default function page() {
         is_admin: ''
     });
 
+    const [emailError, setEmailError] = useState('');
+
     const handleChange = (e) => {
         const { id, value } = e.target;
         setFormData((prev) => ({
@@ -28,9 +30,23 @@ export default function page() {
         }));
     };
 
+    const validateEmail = (email) => {
+        const sceEmailRegex = /^[a-zA-Z0-9._%+-]+@sce\.edu$/; // Update the regex as per the SCE email format
+        return sceEmailRegex.test(email);
+    };
+
     const handleSignUp = async () => {
         const { username, first_name, last_name, email, password, student_id } = formData;
 
+        // Validate email
+        if (!validateEmail(email)) {
+            setEmailError("Please use a valid SCE email (e.g., username@sce.edu).");
+            return;
+        } else {
+            setEmailError('');
+        }
+
+        // Validate other fields
         if (!first_name || !last_name || !student_id || !username || !password || !email) {
             alert("Please fill in all fields!");
             return;
@@ -56,9 +72,6 @@ export default function page() {
             alert('An unexpected error occurred. Please try again later.');
         }
     };
-
-
-
 
     return (
         <div className="flex flex-col items-center justify-center h-screen bg-[#fff]">
@@ -141,6 +154,9 @@ export default function page() {
                         type="email"
                         placeholder="Email"
                     />
+                    {emailError && (
+                        <div className="text-red-500 text-sm mt-2">{emailError}</div>
+                    )}
                 </div>
 
                 <button onClick={handleSignUp} className="bg-green-500 rounded-full border-0 text-[#eee] text-lg h-[50px] mt-9 w-full hover:bg-green-600">
