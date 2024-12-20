@@ -19,7 +19,7 @@ const Navbar = ({ children,userRole }) => {
             {
              icon: <FaRegFilePowerpoint className="text-2xl mr-2" />,
              title: "Parking File",
-            path: "/",
+             path: "/",
         },
         {
             icon: <FaFileDownload  className="text-2xl mr-2" />,
@@ -166,7 +166,7 @@ const Navbar = ({ children,userRole }) => {
                     ></div>
                 </div>
             )}
-        {userRole ? (
+        {userRole === "true" ? (
             <aside
                 className={`transform top-0 left-0 w-64 bg-gray-900 fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 ${isOpen ? "translate-x-0" : "-translate-x-full"
                     }`}
@@ -212,24 +212,25 @@ const Navbar = ({ children,userRole }) => {
                     }`}
                     >
            
-            <button
-                    title="Delete Account"
-                    onClick={sideListDelete.onClick} // Attach the delete handler
-                    className="flex items-center p-3 font-medium mr-2 text-center bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:bg-red-700"
-                >
-                    <span>{sideListDelete.icon}</span> {/* Use the delete icon */}
-                    <span>{sideListDelete.title}</span> {/* Use the delete title */}
-          </button>
+           
           <Link  href={sideListSignoutStudent.path} passHref>
                 <button
                     title="Sign Out"
-                    
-                    className="flex items-center p-3 font-medium mr-2 text-center bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:bg-red-700"
+                    className="flex items-center w-full p-4 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200"
                 >
                     <span>{sideListSignoutStudent.icon}</span> {/* Use the delete icon */}
                     <span>{sideListSignoutStudent.title}</span> {/* Use the delete title */}
                 </button>
           </Link>
+
+          <button
+                    title="Delete Account"
+                    onClick={sideListDelete.onClick} // Attach the delete handler
+                   className="absolute bottom-10 left-0 w-full p-2 flex justify-center items-center font-medium text-center bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:bg-red-700"
+                >
+                    <span>{sideListDelete.icon}</span> {/* Use the delete icon */}
+                    <span>{sideListDelete.title}</span> {/* Use the delete title */}
+          </button>
 
            </aside>
 
