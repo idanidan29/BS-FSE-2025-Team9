@@ -1,6 +1,6 @@
 import { expect } from 'chai';  // Import using ES Module syntax
 
-// The function you want to test
+// The function i'm test
 const isValidId = (id) => {
     id = id.replace(/\D/g, '');  // Remove non-digit characters
     if (id.length !== 9) {  // Check if the length is 9
@@ -9,11 +9,13 @@ const isValidId = (id) => {
     return true;
 };
 
+
 // Email validation function (for example SCE email validation)
 const isValidEmail = (email) => {
     const sceEmailRegex = /^[a-zA-Z0-9._%+-]+@sce\.edu$/;  // Regex for SCE emails
     return sceEmailRegex.test(email);
 };
+
 
 // Unit test cases
 describe('Validation Functions', () => {
@@ -44,6 +46,7 @@ describe('Validation Functions', () => {
             expect(result).to.be.true;  // Assert that non-digits are removed and length becomes 9
         });
     });
+
 
     const validateEmail = (email) => {
         const sceEmailRegex = /^[a-zA-Z0-9._%+-]+@sce\.edu$/; // Update the regex as per the SCE email format
@@ -81,3 +84,7 @@ describe('Validation Functions', () => {
         });
     });
 });
+
+
+
+
