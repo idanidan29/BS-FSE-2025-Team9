@@ -125,13 +125,20 @@ export default function Page({ params }) {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen bg-[#fff] rtl">
+        <div className="flex flex-col items-center space-y-4 pt-[10px]">
 
             <NavBar children={localStorage.getItem('studentId')} userRole={localStorage.getItem('userRole')}></NavBar>
             <div className="bg-[#fff] rounded-2xl box-border min-h-[600px] p-5 w-[520px]">
-                <div className="text-[#eee] font-sans text-4xl font-semibold mt-8 text-center text-green-500">
-                    Application Form
-                </div>
+            <div>
+                        <h1 className="text-center text-4xl font-serif font-light tracking-wide text-gray-800 uppercase">
+                            Parking File
+                            <span className="mt-1 text-sm font-sans font-medium text-gray-600 tracking-widest uppercase flex items-center gap-5">
+                                <span className="flex-1 border-t border-b border-gray-300 bg-gray-100 h-1"></span>
+                                Please fill the fields below
+                                <span className="flex-1 border-t border-b border-gray-300 bg-gray-100 h-1"></span>
+                            </span>
+                        </h1>
+                    </div>
 
 
                 {Object.keys(formData).map((key) => (

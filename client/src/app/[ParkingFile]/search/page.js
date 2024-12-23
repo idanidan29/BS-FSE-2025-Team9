@@ -25,7 +25,7 @@ export default function Page() {
             } catch (error) {
                 console.error("Error fetching users:", error);
             }
-            
+
 
         }
 
@@ -57,33 +57,41 @@ export default function Page() {
     };
 
     const handleEdit = (userId) => {
-        
+
         router.push(`${localStorage.getItem('username')}/search/${userId}`);
     };
-    
+
 
     const displayedUsers = isSearchPerformed && filteredUser ? [filteredUser] : users;
 
     return (
         <div>
-            <Navbar />
+            <Navbar children={localStorage.getItem('studentId')} userRole={localStorage.getItem('userRole')}/>
             <div>
-                <div className="flex flex-col items-center space-y-4">
-                    <label htmlFor="searchById" className="text-lg font-medium">
-                        Search User by ID:
-                    </label>
+            <div className="flex flex-col items-center space-y-4 pt-[20px]">
+            
+                    <div>
+                        <h1 className="text-center text-4xl font-serif font-light tracking-wide text-gray-800 uppercase">
+                            Data Center
+                            <span className="mt-1 text-sm font-sans font-medium text-gray-600 tracking-widest uppercase flex items-center gap-5">
+                                <span className="flex-1 border-t border-b border-gray-300 bg-gray-100 h-1"></span>
+                                Please Entere User ID
+                                <span className="flex-1 border-t border-b border-gray-300 bg-gray-100 h-1"></span>
+                            </span>
+                        </h1>
+                    </div>
+
                     <div className="flex space-x-2">
                         <input
                             type="text"
                             id="searchById"
                             value={searchId}
                             onChange={(e) => setSearchId(e.target.value)}
-                            placeholder="Enter user ID"
-                            className="w-64 px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-64 px-4 py-1 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         <button
                             onClick={handleSearch}
-                            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                            className="px-4 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
                         >
                             Search
                         </button>

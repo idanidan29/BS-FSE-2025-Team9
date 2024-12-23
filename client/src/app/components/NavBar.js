@@ -191,7 +191,7 @@ const Navbar = ({ children,userRole }) => {
                 <button
                         title="Delete Account"
                         onClick={sideListDelete.onClick} // Attach the delete handler
-                        className="flex items-center p-3 font-medium mr-2 text-center bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:bg-red-700"
+                        className="flex items-center p-4 text-gray-300 hover:bg-red-700 hover:text-white transition-colors duration-200"
                     >
                         <span>{sideListDelete.icon}</span> {/* Use the delete icon */}
                         <span>{sideListDelete.title}</span> {/* Use the delete title */}
@@ -199,7 +199,7 @@ const Navbar = ({ children,userRole }) => {
                     <button
                         title="Delete All Accounts"
                         onClick={sideListDelete.onClick} // Attach the delete handler
-                        className="flex items-center p-3 font-medium mr-2 text-center bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:bg-red-700"
+                        className="flex items-center p-4 text-gray-300 hover:bg-red-700 hover:text-white transition-colors duration-200"
                     >
                         <span>{sideListDeleteAll.icon}</span> {/* Use the delete icon */}
                         <span>{sideListDeleteAll.title}</span> {/* Use the delete title */}
@@ -226,7 +226,7 @@ const Navbar = ({ children,userRole }) => {
           <button
                     title="Delete Account"
                     onClick={sideListDelete.onClick} // Attach the delete handler
-                   className="absolute bottom-10 left-0 w-full p-2 flex justify-center items-center font-medium text-center bg-red-600 text-white rounded hover:bg-red-700 focus:outline-none focus:bg-red-700"
+                   className="absolute bottom-10 left-0 w-full p-2 flex justify-center items-center font-medium text-center bg-red-500 text-white  hover:bg-red-700 focus:outline-none"
                 >
                     <span>{sideListDelete.icon}</span> {/* Use the delete icon */}
                     <span>{sideListDelete.title}</span> {/* Use the delete title */}
