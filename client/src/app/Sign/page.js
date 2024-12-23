@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+
 export default function page() {
     const router = useRouter();
 
@@ -39,12 +40,12 @@ export default function page() {
         const { username, first_name, last_name, email, password, student_id } = formData;
 
         // Validate email
-        if (!validateEmail(email)) {
-            setEmailError("Please use a valid SCE email (e.g., username@sce.edu).");
-            return;
-        } else {
-            setEmailError('');
-        }
+     //   if (!validateEmail(email)) {
+      //      setEmailError("Please use a valid SCE email (e.g., username@sce.edu).");
+      //      return;
+        //} else {
+      //      setEmailError('');
+        //}
 
         // Validate other fields
         if (!first_name || !last_name || !student_id || !username || !password || !email) {

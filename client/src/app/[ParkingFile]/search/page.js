@@ -2,7 +2,8 @@
 import { FaPencil } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // Import useRouter for navigation
+import { FaCrown } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 import Navbar from "@/app/components/NavBar";
 
 export default function Page() {
@@ -47,8 +48,8 @@ export default function Page() {
                 throw new Error("Failed to delete user");
             }
             // Remove the user from the local state
-            setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
-            if (filteredUser && filteredUser._id === userId) {
+            setUsers((prevUsers) => prevUsers.filter((user) => user.student_id !== userId));
+            if (filteredUser && filteredUser.student_id === userId) {
                 setFilteredUser(null); // Reset filtered user if it's the one deleted
             }
         } catch (error) {
@@ -61,15 +62,50 @@ export default function Page() {
         router.push(`${localStorage.getItem('username')}/search/${userId}`);
     };
 
+    const handlePromoteToAdmin = async (username) => {
+        try {
+            const response = await fetch(`http://localhost:5000/users/${username}`, {
+                method: "PUT", // Use PUT for updating
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ is_admin: true }), // Update the is_admin field
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to promote user to admin");
+            }
+
+            // Update the user in the local state
+            setUsers((prevUsers) =>
+                prevUsers.map((user) =>
+                    user.username === username ? { ...user, is_admin: true } : user
+                )
+            );
+
+            if (filteredUser && filteredUser.username === username) {
+                setFilteredUser({ ...filteredUser, is_admin: true }); // Update the filtered user if applicable
+            }
+
+            // Display success alert
+            alert(`User ${username} has been successfully promoted to admin.`);
+        } catch (error) {
+            console.error("Error promoting user to admin:", error);
+            alert(`Failed to promote user ${username} to admin. Please try again.`);
+        }
+    };
+
+
+
 
     const displayedUsers = isSearchPerformed && filteredUser ? [filteredUser] : users;
 
     return (
         <div>
-            <Navbar children={localStorage.getItem('studentId')} userRole={localStorage.getItem('userRole')}/>
+            <Navbar children={localStorage.getItem('studentId')} userRole={localStorage.getItem('userRole')} />
             <div>
-            <div className="flex flex-col items-center space-y-4 pt-[20px]">
-            
+                <div className="flex flex-col items-center space-y-4 pt-[20px]">
+
                     <div>
                         <h1 className="text-center text-4xl font-serif font-light tracking-wide text-gray-800 uppercase">
                             Data Center
@@ -137,19 +173,40 @@ export default function Page() {
                                                         {user.email}
                                                     </td>
                                                     <td className="whitespace-nowrap px-8 py-6">
-                                                        <button
-                                                            onClick={() => handleDelete(user._id)}
-                                                            className="px-4 py-2 bg-[#a5a6aa] text-white rounded-md hover:bg-red-600 transition mr-2"
-                                                        >
-                                                            <FaTrash />
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleEdit(user.student_id)} // Pass the student_id to check the document
-                                                            className="px-4 py-2 bg-[#a5a6aa] text-white rounded-md hover:bg-yellow-500 transition"
-                                                        >
-                                                            <FaPencil />
-                                                        </button>
-                                                    </td>
+    <div className="flex flex-col space-y-2">
+        {/* Delete Button */}
+        <button
+            onClick={() => handleDelete(user.student_id)}
+            className="px-2 py-1 w-30 bg-[#a5a6aa] text-white rounded-md hover:bg-red-600 transition flex justify-center items-center space-x-2"
+        >
+            <span>Delete</span> {/* Add the "Delete" label */}
+            <FaTrash />
+        </button>
+
+        {/* Edit Button */}
+        <button
+            onClick={() => handleEdit(user.student_id)} // Pass the student_id to check the document
+            className="px-2 py-1 w-30 bg-[#a5a6aa] text-white rounded-md hover:bg-blue-500 transition flex justify-center items-center space-x-2"
+        >
+            <span>Edit</span> {/* Add the "Edit" label */}
+            <FaPencil />
+        </button>
+
+        {/* Promote Button */}
+        <button
+            onClick={() => handlePromoteToAdmin(user.username)} // Promote to admin
+            className="px-2 py-1 w-30 bg-[#a5a6aa] text-white rounded-md hover:bg-yellow-500 transition flex justify-center items-center space-x-2"
+        >
+            <span>Promote</span> {/* Add the "Promote" label */}
+            <FaCrown />
+        </button>
+    </div>
+</td>
+
+
+
+
+
                                                 </tr>
                                             ))
                                         ) : (
