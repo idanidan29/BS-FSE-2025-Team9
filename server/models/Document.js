@@ -9,7 +9,9 @@ const DocumentSchema = new mongoose.Schema({
   phone_number: { type: Number, required: true },
   Study_Department:{ type: String, required: true},
   car_type: { type: String, required: true },
-  car_number: { type: Number, required: true }
+  car_number: { type: Number, required: true },
+  licenseImage: { type: String, required: true }
+
 });
 
 // Create a model from the schema

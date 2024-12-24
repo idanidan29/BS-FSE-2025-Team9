@@ -1,3 +1,5 @@
+const multer = require('multer');
+const upload= multer ({dest: 'uploads/'});
 const express = require('express');
 const mongoose = require('mongoose');
 const User = require('../models/user');
@@ -58,6 +60,9 @@ router.post('/users/login', async (req, res) => {
     res.status(400).json({ message: 'Error fetching user', error: err });
   }
 });
+
+
+
 
 // Route to get all users
 router.get('/users', async (req, res) => {
