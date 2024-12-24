@@ -1,7 +1,13 @@
+const multer = require('multer');
+const upload= multer ({dest: 'uploads/'});
 const express = require('express');
 const User = require('../models/user');
 
-const router = express.Router();
+const router = express();
+
+
+
+
 
 // Route to create a new user
 router.post('/users', async (req, res) => {
@@ -60,6 +66,9 @@ router.post('/users/login', async (req, res) => {
     res.status(400).json({ message: 'Error fetching user', error: err });
   }
 });
+
+
+
 
 // Route to get all users
 router.get('/users', async (req, res) => {

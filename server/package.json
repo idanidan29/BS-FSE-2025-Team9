@@ -2,9 +2,11 @@
   "name": "server",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-    "test": "mocha \"UnitTest/**/*.test.js\""
-  },
+  "type": "commonjs",
+
+ "scripts": {
+  "test": "mocha --require @babel/register src/**/*.test.js"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",

@@ -4,244 +4,237 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 export default function Page({ params }) {
+ const router = useRouter();
+ const [isAuthorized, setIsAuthorized] = useState(false);
 
-    const router = useRouter();
+ // Authorization check
+ useEffect(() => {
+ (async () => {
+ const userLoggedIn = localStorage.getItem('username');
+ const resolvedParams = await params;
+ if (userLoggedIn === resolvedParams.ParkingFile) {
+ setIsAuthorized(true);
+ } else {
+ router.push('/');
+ }
+ })();
+ }, [params, router]);
 
-    const [isAuthorized, setIsAuthorized] = useState(false);
-    
+ const Navigation = () => {
+ router.push('/');
+ }
 
-    // Load and compare the username from localStorage with params
-    useEffect(() => {
-        (async () => {
-            const userLoggedIn = localStorage.getItem('username');
-            const resolvedParams = await params;
-            if (userLoggedIn === resolvedParams.ParkingFile) {
-                setIsAuthorized(true);
-            } else {
-                router.push('/'); // Redirect to login if not authorized
-            }
-        })();
-    }, [params, router]);
+ // JSON structured state
+ const [parkingData, setParkingData] = useState({
+ "parking_application": {
+ "first_name": "",
+ "last_name": "",
+ "email": "",
+ "student_id": "",
+ "phone_number": "",
+ "Study_Department": "",
+ "car_type": "",
+ "car_number": "",
+ "license_image": null // Will store base64 string
+ }
+ });
 
+ const handleChange = (e) => {
+ const { id, value, type, files } = e.target;
 
-    const Navigation = () => {
-        router.push('/');
+ if (type === 'file') {
+ // Handle file input
+ const file = files[0];
+ if (file) {
+ const reader = new FileReader();
+ reader.onloadend = () => {
+ setParkingData(prev => ({
+ parking_application: {
+ ...prev.parking_application,
+ license_image: reader.result // This will be base64 string
+ }
+ }));
+ };
+ reader.readAsDataURL(file);
+ }
+ } else {
+ // Handle other inputs
+ setParkingData(prev => ({
+ parking_application: {
+ ...prev.parking_application,
+ [id]: value
+ }
+ }));
+ }
+ };
+
+ const handleSignUp = async () => {
+    const { parking_application } = parkingData;
+   
+    // Validation check
+    if (!parking_application.first_name ||
+        !parking_application.last_name ||
+        !parking_application.student_id ||
+        !parking_application.email ||
+        !parking_application.phone_number ||
+        !parking_application.Study_Department ||
+        !parking_application.car_type ||
+        !parking_application.car_number) {
+        alert("Please fill in all fields!");
+        return;
     }
 
-    const [formData, setFormData] = useState({
-        first_name: '',
-        last_name: '',
-        email: '',
-        student_id: '',
-        phone_number: '',
-        Study_Department: '',
-        car_type: '',
-        car_number: ''
-    });
+    // Check if file is selected and processed
+    if (!parking_application.license_image) {
+        alert("Please select a license file!");
+        return;
+    }
 
-    const isValidId = (id) => {
-        id = id.replace(/\D/g, '');
-        if (id.length !== 9) {
-            return false; // Invalid ID length
-        }
-
-        const digits = id.split('').map(Number);
-        const checksum = digits.reduce((sum, digit, index) => {
-            if (index % 2 === 1) {
-                digit *= 2;
-                if (digit > 9) {
-                    digit -= 9;
-                }
-            }
-            return sum + digit;
-        }, 0);
-
-        return checksum % 10 === 0;
-    };
-
-    const handleChange = (e) => {
-        const { id, value, type, files } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [id]: type === 'file' ? files[0] : value, 
-        }));
-    };
-    
-        
+    try {
+        console.log('Sending data:', JSON.stringify(parkingData));
        
-    
-    const handleSignUp = async () => {
-        // Validation check
-        if (!formData.first_name || !formData.last_name || !formData.student_id || !formData.email || !formData.phone_number || !formData.Study_Department || !formData.car_type || !formData.car_number) {
-            alert("Please fill in all fields!");
-            return;
-        }
-        const carNumberLength = car_number.length;
+        const response = await fetch('http://localhost:5000/documents', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(parkingData)
+        });
 
-       /* if (carNumberLength !== 7 && carNumberLength !== 8) {
-            alert("Car Number must be exactly 7 or 8 digits!");
-            return;
-        }
-        if (!isValidId(student_id)) {
-            alert("ID NOT VALID!");
-            return;
-        }*/
-
-
-            const formDataToSend = new FormData();
-            formDataToSend.append('first_name', formData.first_name);
-            formDataToSend.append('last_name', formData.last_name);
-            formDataToSend.append('email', formData.email);
-            formDataToSend.append('student_id', formData.student_id);
-            formDataToSend.append('phone_number', formData.phone_number);
-            formDataToSend.append('Study_Department', formData.Study_Department);
-            formDataToSend.append('car_type', formData.car_type);
-            formDataToSend.append('car_number', formData.car_number);
-           
-            // Get the file from the input
-            const licenseFile = document.getElementById('licenseImage').files[0];
-            if (!licenseFile) {
-                alert("Please select a license file!");
-                return;
+        // First, check if the response is JSON
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+            const data = await response.json();
+            if (response.ok) {
+                alert('Application submitted successfully!');
+                router.push('/');
+            } else {
+                alert(`Error: ${data.message}`);
             }
-            formDataToSend.append('licenseImage', licenseFile);
-        
-            try {
-                const response = await fetch('http://localhost:5000/documents', {
-                    method: 'POST',
-                    body: formDataToSend  // Using formDataToSend instead of formData
-                });
-        
-                if (response.ok) {
-                    alert('document uploaded successful!');
-                    router.push('/');
-                } else {
-                    const error = await response.json();
-                    alert(`Error: ${error.message}`);
-                }
-            } catch (err) {
-                alert('An unexpected error occurred. Please try again later.');
-            }
-        };
-    return (
-        <div className="flex flex-col items-center justify-center h-screen bg-[#fff] rtl">
-            <NavBar children={localStorage.getItem('username')}></NavBar>
-            <div className="bg-[#fff] rounded-2xl box-border min-h-[600px] p-5 w-[520px]">
-            
-                <div className="text-[#eee] font-sans text-4xl font-semibold mt-8 text-center text-green-500">
-                    Application Form
-                </div>
+        } else {
+            // Handle non-JSON response
+            const text = await response.text();
+            throw new Error(text);
+        }
+    } catch (err) {
+        console.error('Error details:', err);
+        alert('An unexpected error occurred. Please try again later.');
+    }
+};
+ return (
+ <div className="flex flex-col items-center justify-center h-screen bg-[#fff] rtl">
+ <NavBar children={localStorage.getItem('username')}></NavBar>
+ <div className="bg-[#fff] rounded-2xl box-border min-h-[600px] p-5 w-[520px]">
+ <div className="text-[#eee] font-sans text-4xl font-semibold mt-8 text-center text-green-500">
+ Application Form
+ </div>
 
+ <div className="relative w-full mt-4">
+ <input
+ id="first_name"
+ value={parkingData.parking_application.first_name}
+ onChange={handleChange}
+ className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+ type="text"
+ placeholder="First Name"
+ />
+ </div>
 
-                <div className="relative w-full mt-4">
-                    <input
-                        id="first_name"
-                        value={formData.first_name}
-                        onChange={handleChange}
-                        className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
-                        type="text"
-                        placeholder="First Name"
-                    />
-                </div>
+ <div className="relative w-full mt-4">
+ <input
+ id="last_name"
+ value={parkingData.parking_application.last_name}
+ onChange={handleChange}
+ className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+ type="text"
+ placeholder="Last Name"
+ />
+ </div>
 
-                <div className="relative w-full mt-4">
-                    <input
-                        id="last_name"
-                        value={formData.last_name}
-                        onChange={handleChange}
-                        className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
-                        type="text"
-                        placeholder="Last name"
-                    />
-                </div>
+ <div className="relative w-full mt-4">
+ <input
+ id="student_id"
+ value={parkingData.parking_application.student_id}
+ onChange={handleChange}
+ className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+ type="text"
+ placeholder="ID"
+ />
+ </div>
 
-                <div className="relative w-full mt-4">
-                    <input
-                        id="student_id"
-                        value={formData.student_id}
-                        onChange={handleChange}
-                        className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
-                        type="text"
-                        placeholder="ID"
-                    />
-                </div>
+ <div className="relative w-full mt-4">
+ <input
+ id="email"
+ value={parkingData.parking_application.email}
+ onChange={handleChange}
+ className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+ type="email"
+ placeholder="Email"
+ />
+ </div>
 
-                <div className="relative w-full mt-4">
-                    <input
-                        id="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
-                        type="email"
-                        placeholder="Email"
-                    />
-                </div>
+ <div className="relative w-full mt-4">
+ <input
+ id="phone_number"
+ value={parkingData.parking_application.phone_number}
+ onChange={handleChange}
+ className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+ type="text"
+ placeholder="Phone Number"
+ />
+ </div>
 
-                <div className="relative w-full mt-4">
-                    <input
-                        id="phone_number"
-                        value={formData.phone_number}
-                        onChange={handleChange}
-                        className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
-                        type="text"
-                        placeholder="Phone Number"
-                    />
-                </div>
+ <div className="relative w-full mt-4">
+ <input
+ id="Study_Department"
+ value={parkingData.parking_application.Study_Department}
+ onChange={handleChange}
+ className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+ type="text"
+ placeholder="Department"
+ />
+ </div>
 
-                <div className="relative w-full mt-4">
-                    <input
-                        id="Study_Department"
-                        value={formData.Study_Department}
-                        onChange={handleChange}
-                        className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
-                        type="text"
-                        placeholder="Department"
-                    />
-                </div>
+ <div className="relative w-full mt-4">
+ <input
+ id="car_type"
+ value={parkingData.parking_application.car_type}
+ onChange={handleChange}
+ className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+ type="text"
+ placeholder="Car Type"
+ />
+ </div>
 
-                <div className="relative w-full mt-4">
-                    <input
-                        id="car_type"
-                        value={formData.car_type}
-                        onChange={handleChange}
-                        className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
-                        type="text"
-                        placeholder="Car Type"
-                    />
-                </div>
+ <div className="relative w-full mt-4">
+ <input
+ id="car_number"
+ value={parkingData.parking_application.car_number}
+ onChange={handleChange}
+ className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+ type="text"
+ placeholder="Car Number"
+ />
+ </div>
 
-                <div className="relative w-full mt-4">
-                    <input
-                        id="car_number"
-                        value={formData.car_number}
-                        onChange={handleChange}
-                        className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
-                        type="text"
-                        placeholder="Car Number"
-                    />
-                </div>
-                <form action="/documents" method="post" encType="multipart/form-data">
-    <div className="relative w-full mt-4">
-        <label htmlFor="licenseImage" className="text-lg">Driver's License:</label>
-        <input
-            id="licenseImage"
-            name="licenseImage" 
-            onChange={handleChange}
-            className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
-            type="file"
-            placeholder="licenseImage"
-        />
-    </div>
-</form>
+ <div className="relative w-full mt-4">
+ <label htmlFor="license_image" className="text-lg">Driver's License:</label>
+ <input
+ id="license_image"
+ onChange={handleChange}
+ className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+ type="file"
+ accept="image/*"
+ />
+ </div>
 
-
-                <button onClick={handleSignUp} className="bg-green-500 rounded-full border-0 text-[#eee] text-lg h-[50px] mt-9 w-full hover:bg-green-600">
-                    Send
-                </button>
-                <button onClick={Navigation} className="bg-[#fff] text-green-500 rounded-full border border-green-500 text-lg h-[50px] mt-5 w-full hover:bg-green-500 hover:text-white">
-                    back
-                </button>
-            </div>
-        </div>
-    );
+ <button onClick={handleSignUp} className="bg-green-500 rounded-full border-0 text-[#eee] text-lg h-[50px] mt-9 w-full hover:bg-green-600">
+ Send
+ </button>
+ <button onClick={Navigation} className="bg-[#fff] text-green-500 rounded-full border border-green-500 text-lg h-[50px] mt-5 w-full hover:bg-green-500 hover:text-white">
+ back
+ </button>
+ </div>
+ </div>
+ );
 }
