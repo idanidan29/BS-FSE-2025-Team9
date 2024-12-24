@@ -10,14 +10,13 @@ export default function Page() {
     const [users, setUsers] = useState([]);
     const [searchId, setSearchId] = useState("");
     const [filteredUser, setFilteredUser] = useState(null);
-    const [isSearchPerformed, setIsSearchPerformed] = useState(false); // To track search action
-    const router = useRouter(); // Instantiate the router for navigation
+    const [isSearchPerformed, setIsSearchPerformed] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
-        // Fetch users from the server
         async function fetchUsers() {
             try {
-                const response = await fetch("http://localhost:5000/users"); // Update the URL to your API endpoint
+                const response = await fetch("http://localhost:5000/users");
                 if (!response.ok) {
                     throw new Error("Failed to fetch users");
                 }
@@ -26,31 +25,27 @@ export default function Page() {
             } catch (error) {
                 console.error("Error fetching users:", error);
             }
-
-
         }
-
         fetchUsers();
     }, []);
 
     const handleSearch = () => {
         const user = users.find((user) => String(user.student_id) === String(searchId));
-        setFilteredUser(user || null); // Set filtered user (or null if not found)
-        setIsSearchPerformed(true); // Mark that search was performed
+        setFilteredUser(user || null);
+        setIsSearchPerformed(true);
     };
 
     const handleDelete = async (userId) => {
         try {
             const response = await fetch(`http://localhost:5000/users/${userId}`, {
-                method: "DELETE", // Make a DELETE request
+                method: "DELETE",
             });
             if (!response.ok) {
                 throw new Error("Failed to delete user");
             }
-            // Remove the user from the local state
             setUsers((prevUsers) => prevUsers.filter((user) => user.student_id !== userId));
             if (filteredUser && filteredUser.student_id === userId) {
-                setFilteredUser(null); // Reset filtered user if it's the one deleted
+                setFilteredUser(null);
             }
         } catch (error) {
             console.error("Error deleting user:", error);
@@ -58,25 +53,23 @@ export default function Page() {
     };
 
     const handleEdit = (userId) => {
-
-        router.push(`${localStorage.getItem('username')}/search/${userId}`);
+        router.push(`${localStorage.getItem("username")}/search/${userId}`);
     };
 
     const handlePromoteToAdmin = async (username) => {
         try {
             const response = await fetch(`http://localhost:5000/users/${username}`, {
-                method: "PUT", // Use PUT for updating
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ is_admin: true }), // Update the is_admin field
+                body: JSON.stringify({ is_admin: true }),
             });
 
             if (!response.ok) {
                 throw new Error("Failed to promote user to admin");
             }
 
-            // Update the user in the local state
             setUsers((prevUsers) =>
                 prevUsers.map((user) =>
                     user.username === username ? { ...user, is_admin: true } : user
@@ -84,10 +77,9 @@ export default function Page() {
             );
 
             if (filteredUser && filteredUser.username === username) {
-                setFilteredUser({ ...filteredUser, is_admin: true }); // Update the filtered user if applicable
+                setFilteredUser({ ...filteredUser, is_admin: true });
             }
 
-            // Display success alert
             alert(`User ${username} has been successfully promoted to admin.`);
         } catch (error) {
             console.error("Error promoting user to admin:", error);
@@ -95,23 +87,19 @@ export default function Page() {
         }
     };
 
-
-
-
     const displayedUsers = isSearchPerformed && filteredUser ? [filteredUser] : users;
 
     return (
         <div>
-            <Navbar children={localStorage.getItem('studentId')} userRole={localStorage.getItem('userRole')} />
+            <Navbar children={localStorage.getItem("studentId")} userRole={localStorage.getItem("userRole")} />
             <div>
                 <div className="flex flex-col items-center space-y-4 pt-[20px]">
-
                     <div>
                         <h1 className="text-center text-4xl font-serif font-light tracking-wide text-gray-800 uppercase">
                             Data Center
                             <span className="mt-1 text-sm font-sans font-medium text-gray-600 tracking-widest uppercase flex items-center gap-5">
                                 <span className="flex-1 border-t border-b border-gray-300 bg-gray-100 h-1"></span>
-                                Please Entere User ID
+                                Please Enter User ID
                                 <span className="flex-1 border-t border-b border-gray-300 bg-gray-100 h-1"></span>
                             </span>
                         </h1>
@@ -134,19 +122,18 @@ export default function Page() {
                     </div>
                 </div>
 
-                {/* Table showing users */}
                 <div className="flex flex-col w-full px-10 lg:px-20 mt-10">
                     <div className="overflow-x-auto">
                         <div className="inline-block min-w-full py-4">
                             <div className="overflow-hidden border border-gray-300 rounded-lg shadow-md">
                                 <table className="w-full text-left text-lg font-light">
-                                    <thead className="bg-gray-200 border-b font-medium text-base">
+                                    <thead className="bg-gray-200 border-b font-medium text-base text-center">
                                         <tr>
                                             <th scope="col" className="px-8 py-6">Number</th>
-                                            <th scope="col" className="px-8 py-6">First Name</th>
-                                            <th scope="col" className="px-8 py-6">Last Name</th>
+                                            <th scope="col" className="px-8 py-6">Full Name</th>
                                             <th scope="col" className="px-8 py-6">Student ID</th>
                                             <th scope="col" className="px-8 py-6">Email</th>
+                                            <th scope="col" className="px-8 py-6">Role</th>
                                             <th scope="col" className="px-8 py-6">Actions</th>
                                         </tr>
                                     </thead>
@@ -155,16 +142,13 @@ export default function Page() {
                                             displayedUsers.map((user, index) => (
                                                 <tr
                                                     key={user._id}
-                                                    className="border-b transition duration-300 ease-in-out hover:bg-neutral-100"
+                                                    className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 text-center"
                                                 >
                                                     <td className="whitespace-nowrap px-8 py-6 font-medium">
                                                         {index + 1}
                                                     </td>
                                                     <td className="whitespace-nowrap px-8 py-6">
-                                                        {user.first_name}
-                                                    </td>
-                                                    <td className="whitespace-nowrap px-8 py-6">
-                                                        {user.last_name}
+                                                        {`${user.first_name} ${user.last_name}`}
                                                     </td>
                                                     <td className="whitespace-nowrap px-8 py-6">
                                                         {user.student_id}
@@ -173,48 +157,38 @@ export default function Page() {
                                                         {user.email}
                                                     </td>
                                                     <td className="whitespace-nowrap px-8 py-6">
-    <div className="flex flex-col space-y-2">
-        {/* Delete Button */}
-        <button
-            onClick={() => handleDelete(user.student_id)}
-            className="px-2 py-1 w-30 bg-[#a5a6aa] text-white rounded-md hover:bg-red-600 transition flex justify-center items-center space-x-2"
-        >
-            <span>Delete</span> {/* Add the "Delete" label */}
-            <FaTrash />
-        </button>
-
-        {/* Edit Button */}
-        <button
-            onClick={() => handleEdit(user.student_id)} // Pass the student_id to check the document
-            className="px-2 py-1 w-30 bg-[#a5a6aa] text-white rounded-md hover:bg-blue-500 transition flex justify-center items-center space-x-2"
-        >
-            <span>Edit</span> {/* Add the "Edit" label */}
-            <FaPencil />
-        </button>
-
-        {/* Promote Button */}
-        <button
-            onClick={() => handlePromoteToAdmin(user.username)} // Promote to admin
-            className="px-2 py-1 w-30 bg-[#a5a6aa] text-white rounded-md hover:bg-yellow-500 transition flex justify-center items-center space-x-2"
-        >
-            <span>Promote</span> {/* Add the "Promote" label */}
-            <FaCrown />
-        </button>
-    </div>
-</td>
-
-
-
-
-
+                                                        {user.is_admin ? "Admin" : "Student"}
+                                                    </td>
+                                                    <td className="whitespace-nowrap px-8 py-6">
+                                                        <div className="flex flex-col space-y-2">
+                                                            <button
+                                                                onClick={() => handleDelete(user.student_id)}
+                                                                className="px-2 py-1 w-30 bg-[#a5a6aa] text-white rounded-md hover:bg-red-600 transition flex justify-center items-center space-x-2"
+                                                            >
+                                                                <span>Delete</span> 
+                                                                <FaTrash />
+                                                            </button>
+                                                            <button
+                                                                onClick={() => handleEdit(user.student_id)}
+                                                                className="px-2 py-1 w-30 bg-[#a5a6aa] text-white rounded-md hover:bg-blue-500 transition flex justify-center items-center space-x-2"
+                                                            >
+                                                                <span>Edit</span> 
+                                                                <FaPencil />
+                                                            </button>
+                                                            <button
+                                                                onClick={() => handlePromoteToAdmin(user.username)}
+                                                                className="px-2 py-1 w-30 bg-[#a5a6aa] text-white rounded-md hover:bg-yellow-500 transition flex justify-center items-center space-x-2"
+                                                            >
+                                                                <span>Promote</span> 
+                                                                <FaCrown />
+                                                            </button>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             ))
                                         ) : (
                                             <tr>
-                                                <td
-                                                    colSpan="6"
-                                                    className="text-center py-6 text-gray-500"
-                                                >
+                                                <td colSpan="6" className="text-center py-6 text-gray-500">
                                                     No users found.
                                                 </td>
                                             </tr>
