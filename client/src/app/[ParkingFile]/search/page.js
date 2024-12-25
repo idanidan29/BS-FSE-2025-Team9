@@ -173,35 +173,35 @@ export default function Page() {
                                                         {user.email}
                                                     </td>
                                                     <td className="whitespace-nowrap px-8 py-6">
-    <div className="flex flex-col space-y-2">
-        {/* Delete Button */}
-        <button
-            onClick={() => handleDelete(user.student_id)}
-            className="px-2 py-1 w-30 bg-[#a5a6aa] text-white rounded-md hover:bg-red-600 transition flex justify-center items-center space-x-2"
-        >
-            <span>Delete</span> {/* Add the "Delete" label */}
-            <FaTrash />
-        </button>
+                                                        <div className="flex flex-col space-y-2">
+                                                            {/* Delete Button */}
+                                                            <button
+                                                                onClick={() => handleDelete(user.student_id)}
+                                                                className="px-2 py-1 w-30 bg-[#a5a6aa] text-white rounded-md hover:bg-red-600 transition flex justify-center items-center space-x-2"
+                                                            >
+                                                                <span>Delete</span> {/* Add the "Delete" label */}
+                                                                <FaTrash />
+                                                            </button>
 
-        {/* Edit Button */}
-        <button
-            onClick={() => handleEdit(user.student_id)} // Pass the student_id to check the document
-            className="px-2 py-1 w-30 bg-[#a5a6aa] text-white rounded-md hover:bg-blue-500 transition flex justify-center items-center space-x-2"
-        >
-            <span>Edit</span> {/* Add the "Edit" label */}
-            <FaPencil />
-        </button>
+                                                            {/* Edit Button */}
+                                                            <button
+                                                                onClick={() => handleEdit(user.student_id)} // Pass the student_id to check the document
+                                                                className="px-2 py-1 w-30 bg-[#a5a6aa] text-white rounded-md hover:bg-blue-500 transition flex justify-center items-center space-x-2"
+                                                            >
+                                                                <span>Edit</span> {/* Add the "Edit" label */}
+                                                                <FaPencil />
+                                                            </button>
 
-        {/* Promote Button */}
-        <button
-            onClick={() => handlePromoteToAdmin(user.username)} // Promote to admin
-            className="px-2 py-1 w-30 bg-[#a5a6aa] text-white rounded-md hover:bg-yellow-500 transition flex justify-center items-center space-x-2"
-        >
-            <span>Promote</span> {/* Add the "Promote" label */}
-            <FaCrown />
-        </button>
-    </div>
-</td>
+                                                            {/* Promote Button */}
+                                                            <button
+                                                                onClick={() => handlePromoteToAdmin(user.username)} // Promote to admin
+                                                                className="px-2 py-1 w-30 bg-[#a5a6aa] text-white rounded-md hover:bg-yellow-500 transition flex justify-center items-center space-x-2"
+                                                            >
+                                                                <span>Promote</span> {/* Add the "Promote" label */}
+                                                                <FaCrown />
+                                                            </button>
+                                                        </div>
+                                                    </td>
 
 
 
