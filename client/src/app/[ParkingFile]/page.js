@@ -73,13 +73,13 @@ export default function Page({ params }) {
 
     // Validation check
     if (!parking_application.first_name ||
-        !parking_application.last_name ||
-        !parking_application.student_id ||
-        !parking_application.email ||
-        !parking_application.phone_number ||
-        !parking_application.Study_Department ||
-        !parking_application.car_type ||
-        !parking_application.car_number) {
+      !parking_application.last_name ||
+      !parking_application.student_id ||
+      !parking_application.email ||
+      !parking_application.phone_number ||
+      !parking_application.Study_Department ||
+      !parking_application.car_type ||
+      !parking_application.car_number) {
       alert("Please fill in all fields!");
       return;
     }
@@ -122,7 +122,9 @@ export default function Page({ params }) {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#fff] rtl">
-      <NavBar children={localStorage.getItem('studentId')} userRole={localStorage.getItem('userRole')}></NavBar>
+      <NavBar userRole={localStorage.getItem('userRole')}>
+        {localStorage.getItem('studentId')}
+      </NavBar>
       <div className="bg-[#fff] rounded-2xl box-border min-h-[600px] p-5 w-[520px]">
         <div className="text-[#eee] font-sans text-4xl font-semibold mt-8 text-center text-green-500">
           Application Form
@@ -222,7 +224,7 @@ export default function Page({ params }) {
         </div>
 
         <div className="relative w-full mt-4">
-          <label htmlFor="license_image" className="text-lg">Driver's License:</label>
+          <label htmlFor="license_image" className="text-lg">Drivers License:</label>
           <input
             id="license_image"
             onChange={handleChange}

@@ -4,7 +4,8 @@ import { FaTrash } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { FaCrown } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import Navbar from "@/app/components/NavBar";
+import NavBar from "../../components/NavBar";
+
 
 export default function Page() {
     const [users, setUsers] = useState([]);
@@ -91,7 +92,9 @@ export default function Page() {
 
     return (
         <div>
-            <Navbar children={localStorage.getItem("studentId")} userRole={localStorage.getItem("userRole")} />
+            <NavBar userRole={localStorage.getItem('userRole')}>
+                {localStorage.getItem('studentId')}
+            </NavBar>
             <div>
                 <div className="flex flex-col items-center space-y-4 pt-[20px]">
                     <div>

@@ -2,6 +2,7 @@
 import { useRouter } from 'next/navigation';  // Correct import for useRouter
 import React, { useEffect, useState } from "react";  // Import React and hooks from 'react'
 import Link from "next/link";
+import Image from 'next/image';
 import { FaRegFilePowerpoint } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FaFileDownload } from "react-icons/fa";
@@ -132,7 +133,7 @@ const Navbar = ({ children,userRole }) => {
                     <GiHamburgerMenu className="text-3xl text-gray-300" />
                 </button>
 
-                <img
+                <Image 
                     src="/SCE_logo.png"
                     alt="Logo"
                     className="h-auto w-24"
@@ -172,7 +173,7 @@ const Navbar = ({ children,userRole }) => {
                     }`}
             >
                 <span className="flex w-full items-center p-4 border-b border-gray-700">
-                    <img
+                    <Image 
                         src="/SCE_logo.png"
                         alt="Logo"
                         className="h-auto w-32 mx-auto"
