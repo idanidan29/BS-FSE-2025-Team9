@@ -133,11 +133,13 @@ const Navbar = ({ children,userRole }) => {
                     <GiHamburgerMenu className="text-3xl text-gray-300" />
                 </button>
 
-                <Image 
-                    src="/SCE_logo.png"
-                    alt="Logo"
-                    className="h-auto w-24"
-                />
+                <Image
+      src="/SCE_logo.png"
+      alt="Logo"
+      className="h-auto w-24"
+      width={96} // Next.js requires width and height attributes
+      height={24}
+    />
             </div>
 
             <div className="flex items-center">
@@ -173,11 +175,13 @@ const Navbar = ({ children,userRole }) => {
                     }`}
             >
                 <span className="flex w-full items-center p-4 border-b border-gray-700">
-                    <Image 
-                        src="/SCE_logo.png"
-                        alt="Logo"
-                        className="h-auto w-32 mx-auto"
-                    />
+                <Image
+      src="/SCE_logo.png"
+      alt="Logo"
+      className="h-auto w-24"
+      width={96} // Next.js requires width and height attributes
+      height={24}
+    />
                 </span>
             
                 {sideList.map(({ icon, title, path }, index) => {
