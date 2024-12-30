@@ -3,16 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "commonjs",
-
- "scripts": {
-  "test": "mocha **/*.test.js"
-},
+  "scripts": {
+    "test": "mocha **/*.test.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.1",
     "mongoose": "^8.8.3",
     "multer": "^1.4.5-lts.1"
