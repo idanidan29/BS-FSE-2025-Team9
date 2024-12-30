@@ -54,9 +54,12 @@ export default function Page() {
     };
 
     const handleEdit = (userId) => {
-        router.push(`${localStorage.getItem("username")}/search/${userId}`);
+        const username = localStorage.getItem("username");
+        const sanitizedUsername = username.endsWith("/") ? username.slice(0, -1) : username; // Remove trailing slash if exists
+        router.push(`/${sanitizedUsername}/search/${userId}`);
     };
-
+    
+    
     const handlePromoteToAdmin = async (username) => {
         try {
             const response = await fetch(`http://localhost:5000/users/${username}`, {
