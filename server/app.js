@@ -3,13 +3,17 @@ const mongoose = require('mongoose');
 const userRoutes = require('./routes/userRoutes');  // Import user routes
 const documentRoutes = require('./routes/DocumentRoutes'); // Import document routes (assumed)
 const cors = require('cors');
+require('dotenv').config();
+
 
 
 const app = express();
 
 // Configuration for PORT and MongoDB URI
 const PORT = 5000;
-const MONGO_URI = 'mongodb+srv://system:NzEo6pKiK9Kq9d9O@filesystem.5cw90.mongodb.net/File_System';
+const mongoUri = process.env.MONGO_URI;
+//const secretKey = process.env.SECRET_KEY;
+
 
 // Middleware for CORS and JSON parsing
 app.use(cors({
