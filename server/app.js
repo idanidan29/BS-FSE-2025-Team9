@@ -12,7 +12,7 @@ const app = express();
 // Configuration for PORT and MongoDB URI
 const PORT = 5000;
 const mongoUri = process.env.MONGO_URI;
-//const secretKey = process.env.SECRET_KEY;
+const secretKey = process.env.SECRET_KEY;
 
 
 // Middleware for CORS and JSON parsing
@@ -25,9 +25,9 @@ app.use(express.urlencoded({ limit: '7mb', extended: true }));
 
 
 // Connect to MongoDB
-mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('MongoDB Connected to File_System database'))
-  .catch(err => console.error('Error connecting to MongoDB:', err));
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Connected to MongoDB'))
+  .catch((error) => console.error('Error connecting to MongoDB:', error));
 
 // Route handling
 app.use('/', userRoutes);  // Use user routes
