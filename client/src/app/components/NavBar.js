@@ -9,6 +9,7 @@ import { FaFileDownload } from "react-icons/fa";
 import { FaChartSimple } from "react-icons/fa6";
 import { FaSignOutAlt } from "react-icons/fa";
 import { MdOutlineDeleteForever } from "react-icons/md";
+import { FaGifts } from "react-icons/fa";
 
 
 const Navbar = ({ children,userRole }) => {
@@ -36,6 +37,11 @@ const Navbar = ({ children,userRole }) => {
             icon: <FaSignOutAlt   className="text-2xl mr-2" />,
             title: "sign out",
             path: "/",
+        },
+        {
+            icon: <FaGifts className="text-2xl mr-2" />, // האייקון של ההגרלה
+            title: "Lottery",
+            path: `/${localStorage.getItem('username')}/lottery`, // הקישור לדף ההגרלה
         },
     ];
 
@@ -193,6 +199,7 @@ const Navbar = ({ children,userRole }) => {
                         </Link>
                     );
                 })}
+                
                 <button
                         title="Delete Account"
                         onClick={sideListDelete.onClick} // Attach the delete handler
