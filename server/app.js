@@ -19,7 +19,6 @@ const secretKey = process.env.SECRET_KEY;
 app.use(cors({
   origin: '*'  // Allow all origins (adjust for production as needed)
 }));
-app.use(express.json());  // Middleware to parse JSON
 app.use(express.json({ limit: '7mb' }));
 app.use(express.urlencoded({ limit: '7mb', extended: true }));
 
