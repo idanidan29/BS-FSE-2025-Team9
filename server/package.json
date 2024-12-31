@@ -5,7 +5,8 @@
   "type": "commonjs",
 
  "scripts": {
-  "test": "mocha **/*.test.js"
+  "test": "mocha **/*.test.js",
+  "start": "node server.js"
 },
   "keywords": [],
   "author": "",
