@@ -25,7 +25,7 @@ export default function EditUser({ params }) {
         async function fetchUser() {
             try {
                 // API call to fetch user data
-                const response = await fetch(`http://localhost:5000/documents/${userId}`);
+                const response = await fetch(`https://bs-fse-2025-team9.onrender.com/documents/${userId}`);
                 if (!response.ok) throw new Error("User not found");
                 const data = await response.json();
                 setUserData(data); // Update state with user data
