@@ -205,7 +205,7 @@ export default function EditUser({ params }) {
                     <div className="grid grid-cols-1">
                         <div>
                             <label htmlFor="drivers_license" className="block text-lg font-semibold text-gray-700">
-                                Driver's License
+                                Drivers License
                             </label>
                             <input
                                 id="drivers_license"
