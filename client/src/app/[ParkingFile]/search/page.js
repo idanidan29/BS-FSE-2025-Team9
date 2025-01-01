@@ -17,7 +17,7 @@ export default function Page() {
     useEffect(() => {
         async function fetchUsers() {
             try {
-                const response = await fetch("http://localhost:5000/users");
+                const response = await fetch("https://bs-fse-2025-team9.onrender.com/users");
                 if (!response.ok) {
                     throw new Error("Failed to fetch users");
                 }
@@ -38,7 +38,7 @@ export default function Page() {
 
     const handleDelete = async (userId) => {
         try {
-            const response = await fetch(`http://localhost:5000/users/${userId}`, {
+            const response = await fetch(`https://bs-fse-2025-team9.onrender.com/users/${userId}`, {
                 method: "DELETE",
             });
             if (!response.ok) {
@@ -62,7 +62,7 @@ export default function Page() {
 
     const handlePromoteToAdmin = async (username) => {
         try {
-            const response = await fetch(`http://localhost:5000/users/${username}`, {
+            const response = await fetch(`https://bs-fse-2025-team9.onrender.com/users/${username}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

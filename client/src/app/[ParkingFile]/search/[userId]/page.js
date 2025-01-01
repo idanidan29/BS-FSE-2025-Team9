@@ -56,7 +56,7 @@ export default function EditUser({ params }) {
             }
 
             // API call to update user data
-            const response = await fetch(`http://localhost:5000/documents/${userId}`, {
+            const response = await fetch(`https://bs-fse-2025-team9.onrender.com/documents/${userId}`, {
                 method: "PUT",
                 body: formData, // Send form data (includes files)
             });

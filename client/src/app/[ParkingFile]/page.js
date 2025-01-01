@@ -93,7 +93,7 @@ export default function Page({ params }) {
     try {
       console.log('Sending data:', JSON.stringify(parkingData));
 
-      const response = await fetch('http://localhost:5000/documents', {
+      const response = await fetch('https://bs-fse-2025-team9.onrender.com/documents', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

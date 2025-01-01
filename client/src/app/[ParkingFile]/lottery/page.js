@@ -15,7 +15,7 @@ const LotteryPage = () => {
 
     try {
       // ביצוע בקשה ל-API לקבלת המשתמשים
-      const response = await fetch('http://localhost:5000/students');
+      const response = await fetch('https://bs-fse-2025-team9.onrender.com/students');
       if (!response.ok) {
         throw new Error('Error fetching students');
       }
