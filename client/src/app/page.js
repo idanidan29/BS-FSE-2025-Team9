@@ -113,7 +113,7 @@ export default function Home() {
                     onClick={Navigation}
                     className="bg-white text-green-500 rounded-full border border-green-500 text-lg h-[45px] sm:h-[50px] mt-5 sm:mt-9 w-full hover:bg-green-500 hover:text-white"
                 >
-                    I Don't Have A User
+                    I Dont Have A User
                 </button>
             </div>
         </div>
