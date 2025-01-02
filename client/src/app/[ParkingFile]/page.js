@@ -121,125 +121,126 @@ export default function Page({ params }) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-[#fff] rtl">
+    <div>
       <NavBar userRole={localStorage.getItem('userRole')}>
         {localStorage.getItem('studentId')}
       </NavBar>
-      <div className="bg-[#fff] rounded-2xl box-border min-h-[600px] p-5 w-[520px]">
-        <div className="text-[#eee] font-sans text-4xl font-semibold mt-8 text-center text-green-500">
-          Application Form
-        </div>
+      <div className="flex flex-col items-center justify-center p-5 min-h-screen bg-gradient-to-br from-green-300 via-teal-200 to-cyan-300 rtl px-4 sm:px-6">
+        <div className="bg-white rounded-2xl box-border min-h-[600px] p-5 w-full sm:w-[520px]">
+          <div className="text-[#eee] font-sans text-2xl sm:text-4xl font-semibold mt-3 text-center text-green-500">
+            Application Form
+          </div>
 
-        <div className="relative w-full mt-4">
-          <input
-            id="first_name"
-            value={parkingData.parking_application.first_name}
-            onChange={handleChange}
-            className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
-            type="text"
-            placeholder="First Name"
-          />
-        </div>
+          <div className="relative w-full mt-4">
+            <input
+              id="first_name"
+              value={parkingData.parking_application.first_name}
+              onChange={handleChange}
+              className="bg-[#fff] h-[50px] sm:h-[60px] rounded-xl border border-green-500 box-border text-black text-sm sm:text-lg outline-none px-5 pt-1 w-full"
+              type="text"
+              placeholder="First Name"
+            />
+          </div>
 
-        <div className="relative w-full mt-4">
-          <input
-            id="last_name"
-            value={parkingData.parking_application.last_name}
-            onChange={handleChange}
-            className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
-            type="text"
-            placeholder="Last Name"
-          />
-        </div>
+          <div className="relative w-full mt-4">
+            <input
+              id="last_name"
+              value={parkingData.parking_application.last_name}
+              onChange={handleChange}
+              className="bg-[#fff] h-[50px] sm:h-[60px] rounded-xl border border-green-500 box-border text-black text-sm sm:text-lg outline-none px-5 pt-1 w-full"
+              type="text"
+              placeholder="Last Name"
+            />
+          </div>
 
-        <div className="relative w-full mt-4">
-          <input
-            id="student_id"
-            value={parkingData.parking_application.student_id}
-            onChange={handleChange}
-            className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
-            type="text"
-            placeholder="ID"
-          />
-        </div>
+          <div className="relative w-full mt-4">
+            <input
+              id="student_id"
+              value={parkingData.parking_application.student_id}
+              onChange={handleChange}
+              className="bg-[#fff] h-[50px] sm:h-[60px] rounded-xl border border-green-500 box-border text-black text-sm sm:text-lg outline-none px-5 pt-1 w-full"
+              type="text"
+              placeholder="ID"
+            />
+          </div>
 
-        <div className="relative w-full mt-4">
-          <input
-            id="email"
-            value={parkingData.parking_application.email}
-            onChange={handleChange}
-            className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
-            type="email"
-            placeholder="Email"
-          />
-        </div>
+          <div className="relative w-full mt-4">
+            <input
+              id="email"
+              value={parkingData.parking_application.email}
+              onChange={handleChange}
+              className="bg-[#fff] h-[50px] sm:h-[60px] rounded-xl border border-green-500 box-border text-black text-sm sm:text-lg outline-none px-5 pt-1 w-full"
+              type="email"
+              placeholder="Email"
+            />
+          </div>
 
-        <div className="relative w-full mt-4">
-          <input
-            id="phone_number"
-            value={parkingData.parking_application.phone_number}
-            onChange={handleChange}
-            className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
-            type="text"
-            placeholder="Phone Number"
-          />
-        </div>
+          <div className="relative w-full mt-4">
+            <input
+              id="phone_number"
+              value={parkingData.parking_application.phone_number}
+              onChange={handleChange}
+              className="bg-[#fff] h-[50px] sm:h-[60px] rounded-xl border border-green-500 box-border text-black text-sm sm:text-lg outline-none px-5 pt-1 w-full"
+              type="text"
+              placeholder="Phone Number"
+            />
+          </div>
 
-        <div className="relative w-full mt-4">
-          <label htmlFor="Study_Department" className="text-lg"></label>
-          <select
-            id="Study_Department"
-            value={parkingData.parking_application.Study_Department}
-            onChange={handleChange}
-            className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
-          >
-            <option value="" disabled >Select your department</option>
-            <option value="Computer Science">Computer Science</option>
-            <option value="Software Engineering">Software Engineering</option>
-            <option value="Business Administration">Business Administration</option>
-            <option value="Chemistry">Chemistry</option>
-          </select>
-        </div>
+          <div className="relative w-full mt-4">
+            <select
+              id="Study_Department"
+              value={parkingData.parking_application.Study_Department}
+              onChange={handleChange}
+              className="bg-[#fff] h-[50px] sm:h-[60px] rounded-xl border border-green-500 box-border text-black text-sm sm:text-lg outline-none px-5 pt-1 w-full"
+            >
+              <option value="" disabled>Select your department</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Software Engineering">Software Engineering</option>
+              <option value="Business Administration">Business Administration</option>
+              <option value="Chemistry">Chemistry</option>
+            </select>
+          </div>
 
-        <div className="relative w-full mt-4">
-          <input
-            id="car_type"
-            value={parkingData.parking_application.car_type}
-            onChange={handleChange}
-            className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
-            type="text"
-            placeholder="Car Type"
-          />
-        </div>
+          <div className="relative w-full mt-4">
+            <input
+              id="car_type"
+              value={parkingData.parking_application.car_type}
+              onChange={handleChange}
+              className="bg-[#fff] h-[50px] sm:h-[60px] rounded-xl border border-green-500 box-border text-black text-sm sm:text-lg outline-none px-5 pt-1 w-full"
+              type="text"
+              placeholder="Car Type"
+            />
+          </div>
 
-        <div className="relative w-full mt-4">
-          <input
-            id="car_number"
-            value={parkingData.parking_application.car_number}
-            onChange={handleChange}
-            className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
-            type="text"
-            placeholder="Car Number"
-          />
-        </div>
+          <div className="relative w-full mt-4">
+            <input
+              id="car_number"
+              value={parkingData.parking_application.car_number}
+              onChange={handleChange}
+              className="bg-[#fff] h-[50px] sm:h-[60px] rounded-xl border border-green-500 box-border text-black text-sm sm:text-lg outline-none px-5 pt-1 w-full"
+              type="text"
+              placeholder="Car Number"
+            />
+          </div>
 
-        <div className="relative w-full mt-4">
-          <label htmlFor="license_image" className="text-lg">Drivers License:</label>
-          <input
-            id="license_image"
-            onChange={handleChange}
-            className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
-            type="file"
-            accept="image/*"
-          />
-        </div>
+          <div className="relative w-full mt-4">
+            <label htmlFor="license_image" className="text-sm sm:text-lg">Driver's License:</label>
+            <input
+              id="license_image"
+              onChange={handleChange}
+              className="bg-[#fff] h-[50px] sm:h-[60px] rounded-xl border border-green-500 box-border text-black text-sm sm:text-lg outline-none px-5 pt-1 w-full"
+              type="file"
+              accept="image/*"
+            />
+          </div>
 
-        <button onClick={handleSignUp} className="bg-green-500 rounded-full border-0 text-[#eee] text-lg h-[50px] mt-9 w-full hover:bg-green-600">
-          Send
-        </button>
-        <button onClick={Navigation} className="bg-[#fff] text-green-500 rounded-full border border-green-500 text-lg h-[50px] mt-5 w-full hover:bg-green-500 hover:text-white">
-          Back
-        </button>
+          <button onClick={handleSignUp} className="bg-green-500 rounded-full border-0 text-[#eee] text-sm sm:text-lg h-[50px] mt-9 w-full hover:bg-green-600">
+            Send
+          </button>
+          <button onClick={Navigation} className="bg-[#fff] text-green-500 rounded-full border border-green-500 text-sm sm:text-lg h-[50px] mt-5 w-full hover:bg-green-500 hover:text-white">
+            Back
+          </button>
+        </div>
       </div>
     </div>
   );
