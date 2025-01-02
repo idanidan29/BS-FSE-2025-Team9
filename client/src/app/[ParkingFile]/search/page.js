@@ -100,35 +100,35 @@ export default function Page() {
             </NavBar>
             <div className="min-h-screen bg-gradient-to-br from-green-300 via-teal-200 to-cyan-300 flex items-center justify-center p-8">
                 <div className="bg-white rounded-3xl shadow-2xl w-full max-w-6xl space-y-2 animate-fade-in p-0">
-                <div className="flex flex-col items-center space-y-4 pt-5 px-4">
-    <div className="w-full max-w-xl">
-        <h1 className="text-center text-2xl sm:text-4xl font-serif font-light tracking-wide text-gray-800 uppercase">
-            Data Center
-        </h1>
-        <div className="mt-2 text-sm font-sans font-medium text-gray-600 tracking-widest uppercase flex items-center gap-5">
-            <span className="flex-1 border-t border-b border-gray-300 bg-gray-100 h-1"></span>
-            Please Enter User ID
-            <span className="flex-1 border-t border-b border-gray-300 bg-gray-100 h-1"></span>
-        </div>
-    </div>
+                    <div className="flex flex-col items-center space-y-4 pt-5 px-4">
+                        <div className="w-full max-w-xl">
+                            <h1 className="text-center text-2xl sm:text-4xl font-serif font-light tracking-wide text-gray-800 uppercase">
+                                Data Center
+                            </h1>
+                            <div className="mt-2 text-sm font-sans font-medium text-gray-600 tracking-widest uppercase flex items-center gap-5">
+                                <span className="flex-1 border-t border-b border-gray-300 bg-gray-100 h-1"></span>
+                                Please Enter User ID
+                                <span className="flex-1 border-t border-b border-gray-300 bg-gray-100 h-1"></span>
+                            </div>
+                        </div>
 
-    <div className="flex flex-col sm:flex-row sm:space-x-2 items-center space-y-2 sm:space-y-0 w-full max-w-md">
-        <input
-            type="text"
-            id="searchById"
-            value={searchId}
-            onChange={(e) => setSearchId(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter User ID"
-        />
-        <button
-            onClick={handleSearch}
-            className="w-full sm:w-auto px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
-        >
-            Search
-        </button>
-    </div>
-</div>
+                        <div className="flex flex-col sm:flex-row sm:space-x-2 items-center space-y-2 sm:space-y-0 w-full max-w-md">
+                            <input
+                                type="text"
+                                id="searchById"
+                                value={searchId}
+                                onChange={(e) => setSearchId(e.target.value)}
+                                className="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="Enter User ID"
+                            />
+                            <button
+                                onClick={handleSearch}
+                                className="w-full sm:w-auto px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                            >
+                                Search
+                            </button>
+                        </div>
+                    </div>
 
 
                     <div className="flex flex-col w-full px-10 lg:px-20 mt-10 ">

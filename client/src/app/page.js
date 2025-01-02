@@ -62,60 +62,58 @@ export default function Home() {
         } catch (err) {
             alert("An unexpected error occurred. Please try again.");
         }
-        
     };
-    
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen bg-[#fff]">
-            <div className="mb-10">
+        <div className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-0 bg-gradient-to-br from-green-300 via-teal-200 to-cyan-300">
+            <div className="mb-5 sm:mb-10 w-full flex justify-center">
                 <Image
                     src="/SCE_logo.png"
                     alt="Logo"
-                    width={350}
-                    height={350}
+                    width={200}
+                    height={200}
                     className="h-auto w-auto"
                 />
             </div>
-
-            <div className="bg-[#fff] rounded-2xl box-border h-[450px] p-5 w-[520px]">
-                <div className="text-[#eee] font-sans text-4xl font-semibold mt-8 text-center text-green-500">
+    
+            <div className="bg-white rounded-2xl box-border p-5 w-full max-w-[400px] sm:max-w-[520px] shadow-md">
+                <div className="text-gray-800 font-sans text-2xl sm:text-4xl font-semibold mt-5 sm:mt-8 text-center text-green-500">
                     Sign In
                 </div>
-
-                <div className="relative w-full mt-10">
+    
+                <div className="relative w-full mt-8">
                     <input
                         id="username"
                         value={formData.username}
                         onChange={handleChange}
-                        className="bg-[#fff] h-[70px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+                        className="bg-white h-[50px] sm:h-[70px] rounded-xl border border-green-500 text-gray-800 text-lg outline-none px-4 sm:px-5 pt-1 w-full"
                         type="text"
                         placeholder="User Name"
                     />
                 </div>
-
-                <div className="relative w-full mt-7">
+    
+                <div className="relative w-full mt-5 sm:mt-7">
                     <input
                         id="password"
                         value={formData.password}
                         onChange={handleChange}
-                        className="bg-[#fff] h-[70px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+                        className="bg-white h-[50px] sm:h-[70px] rounded-xl border border-green-500 text-gray-800 text-lg outline-none px-4 sm:px-5 pt-1 w-full"
                         type="password"
                         placeholder="Password"
                     />
                 </div>
-
+    
                 <button
                     onClick={handleCheckUser}
-                    className="bg-green-500 rounded-full border-0 text-[#eee] text-lg h-[50px] mt-9 w-full hover:bg-green-600"
+                    className="bg-green-500 rounded-full border-0 text-white text-lg h-[45px] sm:h-[50px] mt-7 sm:mt-9 w-full hover:bg-green-600"
                 >
                     Login
                 </button>
                 <button
                     onClick={Navigation}
-                    className="bg-[#fff] text-green-500 rounded-full border border-green-500 text-lg h-[50px] mt-9 w-full hover:bg-green-500 hover:text-white"
+                    className="bg-white text-green-500 rounded-full border border-green-500 text-lg h-[45px] sm:h-[50px] mt-5 sm:mt-9 w-full hover:bg-green-500 hover:text-white"
                 >
-                    I Dont Have A User
+                    I Don't Have A User
                 </button>
             </div>
         </div>
