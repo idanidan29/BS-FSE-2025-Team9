@@ -103,10 +103,8 @@ export default function Page() {
                             <h1 className="text-center text-2xl sm:text-4xl font-serif font-light tracking-wide text-gray-800 uppercase">
                                 Data Center
                             </h1>
-                            <div className="mt-2 text-sm font-sans font-medium text-gray-600 tracking-widest uppercase flex items-center gap-5">
-                                <span className="flex-1 border-t border-b border-gray-300 bg-gray-100 h-1"></span>
-                                Please Enter User ID
-                                <span className="flex-1 border-t border-b border-gray-300 bg-gray-100 h-1"></span>
+                            <div className="mt-2 text-sm font-sans font-medium text-gray-600 tracking-widest uppercase flex items-center justify-center gap-5">
+                                <span>Please Enter User ID</span>
                             </div>
                         </div>
 
