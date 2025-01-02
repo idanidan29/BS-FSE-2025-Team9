@@ -224,7 +224,7 @@ export default function Page({ params }) {
           </div>
 
           <div className="relative w-full mt-4">
-            <label htmlFor="license_image" className="text-sm sm:text-lg">Driver's License:</label>
+            <label htmlFor="license_image" className="text-sm sm:text-lg">Drivers License:</label>
             <input
               id="license_image"
               onChange={handleChange}
