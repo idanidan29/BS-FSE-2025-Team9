@@ -94,13 +94,13 @@ export default function Page() {
 
                 <button
                     onClick={handleSignUp}
-                    className="bg-green-500 rounded-full border-0 text-white text-lg h-[45px] sm:h-[50px] mt-7 w-full hover:bg-green-600"
+                    className="mt-7 w-full py-3 bg-gradient-to-r from-green-400 to-cyan-500 text-white font-bold rounded-xl hover:from-cyan-500 hover:to-green-400 shadow-lg transform hover:scale-105 transition-all duration-300"
                 >
                     Sign Up
                 </button>
                 <button
                     onClick={Navigation}
-                    className="bg-white text-green-500 rounded-full border border-green-500 text-lg h-[45px] sm:h-[50px] mt-5 sm:mt-7 w-full hover:bg-green-500 hover:text-white"
+                    className="mt-7 w-full py-3 bg-gradient-to-r from-green-400 to-cyan-500 text-white font-bold rounded-xl hover:from-cyan-500 hover:to-green-400 shadow-lg transform hover:scale-105 transition-all duration-300"
                 >
                     Login
                 </button>

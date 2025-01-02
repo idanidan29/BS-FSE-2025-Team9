@@ -6,7 +6,6 @@ import { FaCrown } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import NavBar from "../../components/NavBar";
 
-
 export default function Page() {
     const [users, setUsers] = useState([]);
     const [searchId, setSearchId] = useState("");
@@ -59,7 +58,6 @@ export default function Page() {
         router.push(`/${sanitizedUsername}/search/${userId}`);
     };
 
-
     const handlePromoteToAdmin = async (username) => {
         try {
             const response = await fetch(`https://bs-fse-2025-team9.onrender.com/users/${username}`, {
@@ -98,8 +96,8 @@ export default function Page() {
             <NavBar userRole={localStorage.getItem('userRole')}>
                 {localStorage.getItem('studentId')}
             </NavBar>
-            <div className="min-h-screen bg-gradient-to-br from-green-300 via-teal-200 to-cyan-300 flex items-center justify-center p-8">
-                <div className="bg-white rounded-3xl shadow-2xl w-full max-w-6xl space-y-2 animate-fade-in p-0">
+            <div className="w-full min-h-screen bg-gradient-to-br from-green-300 via-teal-200 to-cyan-300 flex items-center justify-center p-4 sm:p-8 w-full space-y-2 animate-fade-in">
+                <div className="w-full max-w-6xl space-y-2 animate-fade-in p-0">
                     <div className="flex flex-col items-center space-y-4 pt-5 px-4">
                         <div className="w-full max-w-xl">
                             <h1 className="text-center text-2xl sm:text-4xl font-serif font-light tracking-wide text-gray-800 uppercase">
@@ -130,20 +128,18 @@ export default function Page() {
                         </div>
                     </div>
 
-
-                    <div className="flex flex-col w-full px-10 lg:px-20 mt-10 ">
-                        <div className="overflow-x-auto ">
+                    <div className="flex flex-col w-full px-4 sm:px-10 lg:px-20 mt-10">
+                        <div className="overflow-x-auto">
                             <div className="inline-block min-w-full py-4">
                                 <div className="overflow-hidden border border-gray-300 rounded-lg shadow-md">
                                     <table className="w-full text-left text-lg font-light">
                                         <thead className="bg-gray-200 border-b font-medium text-base text-center">
                                             <tr>
-                                                <th scope="col" className="px-8 py-6">Number</th>
-                                                <th scope="col" className="px-8 py-6">Full Name</th>
-                                                <th scope="col" className="px-8 py-6">Student ID</th>
-                                                <th scope="col" className="px-8 py-6">Email</th>
-                                                <th scope="col" className="px-8 py-6">Is Admin</th>
-                                                <th scope="col" className="px-8 py-6">Actions</th>
+                                                <th scope="col" className="px-4 py-6 sm:px-8 sm:py-6 bg-green-100">Full Name</th>
+                                                <th scope="col" className="px-4 py-6 sm:px-8 sm:py-6 hidden md:table-cell bg-yellow-100">Student ID</th>
+                                                <th scope="col" className="px-4 py-6 sm:px-8 sm:py-6 hidden md:table-cell bg-red-100">Email</th>
+                                                <th scope="col" className="px-4 py-6 sm:px-8 sm:py-6 hidden md:table-cell bg-purple-100">Is Admin</th>
+                                                <th scope="col" className="px-4 py-6 sm:px-8 sm:py-6 bg-teal-100">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -153,22 +149,19 @@ export default function Page() {
                                                         key={user._id}
                                                         className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 text-center"
                                                     >
-                                                        <td className="whitespace-nowrap px-8 py-6 font-medium">
-                                                            {index + 1}
-                                                        </td>
-                                                        <td className="whitespace-nowrap px-8 py-6">
+                                                        <td className="whitespace-nowrap px-4 py-4 sm:px-8 sm:py-6 bg-green-50">
                                                             {`${user.first_name} ${user.last_name}`}
                                                         </td>
-                                                        <td className="whitespace-nowrap px-8 py-6">
+                                                        <td className="whitespace-nowrap px-4 py-4 sm:px-8 sm:py-6 hidden md:table-cell bg-yellow-50">
                                                             {user.student_id}
                                                         </td>
-                                                        <td className="whitespace-nowrap px-8 py-6">
+                                                        <td className="whitespace-nowrap px-4 py-4 sm:px-8 sm:py-6 hidden md:table-cell bg-red-50">
                                                             {user.email}
                                                         </td>
-                                                        <td className="whitespace-nowrap px-8 py-6">
+                                                        <td className="whitespace-nowrap px-4 py-4 sm:px-8 sm:py-6 hidden md:table-cell bg-purple-50">
                                                             {user.is_admin ? "Yes" : "No"}
                                                         </td>
-                                                        <td className="whitespace-nowrap px-8 py-6">
+                                                        <td className="whitespace-nowrap px-4 py-4 sm:px-8 sm:py-6 bg-teal-50">
                                                             <div className="flex flex-col space-y-2">
                                                                 <button
                                                                     onClick={() => handleDelete(user.student_id)}
