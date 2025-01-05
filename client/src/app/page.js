@@ -1,7 +1,8 @@
-"use client";
+"use client"
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import LoadingCard from './components/LoadingCard'; // Adjust the path to where you store it
 
 export default function Home() {
     const [formData, setFormData] = useState({
@@ -9,6 +10,7 @@ export default function Home() {
         password: ''
     });
 
+    const [loading, setLoading] = useState(false); // Track loading state
     const router = useRouter();
 
     const Navigation = () => {
@@ -31,7 +33,9 @@ export default function Home() {
             alert("Please fill in both fields!");
             return;
         }
-    
+
+        setLoading(true); // Activate loading screen
+
         try {
             const response = await fetch("https://bs-fse-2025-team9.onrender.com/users/login", {
                 method: "POST",
@@ -61,11 +65,15 @@ export default function Home() {
             }
         } catch (err) {
             alert("An unexpected error occurred. Please try again.");
+        } finally {
+            setLoading(false); // Deactivate loading screen
         }
     };
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-0 bg-gradient-to-br from-green-300 via-teal-200 to-cyan-300">
+            {loading && <LoadingCard />} {/* Show the loading card while waiting */}
+            
             <div className="mb-5 sm:mb-10 w-full flex justify-center">
                 <Image
                     src="/SCE_logo.png"
@@ -113,7 +121,7 @@ export default function Home() {
                     onClick={Navigation}
                     className="mt-7 w-full py-3 bg-gradient-to-r from-green-400 to-cyan-500 text-white font-bold rounded-xl hover:from-cyan-500 hover:to-green-400 shadow-lg transform hover:scale-105 transition-all duration-300"
                 >
-                    I Dont Have A User
+                    I Don't Have A User
                 </button>
             </div>
         </div>
