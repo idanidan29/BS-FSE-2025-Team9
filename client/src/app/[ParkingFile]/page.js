@@ -19,11 +19,7 @@ export default function Page({ params }) {
       }
     })();
   }, [params, router]);
-
-  const Navigation = () => {
-    router.push('/');
-  };
-
+  
   // JSON structured state
   const [parkingData, setParkingData] = useState({
     parking_application: {
@@ -136,7 +132,7 @@ export default function Page({ params }) {
               id="first_name"
               value={parkingData.parking_application.first_name}
               onChange={handleChange}
-              className="bg-[#fff] h-[50px] sm:h-[60px] rounded-xl border border-green-500 box-border text-black text-sm sm:text-lg outline-none px-5 pt-1 w-full"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
               type="text"
               placeholder="First Name"
             />
@@ -147,7 +143,7 @@ export default function Page({ params }) {
               id="last_name"
               value={parkingData.parking_application.last_name}
               onChange={handleChange}
-              className="bg-[#fff] h-[50px] sm:h-[60px] rounded-xl border border-green-500 box-border text-black text-sm sm:text-lg outline-none px-5 pt-1 w-full"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
               type="text"
               placeholder="Last Name"
             />
@@ -158,7 +154,7 @@ export default function Page({ params }) {
               id="student_id"
               value={parkingData.parking_application.student_id}
               onChange={handleChange}
-              className="bg-[#fff] h-[50px] sm:h-[60px] rounded-xl border border-green-500 box-border text-black text-sm sm:text-lg outline-none px-5 pt-1 w-full"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
               type="text"
               placeholder="ID"
             />
@@ -169,7 +165,7 @@ export default function Page({ params }) {
               id="email"
               value={parkingData.parking_application.email}
               onChange={handleChange}
-              className="bg-[#fff] h-[50px] sm:h-[60px] rounded-xl border border-green-500 box-border text-black text-sm sm:text-lg outline-none px-5 pt-1 w-full"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
               type="email"
               placeholder="Email"
             />
@@ -180,7 +176,7 @@ export default function Page({ params }) {
               id="phone_number"
               value={parkingData.parking_application.phone_number}
               onChange={handleChange}
-              className="bg-[#fff] h-[50px] sm:h-[60px] rounded-xl border border-green-500 box-border text-black text-sm sm:text-lg outline-none px-5 pt-1 w-full"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
               type="text"
               placeholder="Phone Number"
             />
@@ -191,7 +187,7 @@ export default function Page({ params }) {
               id="Study_Department"
               value={parkingData.parking_application.Study_Department}
               onChange={handleChange}
-              className="bg-[#fff] h-[50px] sm:h-[60px] rounded-xl border border-green-500 box-border text-black text-sm sm:text-lg outline-none px-5 pt-1 w-full"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
             >
               <option value="" disabled>Select your department</option>
               <option value="Computer Science">Computer Science</option>
@@ -206,7 +202,7 @@ export default function Page({ params }) {
               id="car_type"
               value={parkingData.parking_application.car_type}
               onChange={handleChange}
-              className="bg-[#fff] h-[50px] sm:h-[60px] rounded-xl border border-green-500 box-border text-black text-sm sm:text-lg outline-none px-5 pt-1 w-full"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
               type="text"
               placeholder="Car Type"
             />
@@ -217,7 +213,7 @@ export default function Page({ params }) {
               id="car_number"
               value={parkingData.parking_application.car_number}
               onChange={handleChange}
-              className="bg-[#fff] h-[50px] sm:h-[60px] rounded-xl border border-green-500 box-border text-black text-sm sm:text-lg outline-none px-5 pt-1 w-full"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
               type="text"
               placeholder="Car Number"
             />
@@ -228,17 +224,14 @@ export default function Page({ params }) {
             <input
               id="license_image"
               onChange={handleChange}
-              className="bg-[#fff] h-[50px] sm:h-[60px] rounded-xl border border-green-500 box-border text-black text-sm sm:text-lg outline-none px-5 pt-1 w-full"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
               type="file"
               accept="image/*"
             />
           </div>
 
-          <button onClick={handleSignUp} className="bg-green-500 rounded-full border-0 text-[#eee] text-sm sm:text-lg h-[50px] mt-9 w-full hover:bg-green-600">
+          <button onClick={handleSignUp} className="mt-7 w-full py-3 bg-gradient-to-r from-green-400 to-cyan-500 text-white font-bold rounded-xl hover:from-cyan-500 hover:to-green-400 shadow-lg transform hover:scale-105 transition-all duration-300">
             Send
-          </button>
-          <button onClick={Navigation} className="bg-[#fff] text-green-500 rounded-full border border-green-500 text-sm sm:text-lg h-[50px] mt-5 w-full hover:bg-green-500 hover:text-white">
-            Back
           </button>
         </div>
       </div>

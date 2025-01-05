@@ -82,7 +82,7 @@ export default function Page() {
                             id={field}
                             value={formData[field]}
                             onChange={handleChange}
-                            className="bg-white h-[50px] sm:h-[70px] rounded-xl border border-green-500 text-gray-800 text-lg outline-none px-4 sm:px-5 w-full"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
                             type={field === "password" ? "password" : field === "email" ? "email" : "text"}
                             placeholder={field.split("_").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")}
                         />

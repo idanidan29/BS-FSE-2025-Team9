@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import NavBar from "../../../components/NavBar";
 
 export default function EditUser({ params }) {
     const router = useRouter();
@@ -72,7 +73,12 @@ export default function EditUser({ params }) {
     };
 
     return (
+        <div>
+            <NavBar userRole={localStorage.getItem('userRole')}>
+                {localStorage.getItem('studentId')}
+            </NavBar>
         <div className="min-h-screen bg-gradient-to-br from-green-300 via-teal-200 to-cyan-300 flex items-center justify-center p-8">
+            
             <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl p-8 space-y-6 animate-fade-in">
                 <h1 className="text-4xl font-extrabold text-center text-cyan-700 tracking-wide">
                     Edit User
@@ -227,6 +233,7 @@ export default function EditUser({ params }) {
                     </button>
                 </form>
             </div>
+        </div>
         </div>
     );
 }
