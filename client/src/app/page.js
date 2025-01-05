@@ -121,7 +121,7 @@ export default function Home() {
                     onClick={Navigation}
                     className="mt-7 w-full py-3 bg-gradient-to-r from-green-400 to-cyan-500 text-white font-bold rounded-xl hover:from-cyan-500 hover:to-green-400 shadow-lg transform hover:scale-105 transition-all duration-300"
                 >
-                    I Don't Have A User
+                    I Dont Have A User
                 </button>
             </div>
         </div>
