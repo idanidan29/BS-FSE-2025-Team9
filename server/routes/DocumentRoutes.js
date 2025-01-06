@@ -166,12 +166,7 @@ router.get('/documents/export', async (req, res) => {
       { header: 'First Name', key: 'first_name', width: 20 },
       { header: 'Last Name', key: 'last_name', width: 20 },
       { header: 'Email', key: 'email', width: 30 },
-      { header: 'Student ID', key: 'student_id', width: 15 },
-      { header: 'Phone Number', key: 'phone_number', width: 20 },
-      { header: 'Study Department', key: 'Study_Department', width: 25 },
-      { header: 'Car Type', key: 'car_type', width: 20 },
-      { header: 'Car Number', key: 'car_number', width: 20 },
-      { header: 'License Image', key: 'licenseImage', width: 40 },
+
     ];
 
     // Add rows to the worksheet
@@ -179,13 +174,7 @@ router.get('/documents/export', async (req, res) => {
       worksheet.addRow({
         first_name: doc.first_name,
         last_name: doc.last_name,
-        email: doc.email,
-        student_id: doc.student_id,
-        phone_number: doc.phone_number,
-        Study_Department: doc.Study_Department,
-        car_type: doc.car_type,
-        car_number: doc.car_number,
-        licenseImage: doc.licenseImage,
+        email: doc.email
       });
     });
 
