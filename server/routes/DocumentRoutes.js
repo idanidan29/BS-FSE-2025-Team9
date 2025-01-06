@@ -3,42 +3,43 @@ const Document = require('../models/Document');
 const router = express.Router();
 const fs = require('fs');
 const path = require('path');
+const ExcelJS = require('exceljs'); // Required for creating Excel files
 
 // Helper function to decode and save base64 image
 const saveBase64Image = (base64String, student_id) => {
-    // Extract base64 data and file extension
+    // Validate and decode the base64 string
     const matches = base64String.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
     if (!matches || matches.length !== 3) {
         throw new Error('Invalid base64 string');
     }
 
-    const fileType = matches[1];
-    const base64Data = matches[2];
-    const extension = fileType.split('/')[1];
-   
-    // Create filename
+    const fileType = matches[1]; // Extract the file type
+    const base64Data = matches[2]; // Extract the base64 encoded data
+    const extension = fileType.split('/')[1]; // Extract the file extension
+
+    // Generate a unique file name
     const fileName = `license-${student_id}-${Date.now()}.${extension}`;
     const filePath = path.join('uploads', fileName);
 
-    // Ensure uploads directory exists
+    // Ensure the uploads directory exists
     if (!fs.existsSync('uploads')) {
         fs.mkdirSync('uploads');
     }
 
-    // Save file
+    // Save the file to the uploads directory
     fs.writeFileSync(filePath, base64Data, 'base64');
-    return fileName;
+    return fileName; // Return the file name
 };
 
 // Route to create a new document
 router.post('/documents', async (req, res) => {
     console.log("=== POST /documents request received ===");
-   
     try {
         const { parking_application } = req.body;
-       
+
         // Validate required fields
-        if (!parking_application.first_name ||
+        if (
+            !parking_application.first_name ||
             !parking_application.last_name ||
             !parking_application.email ||
             !parking_application.student_id ||
@@ -46,17 +47,18 @@ router.post('/documents', async (req, res) => {
             !parking_application.Study_Department ||
             !parking_application.car_type ||
             !parking_application.car_number ||
-            !parking_application.license_image) {
+            !parking_application.license_image
+        ) {
             return res.status(400).json({ message: 'All fields are required.' });
         }
 
-        // Save base64 image
+        // Save the license image and generate the file name
         const fileName = saveBase64Image(
             parking_application.license_image,
             parking_application.student_id
         );
 
-        // Create new document
+        // Create a new document in the database
         const newDocument = new Document({
             first_name: parking_application.first_name,
             last_name: parking_application.last_name,
@@ -66,15 +68,15 @@ router.post('/documents', async (req, res) => {
             Study_Department: parking_application.Study_Department,
             car_type: parking_application.car_type,
             car_number: parking_application.car_number,
-            licenseImage: fileName
+            licenseImage: fileName,
         });
 
         await newDocument.save();
         console.log("Document saved successfully");
-       
+
         res.status(201).json({
             message: 'Document created successfully',
-            document: newDocument
+            document: newDocument,
         });
     } catch (err) {
         console.error("Error saving document:", err);
@@ -82,81 +84,123 @@ router.post('/documents', async (req, res) => {
     }
 });
 
-// Keep your existing routes
-/*router.get('/documents/:student_id', async (req, res) => {
-    try {
-        const document = await Document.findOne({ student_id: req.params.student_id });
-        if (!document) {
-            return res.status(404).json({ message: 'Document not found' });
-        }
-        res.status(200).json(document);
-    } catch (err) {
-        res.status(400).json({ message: 'Error fetching document', error: err });
-    }
-});*/ 
-//new get
-router.get('/documents/:student_id', async (req, res) => {
-    try {
-        const {student_id }=req.params;
-        console.log("Fetching document for student_id:", student_id);
-        const updatedDocument = await Document.findOne({ student_id }); // חפש את המסמך לפי student_id
-
-    
-
-    if (!updatedDocument) {
-      return res.status(404).json({ message: 'No document found for this student.' });
+// Route to export all users as Excel (Admin only)
+router.get('/export-users', async (req, res) => {
+    const isAdmin = req.user?.is_admin; // Assuming user data is retrieved from session or JWT
+    if (!isAdmin) {
+        return res.status(403).send({ error: 'Access denied' });
     }
 
-    res.status(200).json(updatedDocument);
-  } catch (err) {
-    console.error("Error fetching document:", err);
-    res.status(400).json({ message: 'Error updating document', error: err });
-  }
+    try {
+        // Fetch all users from the database
+        const users = await Document.find();
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Users');
+
+        // Define worksheet columns
+        worksheet.columns = [
+            { header: 'Full Name', key: 'full_name', width: 30 },
+            { header: 'Student ID', key: 'student_id', width: 20 },
+            { header: 'Email', key: 'email', width: 30 },
+            { header: 'Phone Number', key: 'phone_number', width: 20 },
+            { header: 'Study Department', key: 'Study_Department', width: 25 },
+            { header: 'Car Type', key: 'car_type', width: 20 },
+            { header: 'Car Number', key: 'car_number', width: 15 },
+            { header: 'Is Admin', key: 'is_admin', width: 10 },
+        ];
+
+        // Populate worksheet rows with user data
+        users.forEach((user) => {
+            worksheet.addRow({
+                full_name: `${user.first_name} ${user.last_name}`,
+                student_id: user.student_id,
+                email: user.email,
+                phone_number: user.phone_number,
+                Study_Department: user.Study_Department,
+                car_type: user.car_type,
+                car_number: user.car_number,
+                is_admin: user.is_admin ? 'Yes' : 'No',
+            });
+        });
+
+        // Set headers and send the Excel file
+        res.setHeader(
+            'Content-Type',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        );
+        res.setHeader(
+            'Content-Disposition',
+            'attachment; filename="users.xlsx"'
+        );
+        await workbook.xlsx.write(res);
+        res.end();
+    } catch (error) {
+        console.error('Error exporting users:', error);
+        res.status(500).send({ error: 'Failed to export users' });
+    }
 });
 
+// Route to fetch a document by student ID
+router.get('/documents/:student_id', async (req, res) => {
+    try {
+        const { student_id } = req.params;
+        const updatedDocument = await Document.findOne({ student_id });
 
+        if (!updatedDocument) {
+            return res.status(404).json({ message: 'No document found for this student.' });
+        }
 
+        res.status(200).json(updatedDocument);
+    } catch (err) {
+        console.error("Error fetching document:", err);
+        res.status(400).json({ message: 'Error fetching document', error: err });
+    }
+});
+
+// Route to fetch all documents
 router.get('/documents', async (req, res) => {
     try {
         const documents = await Document.find();
         res.status(200).json(documents);
     } catch (err) {
-        console.error("Error fetching document:", err);
+        console.error("Error fetching documents:", err);
         res.status(400).json({ message: 'Error fetching documents', error: err });
     }
 });
 
+// Route to update a document by student ID
 router.put('/documents/:student_id', async (req, res) => {
-  try {
-    const { student_id } = req.params;
-    const updatedData = req.body; // Data to update
-    // Validate required fields 
-    if (!updatedData.first_name ||
-        !updatedData.last_name ||
-        !updatedData.email ||
-        !updatedData.phone_number ||
-        !updatedData.Study_Department ||
-        !updatedData.car_type ||
-        !updatedData.car_number ||
-        !updatedData.license_image) {
-        return res.status(400).json({ message: 'All fields are required.' });
+    try {
+        const { student_id } = req.params;
+        const updatedData = req.body;
+
+        if (
+            !updatedData.first_name ||
+            !updatedData.last_name ||
+            !updatedData.email ||
+            !updatedData.phone_number ||
+            !updatedData.Study_Department ||
+            !updatedData.car_type ||
+            !updatedData.car_number ||
+            !updatedData.license_image
+        ) {
+            return res.status(400).json({ message: 'All fields are required.' });
+        }
+
+        const updatedDocument = await Document.findOneAndUpdate(
+            { student_id },
+            { $set: updatedData },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedDocument) {
+            return res.status(404).json({ message: 'Document not found' });
+        }
+
+        res.status(200).json(updatedDocument);
+    } catch (err) {
+        res.status(400).json({ message: 'Error updating document', error: err });
     }
-
-    // Find and update the document by student_id
-    const updatedDocument = await Document.findOneAndUpdate(
-      { student_id },
-      { $set: updatedData },
-      { new: true, runValidators: true } // Return the updated document and validate input
-    );
-
-    if (!updatedDocument) {
-      return res.status(404).json({ message: 'Document not found' });
-    }
-
-    res.status(200).json(updatedDocument);
-  } catch (err) {
-    res.status(400).json({ message: 'Error updating document', error: err });
-  }
 });
 
 module.exports = router;
