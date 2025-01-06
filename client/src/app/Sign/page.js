@@ -75,7 +75,7 @@ export default function Page() {
             const studentId = localStorage.getItem('studentId');
             if (studentId) {
                 try {
-                    const response = await fetch(`http://localhost:5000/documents/${studentId}`);
+                    const response = await fetch(`https://bs-fse-2025-team9.onrender.com/documents/${studentId}`);
                     if (response.ok) {
                         const data = await response.json();
                         setParkingData({ document: data });
