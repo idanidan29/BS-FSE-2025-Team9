@@ -5,14 +5,23 @@ const documentRoutes = require('./routes/DocumentRoutes'); // Import document ro
 const cors = require('cors');
 require('dotenv').config();
 
-const app = express();
-const PORT = 5000;
 
+
+const app = express();
+
+// Configuration for PORT and MongoDB URI
+const PORT = 5000;
+const mongoUri = process.env.MONGO_URI;
+const secretKey = process.env.SECRET_KEY;
+
+
+// Middleware for CORS and JSON parsing
 app.use(cors({
-  origin: '*'  
+  origin: '*'  // Allow all origins (adjust for production as needed)
 }));
 app.use(express.json({ limit: '7mb' }));
 app.use(express.urlencoded({ limit: '7mb', extended: true }));
+
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
