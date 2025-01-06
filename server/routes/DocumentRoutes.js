@@ -83,7 +83,7 @@ router.post('/documents', async (req, res) => {
 });
 
 // Keep your existing routes
-router.get('/documents/:student_id', async (req, res) => {
+/*router.get('/documents/:student_id', async (req, res) => {
     try {
         const document = await Document.findOne({ student_id: req.params.student_id });
         if (!document) {
@@ -93,13 +93,35 @@ router.get('/documents/:student_id', async (req, res) => {
     } catch (err) {
         res.status(400).json({ message: 'Error fetching document', error: err });
     }
+});*/ 
+//new get
+router.get('/documents/:student_id', async (req, res) => {
+    try {
+        const {student_id }=req.params;
+        console.log("Fetching document for student_id:", student_id);
+        const updatedDocument = await Document.findOne({ student_id }); // חפש את המסמך לפי student_id
+
+    
+
+    if (!updatedDocument) {
+      return res.status(404).json({ message: 'No document found for this student.' });
+    }
+
+    res.status(200).json(updatedDocument);
+  } catch (err) {
+    console.error("Error fetching document:", err);
+    res.status(400).json({ message: 'Error updating document', error: err });
+  }
 });
+
+
 
 router.get('/documents', async (req, res) => {
     try {
         const documents = await Document.find();
         res.status(200).json(documents);
     } catch (err) {
+        console.error("Error fetching document:", err);
         res.status(400).json({ message: 'Error fetching documents', error: err });
     }
 });
@@ -108,6 +130,17 @@ router.put('/documents/:student_id', async (req, res) => {
   try {
     const { student_id } = req.params;
     const updatedData = req.body; // Data to update
+    // Validate required fields 
+    if (!updatedData.first_name ||
+        !updatedData.last_name ||
+        !updatedData.email ||
+        !updatedData.phone_number ||
+        !updatedData.Study_Department ||
+        !updatedData.car_type ||
+        !updatedData.car_number ||
+        !updatedData.license_image) {
+        return res.status(400).json({ message: 'All fields are required.' });
+    }
 
     // Find and update the document by student_id
     const updatedDocument = await Document.findOneAndUpdate(

@@ -7,6 +7,7 @@ export default function Page({ params }) {
   const router = useRouter();
   const [isAuthorized, setIsAuthorized] = useState(false);
 
+
   // Authorization check
   useEffect(() => {
     (async () => {
@@ -21,6 +22,9 @@ export default function Page({ params }) {
   }, [params, router]);
   
   // JSON structured state
+
+  const [isEditing, setIsEditing] = useState(false); // מצב לעריכת טופס
+
   const [parkingData, setParkingData] = useState({
     parking_application: {
       first_name: "",
@@ -35,11 +39,53 @@ export default function Page({ params }) {
     }
   });
 
+  // Authorization check
+  useEffect(() => {
+    (async () => {
+      const userLoggedIn = localStorage.getItem('username');
+      const resolvedParams = await params;
+      if (userLoggedIn === resolvedParams.ParkingFile) {
+        setIsAuthorized(true);
+      } else {
+        router.push('/');
+      }
+    })();
+  }, [params, router]);
+
+  // Load parking data from the server based on student_id
+  useEffect(() => {
+    const fetchParkingData = async () => {
+      const studentId = localStorage.getItem('studentId');
+      console.log('Current studentId:', studentId);
+
+      if (studentId) {
+        try {
+          const response = await fetch(`http://localhost:5000/documents/${studentId}`);
+          if (response.ok) {
+            const data = await response.json();
+            setParkingData({ parking_application: data });
+            setIsEditing(true); // נכנסים למצב עריכה אם נתונים טוענים בהצלחה
+          } else {
+            console.log('No document found for this student.');
+          }
+        } catch (err) {
+          console.error('Error fetching parking data:', err);
+        }
+      }
+    };
+
+    fetchParkingData();
+  }, []); // השאר את התלות ריקה כדי שזה יקרה פעם אחת כשמטעינים את הקומפוננטה
+
+
+  const Navigation = () => {
+    router.push('/');
+  };
+
   const handleChange = (e) => {
     const { id, value, type, files } = e.target;
 
     if (type === 'file') {
-      // Handle file input
       const file = files[0];
       if (file) {
         const reader = new FileReader();
@@ -54,7 +100,6 @@ export default function Page({ params }) {
         reader.readAsDataURL(file);
       }
     } else {
-      // Handle other inputs
       setParkingData(prev => ({
         parking_application: {
           ...prev.parking_application,
@@ -64,10 +109,41 @@ export default function Page({ params }) {
     }
   };
 
+  const handleUpdate = async () => {
+    const studentId = localStorage.getItem('studentId');
+    const { parking_application } = parkingData;
+
+    try {
+      const response = await fetch(`http://localhost:5000/documents/${studentId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(parking_application),
+      });
+
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.indexOf("application/json") !== -1) {
+        const data = await response.json();
+        if (response.ok) {
+          alert('Application updated successfully!');
+          localStorage.setItem('parkingData', JSON.stringify(parkingData)); // Save updated data
+        } else {
+          alert(`Error: ${data.message}`);
+        }
+      } else {
+        const text = await response.text();
+        alert(`Unexpected response from server: ${text}`);
+      }
+    } catch (err) {
+      console.error('Error updating parking application:', err);
+      alert('An unexpected error occurred. Please try again later.');
+    }
+  };
+
   const handleSignUp = async () => {
     const { parking_application } = parkingData;
 
-    // Validation check
     if (!parking_application.first_name ||
       !parking_application.last_name ||
       !parking_application.student_id ||
@@ -80,7 +156,6 @@ export default function Page({ params }) {
       return;
     }
 
-    // Check if file is selected and processed
     if (!parking_application.license_image) {
       alert("Please select a license file!");
       return;
@@ -102,6 +177,7 @@ export default function Page({ params }) {
         const data = await response.json();
         if (response.ok) {
           alert('Application submitted successfully!');
+          localStorage.setItem('parkingData', JSON.stringify(parkingData)); // Save submitted data
           router.push('/');
         } else {
           alert(`Error: ${data.message}`);
@@ -182,20 +258,23 @@ export default function Page({ params }) {
             />
           </div>
 
-          <div className="relative w-full mt-4">
-            <select
-              id="Study_Department"
-              value={parkingData.parking_application.Study_Department}
-              onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
-            >
-              <option value="" disabled>Select your department</option>
-              <option value="Computer Science">Computer Science</option>
-              <option value="Software Engineering">Software Engineering</option>
-              <option value="Business Administration">Business Administration</option>
-              <option value="Chemistry">Chemistry</option>
-            </select>
-          </div>
+
+        <div className="relative w-full mt-4">
+          <label htmlFor="Study_Department" className="text-lg"></label>
+          <select
+            id="Study_Department"
+            value={parkingData.parking_application.Study_Department}
+            onChange={handleChange}
+            className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+          >
+            <option value="" disabled>Select your department</option>
+            <option value="Computer Science">Computer Science</option>
+            <option value="Software Engineering">Software Engineering</option>
+            <option value="Business Administration">Business Administration</option>
+            <option value="Chemistry">Chemistry</option>
+          </select>
+        </div>
+
 
           <div className="relative w-full mt-4">
             <input
@@ -219,22 +298,34 @@ export default function Page({ params }) {
             />
           </div>
 
-          <div className="relative w-full mt-4">
-            <label htmlFor="license_image" className="text-sm sm:text-lg">Drivers License:</label>
-            <input
-              id="license_image"
-              onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
-              type="file"
-              accept="image/*"
-            />
-          </div>
 
-          <button onClick={handleSignUp} className="mt-7 w-full py-3 bg-gradient-to-r from-green-400 to-cyan-500 text-white font-bold rounded-xl hover:from-cyan-500 hover:to-green-400 shadow-lg transform hover:scale-105 transition-all duration-300">
-            Send
+        <div className="relative w-full mt-4">
+          <input
+            id="license_image"
+            onChange={handleChange}
+            className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+            type="file"
+            accept="image/*"
+          />
+        </div>
+
+        <div className="flex justify-between mt-8">
+          <button
+            onClick={isEditing ? handleUpdate : handleSignUp}
+            className="bg-green-500 text-white rounded-lg h-[50px] w-[200px]"
+          >
+            {isEditing ? 'Update Application' : 'Submit Application'}
+          </button>
+          <button
+            onClick={Navigation}
+            className="bg-red-500 text-white rounded-lg h-[50px] w-[200px]"
+          >
+            Cancel
+
           </button>
         </div>
       </div>
     </div>
+  </div>
   );
 }

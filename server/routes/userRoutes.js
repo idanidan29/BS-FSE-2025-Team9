@@ -58,7 +58,10 @@ router.post('/users/login', async (req, res) => {
     res.status(200).json(userDetails);
   } catch (err) {
     res.status(400).json({ message: 'Error fetching user', error: err });
+    console.error(err);
+
   }
+
 });
 
 

@@ -48,8 +48,12 @@ export default function Page() {
             });
 
             if (response.ok) {
-                alert("Sign-up successful!");
-                router.push("/");
+
+                const data = await response.json();
+                localStorage.setItem('student_id', data.student_id);
+                alert('Sign-up successful!');
+                router.push('/');  
+
             } else {
                 const error = await response.json();
                 alert(`Error: ${error.message}`);
@@ -58,6 +62,41 @@ export default function Page() {
             alert("An unexpected error occurred. Please try again later.");
         }
     };
+    useEffect(() => {
+        // טען את הנתונים מה-localStorage
+        const savedFormData = localStorage.getItem('formData');
+        if (savedFormData) {
+            setFormData(JSON.parse(savedFormData));
+        }
+
+        // פונקציה להעלאת המסמך מהשרת
+        const fetchData = async () => {
+            const studentId = localStorage.getItem('studentId');
+            if (studentId) {
+                try {
+                    const response = await fetch(`http://localhost:5000/documents/${studentId}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setParkingData({ document: data });
+                    } else {
+                        console.log('No document found.');
+                    }
+                } catch (err) {
+                    console.error('Error fetching document:', err);
+                }
+            }
+        };
+
+        fetchData();
+    }, []); // הפעיל את ה-useEffect פעם אחת כשקומפוננטה נטענת
+
+    // שימוש ב-useEffect נוסף כדי לשמור את formData ב-localStorage בכל פעם שהוא משתנה
+    useEffect(() => {
+        localStorage.setItem('formData', JSON.stringify(formData));
+    }, [formData]); // הפעיל את ה-useEffect כאשר formData משתנה
+
+      
+    
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-0 bg-gradient-to-br from-green-300 via-teal-200 to-cyan-300">
@@ -107,4 +146,6 @@ export default function Page() {
             </div>
         </div>
     );
+
 }
+
