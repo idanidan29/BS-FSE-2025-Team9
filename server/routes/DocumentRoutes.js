@@ -1,8 +1,9 @@
 const express = require('express');
 const Document = require('../models/Document');
-const router = express.Router();
+const ExcelJS = require('exceljs'); // Import ExcelJS
 const fs = require('fs');
 const path = require('path');
+const router = express.Router();
 
 // Helper function to decode and save base64 image
 const saveBase64Image = (base64String, student_id) => {
@@ -82,55 +83,42 @@ router.post('/documents', async (req, res) => {
     }
 });
 
-// Keep your existing routes
-/*router.get('/documents/:student_id', async (req, res) => {
-    try {
-        const document = await Document.findOne({ student_id: req.params.student_id });
-        if (!document) {
-            return res.status(404).json({ message: 'Document not found' });
-        }
-        res.status(200).json(document);
-    } catch (err) {
-        res.status(400).json({ message: 'Error fetching document', error: err });
-    }
-});*/ 
-//new get
-router.get('/documents/:student_id', async (req, res) => {
-    try {
-        const {student_id }=req.params;
-        console.log("Fetching document for student_id:", student_id);
-        const updatedDocument = await Document.findOne({ student_id }); // חפש את המסמך לפי student_id
-
-    
-
-    if (!updatedDocument) {
-      return res.status(404).json({ message: 'No document found for this student.' });
-    }
-
-    res.status(200).json(updatedDocument);
-  } catch (err) {
-    console.error("Error fetching document:", err);
-    res.status(400).json({ message: 'Error updating document', error: err });
-  }
-});
-
-
-
+// Route to fetch all documents
 router.get('/documents', async (req, res) => {
     try {
         const documents = await Document.find();
         res.status(200).json(documents);
     } catch (err) {
-        console.error("Error fetching document:", err);
+        console.error("Error fetching documents:", err);
         res.status(400).json({ message: 'Error fetching documents', error: err });
     }
 });
 
+// Route to fetch document by student_id
+router.get('/documents/:student_id', async (req, res) => {
+    try {
+        const { student_id } = req.params;
+        console.log("Fetching document for student_id:", student_id);
+        const updatedDocument = await Document.findOne({ student_id });
+
+        if (!updatedDocument) {
+            return res.status(404).json({ message: 'No document found for this student.' });
+        }
+
+        res.status(200).json(updatedDocument);
+    } catch (err) {
+        console.error("Error fetching document:", err);
+        res.status(400).json({ message: 'Error updating document', error: err });
+    }
+});
+
+// Route to update document by student_id
 router.put('/documents/:student_id', async (req, res) => {
   try {
     const { student_id } = req.params;
-    const updatedData = req.body; // Data to update
-    // Validate required fields 
+    const updatedData = req.body;
+
+    // Validate required fields
     if (!updatedData.first_name ||
         !updatedData.last_name ||
         !updatedData.email ||
@@ -146,7 +134,7 @@ router.put('/documents/:student_id', async (req, res) => {
     const updatedDocument = await Document.findOneAndUpdate(
       { student_id },
       { $set: updatedData },
-      { new: true, runValidators: true } // Return the updated document and validate input
+      { new: true, runValidators: true }
     );
 
     if (!updatedDocument) {
@@ -156,6 +144,72 @@ router.put('/documents/:student_id', async (req, res) => {
     res.status(200).json(updatedDocument);
   } catch (err) {
     res.status(400).json({ message: 'Error updating document', error: err });
+  }
+});
+
+// Route to generate Excel file from all documents
+router.get('/documents/export', async (req, res) => {
+  try {
+    // Fetch all documents from MongoDB
+    const documents = await Document.find();
+
+    if (documents.length === 0) {
+      return res.status(404).json({ message: 'No documents found to export.' });
+    }
+
+    // Create a new Excel workbook and worksheet
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Documents');
+
+    // Define the columns for the Excel file
+    worksheet.columns = [
+      { header: 'First Name', key: 'first_name', width: 20 },
+      { header: 'Last Name', key: 'last_name', width: 20 },
+      { header: 'Email', key: 'email', width: 30 },
+      { header: 'Student ID', key: 'student_id', width: 15 },
+      { header: 'Phone Number', key: 'phone_number', width: 20 },
+      { header: 'Study Department', key: 'Study_Department', width: 25 },
+      { header: 'Car Type', key: 'car_type', width: 20 },
+      { header: 'Car Number', key: 'car_number', width: 20 },
+      { header: 'License Image', key: 'licenseImage', width: 40 },
+    ];
+
+    // Add rows to the worksheet
+    documents.forEach(doc => {
+      worksheet.addRow({
+        first_name: doc.first_name,
+        last_name: doc.last_name,
+        email: doc.email,
+        student_id: doc.student_id,
+        phone_number: doc.phone_number,
+        Study_Department: doc.Study_Department,
+        car_type: doc.car_type,
+        car_number: doc.car_number,
+        licenseImage: doc.licenseImage,
+      });
+    });
+
+    // Define the file path
+    const filePath = path.join(__dirname, 'documents_export.xlsx');
+
+    // Write the workbook to a file
+    await workbook.xlsx.writeFile(filePath);
+
+    // Send the file as a response
+    res.download(filePath, 'documents_export.xlsx', (err) => {
+      if (err) {
+        console.error("Error downloading the file:", err);
+        return res.status(500).json({ message: 'Error downloading the file' });
+      }
+
+      // Optionally, delete the file after download (cleanup)
+      fs.unlink(filePath, (err) => {
+        if (err) console.error('Error deleting file:', err);
+      });
+    });
+  } catch (err) {
+    console.error("Error generating Excel file:", err);
+    res.status(500).json({ message: 'Error generating Excel file', error: err.message });
   }
 });
 
