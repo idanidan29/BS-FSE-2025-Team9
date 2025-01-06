@@ -12,29 +12,29 @@ import { MdOutlineDeleteForever } from "react-icons/md";
 import { FaGifts } from "react-icons/fa";
 
 
-const Navbar = ({ children,userRole }) => {
+const Navbar = ({ children, userRole }) => {
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
 
-   
-     const sideList = [
-            {
-             icon: <FaRegFilePowerpoint className="text-2xl mr-2" />,
-             title: "Parking File",
-             path: "/",
+
+    const sideList = [
+        {
+            icon: <FaRegFilePowerpoint className="text-2xl mr-2" />,
+            title: "Parking File",
+            path: `/${localStorage.getItem('username')}`,
         },
         {
-            icon: <FaFileDownload  className="text-2xl mr-2" />,
+            icon: <FaFileDownload className="text-2xl mr-2" />,
             title: "Exel File",
-            path: "/Exel",
+            path: `/${localStorage.getItem('username')}/exel`,
         },
         {
-            icon: <FaChartSimple  className="text-2xl mr-2" />,
+            icon: <FaChartSimple className="text-2xl mr-2" />,
             title: "Data",
             path: `/${localStorage.getItem('username')}/search`,
         },
         {
-            icon: <FaSignOutAlt   className="text-2xl mr-2" />,
+            icon: <FaSignOutAlt className="text-2xl mr-2" />,
             title: "sign out",
             path: "/",
         },
@@ -45,26 +45,26 @@ const Navbar = ({ children,userRole }) => {
         },
     ];
 
-    
+
 
 
     const handleDeleteAccount = async () => {
         const userId = children;
-    
+
         try {
             const response = await fetch(`http://localhost:5000/users/${userId}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
             });
-    
+
             console.log('Response status:', response.status);
-    
+
             if (!response.ok) {
                 const errorDetails = await response.text();
                 console.error('Response error details:', errorDetails);
                 throw new Error('Failed to delete the account.');
             }
-    
+
             alert('Account deleted successfully!');
             console.log('Redirecting to /Sign');
             router.push('/Sign');
@@ -73,16 +73,16 @@ const Navbar = ({ children,userRole }) => {
             alert('Error deleting account.');
         }
     };
-    
+
 
     const sideListDelete = {
         icon: <MdOutlineDeleteForever className="text-2xl mr-2" />,
         title: "Delete Account",
         onClick: async () => {
-            await handleDeleteAccount(children); // Perform delete
+            await handleDeleteAccount(children);
             console.log('Delete account successful, redirecting to /Sign');
         },
-        
+
     };
 
     const sideListDeleteAll = {
@@ -91,21 +91,21 @@ const Navbar = ({ children,userRole }) => {
         onClick: async () => {
             router.push('/Sign'); // Redirect after action
             await handleDeleteAccount(children); // Perform delete
-           
+
         },
     };
 
 
     const sideListSignoutStudent = {
-        icon: <FaSignOutAlt   className="text-2xl mr-2" />,
+        icon: <FaSignOutAlt className="text-2xl mr-2" />,
         title: "sign out",
         path: "/"
     };
 
-    
+
 
     const navList = [
-        
+
     ];
 
     const handleDrawer = () => {
@@ -140,12 +140,12 @@ const Navbar = ({ children,userRole }) => {
                 </button>
 
                 <Image
-      src="/SCE_logo.png"
-      alt="Logo"
-      className="h-auto w-24"
-      width={96} // Next.js requires width and height attributes
-      height={24}
-    />
+                    src="/SCE_logo.png"
+                    alt="Logo"
+                    className="h-auto w-24"
+                    width={96} // Next.js requires width and height attributes
+                    height={24}
+                />
             </div>
 
             <div className="flex items-center">
@@ -175,86 +175,86 @@ const Navbar = ({ children,userRole }) => {
                     ></div>
                 </div>
             )}
-        {userRole === "true" ? (
-            <aside
-                className={`transform top-0 left-0 w-64 bg-gray-900 fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 ${isOpen ? "translate-x-0" : "-translate-x-full"
-                    }`}
-            >
-                <span className="flex w-full items-center p-4 border-b border-gray-700">
-                <Image
-      src="/SCE_logo.png"
-      alt="Logo"
-      className="h-auto w-24"
-      width={96} // Next.js requires width and height attributes
-      height={24}
-    />
-                </span>
-            
-                {sideList.map(({ icon, title, path }, index) => {
-                    return (
-                        <Link key={index} href={path} passHref>
-                            <span className="flex items-center p-4 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
-                                <span className="mr-2">{icon}</span> <span>{title}</span>
-                            </span>
-                        </Link>
-                    );
-                })}
-                
-                <button
+            {userRole === "true" ? (
+                <aside
+                    className={`transform top-0 left-0 w-64 bg-gray-900 fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 ${isOpen ? "translate-x-0" : "-translate-x-full"
+                        }`}
+                >
+                    <span className="flex w-full items-center p-4 border-b border-gray-700">
+                        <Image
+                            src="/SCE_logo.png"
+                            alt="Logo"
+                            className="h-auto w-24"
+                            width={96} // Next.js requires width and height attributes
+                            height={24}
+                        />
+                    </span>
+
+                    {sideList.map(({ icon, title, path }, index) => {
+                        return (
+                            <Link key={index} href={path} passHref>
+                                <span className="flex items-center p-4 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+                                    <span className="mr-2">{icon}</span> <span>{title}</span>
+                                </span>
+                            </Link>
+                        );
+                    })}
+
+                    <button
                         title="Delete Account"
-                        onClick={sideListDelete.onClick} // Attach the delete handler
+                        onClick={sideListDelete.onClick} 
                         className="flex items-center p-4 text-gray-300 hover:bg-red-700 hover:text-white transition-colors duration-200"
                     >
-                        <span>{sideListDelete.icon}</span> {/* Use the delete icon */}
-                        <span>{sideListDelete.title}</span> {/* Use the delete title */}
+                        <span>{sideListDelete.icon}</span> 
+                        <span>{sideListDelete.title}</span> 
                     </button>
                     <button
                         title="Delete All Accounts"
                         onClick={sideListDelete.onClick} // Attach the delete handler
                         className="flex items-center p-4 text-gray-300 hover:bg-red-700 hover:text-white transition-colors duration-200"
                     >
-                        <span>{sideListDeleteAll.icon}</span> {/* Use the delete icon */}
-                        <span>{sideListDeleteAll.title}</span> {/* Use the delete title */}
-                    </button>    
+                        <span>{sideListDeleteAll.icon}</span> 
+                        <span>{sideListDeleteAll.title}</span> 
+                    </button>
 
-            </aside>
-        ) : (
-            <aside
-                className={`transform top-0 left-0 w-64 bg-gray-900 fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 ${isOpen ? "translate-x-0" : "-translate-x-full"
-                    }`}
+                </aside>
+            ) : (
+                <aside
+                    className={`transform top-0 left-0 w-64 bg-gray-900 fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 ${isOpen ? "translate-x-0" : "-translate-x-full"
+                        }`}
+                >
+
+
+                    <Link href={sideListSignoutStudent.path} passHref>
+                        <button
+                            title="Sign Out"
+                            className="flex items-center w-full p-4 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200"
+                        >
+                            <span>{sideListSignoutStudent.icon}</span> 
+                            <span>{sideListSignoutStudent.title}</span> 
+                        </button>
+                    </Link>
+
+                    <button
+                        title="Delete Account"
+                        onClick={sideListDelete.onClick} // Attach the delete handler
+                        className="absolute bottom-10 left-0 w-full p-2 flex justify-center items-center font-medium text-center bg-red-500 text-white  hover:bg-red-700 focus:outline-none"
                     >
-           
-           
-          <Link  href={sideListSignoutStudent.path} passHref>
-                <button
-                    title="Sign Out"
-                    className="flex items-center w-full p-4 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200"
-                >
-                    <span>{sideListSignoutStudent.icon}</span> {/* Use the delete icon */}
-                    <span>{sideListSignoutStudent.title}</span> {/* Use the delete title */}
-                </button>
-          </Link>
+                        <span>{sideListDelete.icon}</span> 
+                        <span>{sideListDelete.title}</span> 
+                    </button>
 
-          <button
-                    title="Delete Account"
-                    onClick={sideListDelete.onClick} // Attach the delete handler
-                   className="absolute bottom-10 left-0 w-full p-2 flex justify-center items-center font-medium text-center bg-red-500 text-white  hover:bg-red-700 focus:outline-none"
-                >
-                    <span>{sideListDelete.icon}</span> {/* Use the delete icon */}
-                    <span>{sideListDelete.title}</span> {/* Use the delete title */}
-          </button>
+                </aside>
 
-           </aside>
+            )}
 
-        )}
 
-        
 
             <div>{children}</div>
         </nav>
     );
 
-   
+
 };
 
 export default Navbar;

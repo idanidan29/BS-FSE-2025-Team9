@@ -15,7 +15,9 @@ const LotteryPage = () => {
     setCrystalActive(true); // הפעלת האנימציה של כדור הבדולח
 
     try {
-      const response = await fetch("http://localhost:5000/documents");
+
+      const response = await fetch("https://bs-fse-2025-team9.onrender.com/documents");
+
       if (!response.ok) {
         throw new Error("Error fetching documents");
       }
