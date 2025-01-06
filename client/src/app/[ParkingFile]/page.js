@@ -60,7 +60,7 @@ export default function Page({ params }) {
 
       if (studentId) {
         try {
-          const response = await fetch(`http://localhost:5000/documents/${studentId}`);
+          const response = await fetch(`https://bs-fse-2025-team9.onrender.com/documents/${studentId}`);
           if (response.ok) {
             const data = await response.json();
             setParkingData({ parking_application: data });
@@ -114,7 +114,7 @@ export default function Page({ params }) {
     const { parking_application } = parkingData;
 
     try {
-      const response = await fetch(`http://localhost:5000/documents/${studentId}`, {
+      const response = await fetch(`https://bs-fse-2025-team9.onrender.com/documents/${studentId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -265,7 +265,7 @@ export default function Page({ params }) {
             id="Study_Department"
             value={parkingData.parking_application.Study_Department}
             onChange={handleChange}
-            className="bg-[#fff] h-[60px] rounded-xl border border-green-500 box-border text-bg-black text-lg outline-none px-5 pt-1 w-full"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
           >
             <option value="" disabled>Select your department</option>
             <option value="Computer Science">Computer Science</option>
@@ -312,17 +312,11 @@ export default function Page({ params }) {
         <div className="flex justify-between mt-8">
           <button
             onClick={isEditing ? handleUpdate : handleSignUp}
-            className="bg-green-500 text-white rounded-lg h-[50px] w-[200px]"
+            className="mt-7 w-full py-3 bg-gradient-to-r from-green-400 to-cyan-500 text-white font-bold rounded-xl hover:from-cyan-500 hover:to-green-400 shadow-lg transform hover:scale-105 transition-all duration-300 p-4"
           >
             {isEditing ? 'Update Application' : 'Submit Application'}
           </button>
-          <button
-            onClick={Navigation}
-            className="bg-red-500 text-white rounded-lg h-[50px] w-[200px]"
-          >
-            Cancel
-
-          </button>
+          
         </div>
       </div>
     </div>
