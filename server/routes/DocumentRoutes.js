@@ -67,7 +67,7 @@ router.post('/documents', async (req, res) => {
             car_type: parking_application.car_type,
             car_number: parking_application.car_number,
             licenseImage: fileName,
-            is_Won: parking_application.is_Won || false,
+            is_Won: is_Won || false,
         });
 
         await newDocument.save();
