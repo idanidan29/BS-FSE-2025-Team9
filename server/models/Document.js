@@ -10,8 +10,7 @@ const DocumentSchema = new mongoose.Schema({
   Study_Department:{ type: String, required: true},
   car_type: { type: String, required: true },
   car_number: { type: Number, required: true },
-  licenseImage: { type: String, required: true },
-  is_Won: {type: Boolean, required: false, default: false}
+  licenseImage: { type: String, required: true }
 
 });
 
