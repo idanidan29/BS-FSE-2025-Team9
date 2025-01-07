@@ -27,6 +27,31 @@ const Navbar = ({ children, userRole }) => {
             icon: <FaFileDownload className="text-2xl mr-2" />,
             title: "Exel File",
             path: `/${localStorage.getItem('username')}/exel`,
+            onClick: async () => {
+                try {
+                    const response = await fetch('https://bs-fse-2025-team9.onrender.com/documents/excel');
+                    
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch Excel file');
+                    }
+
+                    // Create a Blob from the response data
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+
+                    // Create a link element to simulate file download
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = 'document.xlsx';  // You can set the filename here
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);  // Clean up the URL object
+                } catch (error) {
+                    console.error('Error fetching the Excel file:', error);
+                    alert('Failed to download the Excel file');
+                }
+            },
         },
         {
             icon: <FaChartSimple className="text-2xl mr-2" />,
@@ -189,16 +214,16 @@ const Navbar = ({ children, userRole }) => {
                             height={24}
                         />
                     </span>
-
-                    {sideList.map(({ icon, title, path }, index) => {
-                        return (
-                            <Link key={index} href={path} passHref>
-                                <span className="flex items-center p-4 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
-                                    <span className="mr-2">{icon}</span> <span>{title}</span>
-                                </span>
-                            </Link>
-                        );
-                    })}
+                     {sideList.map(({ icon, title, path, onClick }, index) => (
+                        <button 
+                            key={index} 
+                            onClick={onClick || (() => router.push(path))} 
+                            title={title} 
+                            className="flex items-center p-4 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200"
+                        >
+                            <span className="mr-2">{icon}</span> <span>{title}</span>
+                        </button>
+                    ))}
 
                     <button
                         title="Delete Account"
