@@ -52,7 +52,7 @@ const Navbar = ({ children, userRole }) => {
         const userId = children;
 
         try {
-            const response = await fetch(`http://localhost:5000/users/${userId}`, {
+            const response = await fetch(`https://bs-fse-2025-team9.onrender.com/users/${userId}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
             });
@@ -247,9 +247,6 @@ const Navbar = ({ children, userRole }) => {
                 </aside>
 
             )}
-
-
-
             <div>{children}</div>
         </nav>
     );
