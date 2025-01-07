@@ -83,6 +83,67 @@ router.post('/documents', async (req, res) => {
     }
 });
 
+router.get('/documents/excel', async (req, res) => {
+    try {
+        // Fetch all documents from MongoDB
+        const documents = await Document.find();
+
+        if (documents.length === 0) {
+            return res.status(404).json({ message: 'No documents found to generate Excel file.' });
+        }
+
+        // Create a new Excel workbook and worksheet
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Documents');
+
+        // Define the headers for the worksheet
+        worksheet.columns = [
+            { header: 'First Name', key: 'first_name', width: 20 },
+            { header: 'Last Name', key: 'last_name', width: 20 },
+            { header: 'Email', key: 'email', width: 30 },
+            { header: 'Student ID', key: 'student_id', width: 15 },
+            { header: 'Phone Number', key: 'phone_number', width: 20 },
+            { header: 'Study Department', key: 'Study_Department', width: 25 },
+            { header: 'Car Type', key: 'car_type', width: 20 },
+            { header: 'Car Number', key: 'car_number', width: 15 },
+            { header: 'License Image', key: 'licenseImage', width: 30 },
+        ];
+
+        // Add rows to the worksheet
+        documents.forEach((doc) => {
+            worksheet.addRow({
+                first_name: doc.first_name,
+                last_name: doc.last_name,
+                email: doc.email,
+                student_id: doc.student_id,
+                phone_number: doc.phone_number,
+                Study_Department: doc.Study_Department,
+                car_type: doc.car_type,
+                car_number: doc.car_number,
+                licenseImage: doc.licenseImage,
+            });
+        });
+
+        // Set the response headers for Excel file download
+        res.setHeader(
+            'Content-Type',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        );
+        res.setHeader(
+            'Content-Disposition',
+            'attachment; filename=Documents.xlsx'
+        );
+
+        // Write the workbook to the response stream
+        await workbook.xlsx.write(res);
+
+        // End the response
+        res.status(200).end();
+    } catch (error) {
+        console.error('Error generating Excel file:', error);
+        res.status(500).json({ message: 'Error generating Excel file', error: error.message });
+    }
+});
 // Route to fetch all documents
 router.get('/documents', async (req, res) => {
     try {
@@ -148,67 +209,7 @@ router.put('/documents/:student_id', async (req, res) => {
 });
 
 // Route to generate Excel file from all documents
-router.get('/documents/excel', async (req, res) => {
-    try {
-        // Fetch all documents from MongoDB
-        const documents = await Document.find();
 
-        if (documents.length === 0) {
-            return res.status(404).json({ message: 'No documents found to generate Excel file.' });
-        }
-
-        // Create a new Excel workbook and worksheet
-        const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet('Documents');
-
-        // Define the headers for the worksheet
-        worksheet.columns = [
-            { header: 'First Name', key: 'first_name', width: 20 },
-            { header: 'Last Name', key: 'last_name', width: 20 },
-            { header: 'Email', key: 'email', width: 30 },
-            { header: 'Student ID', key: 'student_id', width: 15 },
-            { header: 'Phone Number', key: 'phone_number', width: 20 },
-            { header: 'Study Department', key: 'Study_Department', width: 25 },
-            { header: 'Car Type', key: 'car_type', width: 20 },
-            { header: 'Car Number', key: 'car_number', width: 15 },
-            { header: 'License Image', key: 'licenseImage', width: 30 },
-        ];
-
-        // Add rows to the worksheet
-        documents.forEach((doc) => {
-            worksheet.addRow({
-                first_name: doc.first_name,
-                last_name: doc.last_name,
-                email: doc.email,
-                student_id: doc.student_id,
-                phone_number: doc.phone_number,
-                Study_Department: doc.Study_Department,
-                car_type: doc.car_type,
-                car_number: doc.car_number,
-                licenseImage: doc.licenseImage,
-            });
-        });
-
-        // Set the response headers for Excel file download
-        res.setHeader(
-            'Content-Type',
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        );
-        res.setHeader(
-            'Content-Disposition',
-            'attachment; filename=Documents.xlsx'
-        );
-
-        // Write the workbook to the response stream
-        await workbook.xlsx.write(res);
-
-        // End the response
-        res.status(200).end();
-    } catch (error) {
-        console.error('Error generating Excel file:', error);
-        res.status(500).json({ message: 'Error generating Excel file', error: error.message });
-    }
-});
 
 
 module.exports = router;
