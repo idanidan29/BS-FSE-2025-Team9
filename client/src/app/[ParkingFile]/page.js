@@ -33,7 +33,8 @@ export default function Page({ params }) {
       Study_Department: "",
       car_type: "",
       car_number: "",
-      license_image: null // Will store base64 string
+      license_image: null, // Will store base64 string
+      is_won: false
     }
   });
 
@@ -149,7 +150,8 @@ export default function Page({ params }) {
       !parking_application.phone_number ||
       !parking_application.Study_Department ||
       !parking_application.car_type ||
-      !parking_application.car_number) {
+      !parking_application.car_number ||
+      !parking_application.is_won) {
       alert("Please fill in all fields!");
       return;
     }
