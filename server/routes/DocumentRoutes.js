@@ -47,8 +47,7 @@ router.post('/documents', async (req, res) => {
             !parking_application.Study_Department ||
             !parking_application.car_type ||
             !parking_application.car_number ||
-            !parking_application.license_image||
-            !parking_application.is_won) {
+            !parking_application.license_image) {
             return res.status(400).json({ message: 'All fields are required.' });
         }
 
@@ -69,7 +68,7 @@ router.post('/documents', async (req, res) => {
             car_type: parking_application.car_type,
             car_number: parking_application.car_number,
             licenseImage: fileName,
-            is_won: parking_application.is_won            
+            is_won: false            
         });
 
         await newDocument.save();
