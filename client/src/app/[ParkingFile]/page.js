@@ -28,7 +28,7 @@ export default function Page({ params }) {
       first_name: "",
       last_name: "",
       email: "",
-      student_id: `${localStorage.getItem('student_id')}`,
+      student_id:  parseInt(localStorage.getItem('student_id'), 10),
       phone_number: "",
       Study_Department: "",
       car_type: "",
