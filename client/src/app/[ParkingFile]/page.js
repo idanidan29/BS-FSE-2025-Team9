@@ -35,7 +35,8 @@ export default function Page({ params }) {
       Study_Department: "",
       car_type: "",
       car_number: "",
-      license_image: null // Will store base64 string
+      license_image: null, // Will store base64 string
+      is_Won: false
     }
   });
 
@@ -192,9 +193,54 @@ export default function Page({ params }) {
     }
   };
 
+<<<<<<< Updated upstream
+=======
+ 
+  const [isWon, setIsWon] = useState(localStorage.getItem('is_won') === 'true');
+
+  useEffect(() => {
+    const checkIfFormExists = async () => {
+      const studentId = localStorage.getItem('studentId');
+      if (studentId) {
+        try {
+          const response = await fetch(`https://bs-fse-2025-team9.onrender.com/documents/${studentId}`);
+          if (response.ok) {
+            const data = await response.json();
+            if (data) {
+              const isWonFromDB = data.is_won;
+              localStorage.setItem('is_won', isWonFromDB.toString());
+              setIsWon(isWonFromDB);
+            }
+          } else {
+            console.log('No form found for this student.');
+            setIsWon(false);  // אם לא נמצא טופס, אתחיל את isWon ל-false
+            localStorage.setItem('is_won', 'false'); // לאחסן את הערך ב-localStorage
+          }
+        } catch (err) {
+          console.error('Error fetching parking data:', err);
+        }
+      }
+    };
+
+    checkIfFormExists();
+  }, []); 
+  
+  if (isWon === null) {
+    return <div>Loading...</div>; // הצגת הודעת טעינה אם הערך עדיין לא הגיע
+  }
+  
+  
+  
+
+>>>>>>> Stashed changes
   return (
+    
     <div>
+<<<<<<< Updated upstream
       <NavBar userRole={localStorage.getItem('userRole')}>
+=======
+      <NavBar userRole={localStorage.getItem('userRole')} isWon={isWon}>
+>>>>>>> Stashed changes
         {localStorage.getItem('studentId')}
       </NavBar>
       <div className="flex flex-col items-center justify-center p-5 min-h-screen bg-gradient-to-br from-green-300 via-teal-200 to-cyan-300 rtl px-4 sm:px-6">
