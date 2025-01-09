@@ -1,21 +1,21 @@
-"use client"; // הוספת ההגדרה לצורך עבודה בצד הלקוח
+"use client";
 
 import React, { useState } from "react";
-import anime from "animejs"; // נדרשת התקנה של anime.js (npm install animejs)
+import anime from "animejs";
+import NavBar from "../../components/NavBar";
 
 const LotteryPage = () => {
-  const [result, setResult] = useState("");
+  const [result, setResult] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [numWinners, setNumWinners] = useState(1); // מספר הזוכים
-  const [crystalActive, setCrystalActive] = useState(false); // מצב כדור הבדולח
+  const [numWinners, setNumWinners] = useState(1);
+  const [crystalActive, setCrystalActive] = useState(false);
 
   const handleLotteryClick = async () => {
     setLoading(true);
-    setResult(""); // איפוס התוצאה הקודמת
-    setCrystalActive(true); // הפעלת האנימציה של כדור הבדולח
+    setResult([]);
+    setCrystalActive(true);
 
     try {
-
       const response = await fetch("https://bs-fse-2025-team9.onrender.com/documents");
 
       if (!response.ok) {
@@ -23,16 +23,15 @@ const LotteryPage = () => {
       }
 
       const documents = await response.json();
-      console.log("Fetched documents:", documents); // בדיקת הנתונים שמתקבלים
 
       if (documents.length === 0) {
-        setResult("No documents found.");
+        setResult(["No documents found."]);
         setLoading(false);
         return;
       }
 
       if (numWinners > documents.length) {
-        setResult("Number of winners exceeds the total number of documents.");
+        setResult(["Number of winners exceeds the total number of documents."]);
         setLoading(false);
         return;
       }
@@ -48,28 +47,24 @@ const LotteryPage = () => {
         }
       }
 
-      const winnerDetails = winners
-        .map(
-          (winner) =>
-            `Name: ${winner.first_name} ${winner.last_name}, ID: ${winner.student_id}`
-        )
-        .join(", ");
+      // Display winners in a list
+      const winnerDetails = winners.map(
+        (winner) => `Name: ${winner.first_name} ${winner.last_name}, ID: ${winner.student_id}`
+      );
 
-      // השהייה של 3 שניות לפני הצגת הזוכים
       setTimeout(() => {
-        setResult(`The winners are: ${winnerDetails}`);
-        setCrystalActive(false); // כיבוי האנימציה של כדור הבדולח
+        setResult(winnerDetails);
+        setCrystalActive(false);
         setLoading(false);
       }, 3000);
     } catch (error) {
-      setResult("An error occurred. Please try again.");
+      setResult(["An error occurred. Please try again."]);
       console.error("Error fetching documents:", error.message);
       setCrystalActive(false);
       setLoading(false);
     }
   };
 
-  // אפקט כדור הבדולח
   React.useEffect(() => {
     if (crystalActive) {
       anime({
@@ -86,84 +81,54 @@ const LotteryPage = () => {
   }, [crystalActive]);
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.header}>Lottery</h1>
-      <div style={styles.inputContainer}>
-        <label style={styles.inputLabel}>Enter the number of winners:</label>
-        <input
-          type="number"
-          min="1"
-          value={numWinners}
-          onChange={(e) => setNumWinners(Number(e.target.value))}
-          style={styles.input}
-        />
+    <div>
+      <NavBar userRole={localStorage.getItem("userRole")}>
+        {localStorage.getItem("studentId")}
+      </NavBar>
+      <div className="min-h-screen bg-gradient-to-br from-green-300 via-teal-200 to-cyan-300 flex items-center justify-center p-4 sm:p-8">
+        <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md space-y-6">
+          <h1 className="text-center text-2xl sm:text-4xl font-serif font-light tracking-wide text-gray-800 uppercase">
+            Lottery
+          </h1>
+          <div className="text-center text-sm font-medium text-gray-600 uppercase">
+            Enter Number Of Winners
+          </div>
+          <input
+            type="number"
+            min="1"
+            value={numWinners}
+            onChange={(e) => setNumWinners(Number(e.target.value))}
+            className="block mx-auto w-20 p-2 border border-gray-300 rounded text-center text-lg focus:ring-2 focus:ring-green-400 focus:outline-none"
+          />
+          <button
+            onClick={handleLotteryClick}
+            disabled={loading}
+            className={`mt-7 w-full py-3 bg-gradient-to-r from-green-400 to-cyan-500 text-white font-bold rounded-xl hover:from-cyan-500 hover:to-green-400 shadow-lg transform hover:scale-105 transition-all duration-300`}
+          >
+            {loading ? "Drawing..." : "Start Lottery"}
+          </button>
+          {crystalActive && (
+            <div className="crystal-ball w-36 h-36 mx-auto rounded-full bg-gradient-to-r from-blue-500 to-pink-500 shadow-lg animate-pulse"></div>
+          )}
+          {result.length > 0 && (
+            <div className="mt-4 text-center">
+              <h2 className="text-xl font-semibold mb-2">The Winners Are:</h2>
+              <div className="flex justify-center">
+                <ul className="list-disc list-inside text-left">
+                  {result.map((winner, index) => (
+                    <li key={index} className="text-gray-700">
+                      {winner}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+
+        </div>
       </div>
-      <button onClick={handleLotteryClick} disabled={loading} style={styles.button}>
-        {loading ? "Drawing..." : "Start Lottery"}
-      </button>
-      <div style={styles.crystalBallContainer}>
-        {crystalActive && <div className="crystal-ball" style={styles.crystalBall}></div>}
-      </div>
-      {result && <div style={styles.result}>{result}</div>}
     </div>
   );
-};
-
-const styles = {
-  container: {
-    textAlign: "center",
-    fontFamily: "Arial, sans-serif",
-    marginTop: "50px",
-  },
-  header: {
-    fontSize: "2rem",
-    marginBottom: "20px",
-  },
-  inputContainer: {
-    marginBottom: "20px",
-  },
-  inputLabel: {
-    fontSize: "1rem",
-    marginBottom: "5px",
-    display: "block",
-  },
-  input: {
-    padding: "10px",
-    fontSize: "16px",
-    width: "100px",
-    textAlign: "center",
-    marginBottom: "10px",
-  },
-  button: {
-    padding: "10px 20px",
-    fontSize: "16px",
-    cursor: "pointer",
-    backgroundColor: "#4CAF50",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-    transition: "background-color 0.3s",
-  },
-  crystalBallContainer: {
-    margin: "30px auto",
-    width: "150px",
-    height: "150px",
-    position: "relative",
-  },
-  crystalBall: {
-    width: "150px",
-    height: "150px",
-    borderRadius: "50%",
-    background: "radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%)",
-    boxShadow: "0 0 30px rgba(63,94,251,0.6)",
-    animation: "pulse 1s infinite",
-  },
-  result: {
-    marginTop: "20px",
-    fontSize: "1.2rem",
-    color: "#333",
-    fontWeight: "bold",
-  },
 };
 
 export default LotteryPage;
