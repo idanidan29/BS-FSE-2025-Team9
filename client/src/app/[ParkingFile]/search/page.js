@@ -3,6 +3,7 @@ import { FaPencil } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { FaCrown } from "react-icons/fa";
+import { IoIosArrowDropdownCircle, IoIosArrowDropupCircle } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import NavBar from "../../components/NavBar";
 
@@ -11,6 +12,7 @@ export default function Page() {
     const [searchId, setSearchId] = useState("");
     const [filteredUser, setFilteredUser] = useState(null);
     const [isSearchPerformed, setIsSearchPerformed] = useState(false);
+    const [dropdownOpen, setDropdownOpen] = useState(null); // Track which user's dropdown is open
     const router = useRouter();
 
     useEffect(() => {
@@ -47,6 +49,7 @@ export default function Page() {
             if (filteredUser && filteredUser.student_id === userId) {
                 setFilteredUser(null);
             }
+            setDropdownOpen(null); // Close dropdown after action
         } catch (error) {
             console.error("Error deleting user:", error);
         }
@@ -56,6 +59,7 @@ export default function Page() {
         const username = localStorage.getItem("username");
         const sanitizedUsername = username.endsWith("/") ? username.slice(0, -1) : username; // Remove trailing slash if exists
         router.push(`/${sanitizedUsername}/search/${userId}`);
+        setDropdownOpen(null); // Close dropdown after action
     };
 
     const handlePromoteToAdmin = async (username) => {
@@ -83,10 +87,16 @@ export default function Page() {
             }
 
             alert(`User ${username} has been successfully promoted to admin.`);
+            setDropdownOpen(null); // Close dropdown after action
         } catch (error) {
             console.error("Error promoting user to admin:", error);
             alert(`Failed to promote user ${username} to admin. Please try again.`);
         }
+    };
+
+    const handleDropdownToggle = (userId) => {
+        // Toggle dropdown visibility for the selected user
+        setDropdownOpen(dropdownOpen === userId ? null : userId);
     };
 
     const displayedUsers = isSearchPerformed && filteredUser ? [filteredUser] : users;
@@ -142,7 +152,7 @@ export default function Page() {
                                         </thead>
                                         <tbody>
                                             {displayedUsers.length > 0 ? (
-                                                displayedUsers.map((user, index) => (
+                                                displayedUsers.map((user) => (
                                                     <tr
                                                         key={user._id}
                                                         className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 text-center"
@@ -160,28 +170,41 @@ export default function Page() {
                                                             {user.is_admin ? "Yes" : "No"}
                                                         </td>
                                                         <td className="whitespace-nowrap px-4 py-4 sm:px-8 sm:py-6 bg-teal-50">
-                                                            <div className="flex flex-col space-y-2">
+                                                            <div className="relative">
                                                                 <button
-                                                                    onClick={() => handleDelete(user.student_id)}
-                                                                    className="px-2 py-1 w-30 bg-[#a5a6aa] text-white rounded-md hover:bg-red-600 transition flex justify-center items-center space-x-2"
+                                                                    onClick={() => handleDropdownToggle(user.student_id)}
+                                                                    className="px-2 py-1 w-30 text-white rounded-md transition flex justify-center items-center space-x-2"
                                                                 >
-                                                                    <span>Delete</span>
-                                                                    <FaTrash />
+                                                                    {dropdownOpen === user.student_id ? (
+                                                                        <IoIosArrowDropupCircle className="text-blue-400" size={40} />
+                                                                    ) : (
+                                                                        <IoIosArrowDropdownCircle className="text-blue-400" size={40} />
+                                                                    )}
                                                                 </button>
-                                                                <button
-                                                                    onClick={() => handleEdit(user.student_id)}
-                                                                    className="px-2 py-1 w-30 bg-[#a5a6aa] text-white rounded-md hover:bg-blue-500 transition flex justify-center items-center space-x-2"
-                                                                >
-                                                                    <span>Edit</span>
-                                                                    <FaPencil />
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => handlePromoteToAdmin(user.username)}
-                                                                    className="px-2 py-1 w-30 bg-[#a5a6aa] text-white rounded-md hover:bg-yellow-500 transition flex justify-center items-center space-x-2"
-                                                                >
-                                                                    <span>Promote</span>
-                                                                    <FaCrown />
-                                                                </button>
+
+                                                                {/* Dropdown Menu */}
+                                                                {dropdownOpen === user.student_id && (
+                                                                    <div className="absolute right-[100px] top-[-40px] w-30 bg-white border border-gray-300 rounded-lg shadow-md z-10">
+                                                                        <button
+                                                                            onClick={() => handleDelete(user.student_id)}
+                                                                            className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                                                                        >
+                                                                            <FaTrash className="inline-block mr-2" /> Delete
+                                                                        </button>
+                                                                        <button
+                                                                            onClick={() => handleEdit(user.student_id)}
+                                                                            className="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100"
+                                                                        >
+                                                                            <FaPencil className="inline-block mr-2" /> Edit
+                                                                        </button>
+                                                                        <button
+                                                                            onClick={() => handlePromoteToAdmin(user.username)}
+                                                                            className="block px-4 py-2 text-sm text-yellow-600 hover:bg-gray-100"
+                                                                        >
+                                                                            <FaCrown className="inline-block mr-2" /> Promote
+                                                                        </button>
+                                                                    </div>
+                                                                )}
                                                             </div>
                                                         </td>
                                                     </tr>

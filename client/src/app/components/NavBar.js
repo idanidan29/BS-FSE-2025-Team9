@@ -12,7 +12,7 @@ import { MdOutlineDeleteForever } from "react-icons/md";
 import { FaGifts } from "react-icons/fa";
 
 
-const Navbar = ({ children, userRole }) => {
+const Navbar = ({ children, userRole, isWon }) => {
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
 
@@ -27,6 +27,31 @@ const Navbar = ({ children, userRole }) => {
             icon: <FaFileDownload className="text-2xl mr-2" />,
             title: "Exel File",
             path: `/${localStorage.getItem('username')}/exel`,
+            onClick: async () => {
+                try {
+                    const response = await fetch('https://bs-fse-2025-team9.onrender.com/documents/excel');
+                    
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch Excel file');
+                    }
+
+                    // Create a Blob from the response data
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+
+                    // Create a link element to simulate file download
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = 'document.xlsx';  // You can set the filename here
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);  // Clean up the URL object
+                } catch (error) {
+                    console.error('Error fetching the Excel file:', error);
+                    alert('Failed to download the Excel file');
+                }
+            },
         },
         {
             icon: <FaChartSimple className="text-2xl mr-2" />,
@@ -34,15 +59,16 @@ const Navbar = ({ children, userRole }) => {
             path: `/${localStorage.getItem('username')}/search`,
         },
         {
-            icon: <FaSignOutAlt className="text-2xl mr-2" />,
-            title: "sign out",
-            path: "/",
-        },
-        {
             icon: <FaGifts className="text-2xl mr-2" />, // האייקון של ההגרלה
             title: "Lottery",
             path: `/${localStorage.getItem('username')}/lottery`, // הקישור לדף ההגרלה
         },
+        {
+            icon: <FaSignOutAlt className="text-2xl mr-2" />,
+            title: "sign out",
+            path: "/",
+        },
+        
     ];
 
 
@@ -52,7 +78,7 @@ const Navbar = ({ children, userRole }) => {
         const userId = children;
 
         try {
-            const response = await fetch(`http://localhost:5000/users/${userId}`, {
+            const response = await fetch(`https://bs-fse-2025-team9.onrender.com/users/${userId}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
             });
@@ -175,6 +201,7 @@ const Navbar = ({ children, userRole }) => {
                     ></div>
                 </div>
             )}
+            
             {userRole === "true" ? (
                 <aside
                     className={`transform top-0 left-0 w-64 bg-gray-900 fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 ${isOpen ? "translate-x-0" : "-translate-x-full"
@@ -189,16 +216,16 @@ const Navbar = ({ children, userRole }) => {
                             height={24}
                         />
                     </span>
-
-                    {sideList.map(({ icon, title, path }, index) => {
-                        return (
-                            <Link key={index} href={path} passHref>
-                                <span className="flex items-center p-4 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
-                                    <span className="mr-2">{icon}</span> <span>{title}</span>
-                                </span>
-                            </Link>
-                        );
-                    })}
+                     {sideList.map(({ icon, title, path, onClick }, index) => (
+                        <button 
+                            key={index} 
+                            onClick={onClick || (() => router.push(path))} 
+                            title={title} 
+                            className="flex items-center p-4 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200"
+                        >
+                            <span className="mr-2">{icon}</span> <span>{title}</span>
+                        </button>
+                    ))}
 
                     <button
                         title="Delete Account"
@@ -248,9 +275,12 @@ const Navbar = ({ children, userRole }) => {
 
             )}
 
+           <div>
+            שלום: {children}
+            {isWon && <span> זכית במקום חניה</span>}
 
 
-            <div>{children}</div>
+          </div>
         </nav>
     );
 

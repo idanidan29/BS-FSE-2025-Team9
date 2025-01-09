@@ -24,7 +24,6 @@ export default function LoadingCard() {
           <div className="h-12 bg-gray-300 rounded mb-4"></div>
         </div>
       </div>
-
     </div>
 
   );
