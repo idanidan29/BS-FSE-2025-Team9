@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import React, { useState } from "react";
 import anime from "animejs";
@@ -122,9 +122,14 @@ const LotteryPage = () => {
                   ))}
                 </ul>
               </div>
+              {/* Button appears after winners are displayed */}
+              <button
+                className="mt-6 w-full py-3 bg-gradient-to-r from-red-400 to-orange-500 text-white font-bold rounded-xl hover:from-orange-500 hover:to-red-400 shadow-lg transform hover:scale-105 transition-all duration-300"
+              >
+                SEND RESULTS TO STUDENTS
+              </button>
             </div>
           )}
-
         </div>
       </div>
     </div>
