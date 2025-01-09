@@ -59,15 +59,16 @@ const Navbar = ({ children, userRole }) => {
             path: `/${localStorage.getItem('username')}/search`,
         },
         {
-            icon: <FaSignOutAlt className="text-2xl mr-2" />,
-            title: "sign out",
-            path: "/",
-        },
-        {
             icon: <FaGifts className="text-2xl mr-2" />, // האייקון של ההגרלה
             title: "Lottery",
             path: `/${localStorage.getItem('username')}/lottery`, // הקישור לדף ההגרלה
         },
+        {
+            icon: <FaSignOutAlt className="text-2xl mr-2" />,
+            title: "sign out",
+            path: "/",
+        },
+        
     ];
 
 
