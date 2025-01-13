@@ -6,13 +6,15 @@ import NavBar from "../../components/NavBar";
 
 const LotteryPage = () => {
   const [result, setResult] = useState([]);
+  const [winners, setWinners] = useState([]);  // Store winners as an array of objects
   const [loading, setLoading] = useState(false);
   const [numWinners, setNumWinners] = useState(1);
   const [crystalActive, setCrystalActive] = useState(false);
 
+  // Handle the lottery draw
   const handleLotteryClick = async () => {
     setLoading(true);
-    setResult([]);
+    setResult([]);  // Reset result
     setCrystalActive(true);
 
     try {
@@ -25,13 +27,13 @@ const LotteryPage = () => {
       const documents = await response.json();
 
       if (documents.length === 0) {
-        setResult(["No documents found."]);
+        setResult([{ message: "No documents found." }]);
         setLoading(false);
         return;
       }
 
       if (numWinners > documents.length) {
-        setResult(["Number of winners exceeds the total number of documents."]);
+        setResult([{ message: "Number of winners exceeds the total number of documents." }]);
         setLoading(false);
         return;
       }
@@ -47,24 +49,57 @@ const LotteryPage = () => {
         }
       }
 
-      // Display winners in a list
-      const winnerDetails = winners.map(
-        (winner) => `Name: ${winner.first_name} ${winner.last_name}, ID: ${winner.student_id}`
-      );
+      // Save winners as an array of objects
+      setWinners(winners);  // Now 'winners' is an array of winner objects
+
+      // Display winner details
+      const winnerDetails = winners.map((winner) => ({
+        student_id: winner.student_id,
+        first_name: winner.first_name,
+        last_name: winner.last_name,
+      }));
 
       setTimeout(() => {
-        setResult(winnerDetails);
+        setResult(winnerDetails);  // Set result as winner details (array of objects)
         setCrystalActive(false);
         setLoading(false);
       }, 3000);
     } catch (error) {
-      setResult(["An error occurred. Please try again."]);
+      setResult([{ message: "An error occurred. Please try again." }]);
       console.error("Error fetching documents:", error.message);
       setCrystalActive(false);
       setLoading(false);
     }
   };
 
+  // Send results to the server
+  const handleSendResults = async () => {
+    // Map over the winners array and get their student IDs
+    const winnerIds = winners.map((winner) => winner.student_id);
+
+    try {
+      const response = await fetch("http://localhost:5000/documents/update-winners", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ winners: winnerIds }), // Send an array of student_ids
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert(`Winners updated successfully! ${data.updatedCount} documents updated.`);
+      } else {
+        const errorData = await response.json();
+        alert(`Error: ${errorData.message}`);
+      }
+    } catch (error) {
+      console.error("Error updating winners:", error);
+      alert("An unexpected error occurred. Please try again later.");
+    }
+  };
+
+  // Animation for the crystal ball
   React.useEffect(() => {
     if (crystalActive) {
       anime({
@@ -117,7 +152,7 @@ const LotteryPage = () => {
                 <ul className="list-disc list-inside text-left">
                   {result.map((winner, index) => (
                     <li key={index} className="text-gray-700">
-                      {winner}
+                      {`Name: ${winner.first_name} ${winner.last_name}, ID: ${winner.student_id}`}
                     </li>
                   ))}
                 </ul>
@@ -125,6 +160,7 @@ const LotteryPage = () => {
               {/* Button appears after winners are displayed */}
               <button
                 className="mt-6 w-full py-3 bg-gradient-to-r from-red-400 to-orange-500 text-white font-bold rounded-xl hover:from-orange-500 hover:to-red-400 shadow-lg transform hover:scale-105 transition-all duration-300"
+                onClick={handleSendResults}
               >
                 SEND RESULTS TO STUDENTS
               </button>
