@@ -33,6 +33,8 @@ const saveBase64Image = (base64String, student_id) => {
     return fileName; // Return the file name
 };
 
+
+
 // Route to create a new document
 router.post('/documents', async (req, res) => {
     try {
@@ -176,6 +178,44 @@ router.get('/documents', async (req, res) => {
     }
 });
 
+router.use((req, res, next) => {
+    console.log(`Incoming request: ${req.method} ${req.originalUrl}`);
+    next();
+});
+
+
+
+
+
+
+router.put('/documents/update-winners', async (req, res) => {
+    try {
+        const { winners } = req.body;
+
+        if (!winners || !Array.isArray(winners) || winners.length === 0) {
+            return res.status(400).json({ message: 'Invalid or empty winners list.' });
+        }
+        console.log('Winners list:', winners);
+        
+        // המתן עד שהעדכון יושלם
+        const result = await Document.updateMany(
+            { student_id: { $in: winners } },
+            { $set: { is_Won: true } }
+        );
+
+        console.log('Update result:', result);
+
+        // שלח תשובה אחרי שהשינוי בוצע
+        res.status(200).json({
+            message: 'Winners updated successfully.',
+            updatedCount: result.modifiedCount, // מספר המסמכים שהשתנו
+        });
+    } catch (err) {
+        console.error('Error updating winners:', err);
+        res.status(500).json({ message: 'Error updating winners.', error: err });
+    }
+});
+
 
 // Route to update a document by student ID
 router.put('/documents/:student_id', async (req, res) => {
@@ -196,9 +236,17 @@ router.put('/documents/:student_id', async (req, res) => {
             return res.status(400).json({ message: 'All fields are required.' });
         }
 
+        // Check if the student is a winner and update the is_Won field accordingly
+        const isWinner = updatedData.is_Won !== undefined ? updatedData.is_Won : false;
+
         const updatedDocument = await Document.findOneAndUpdate(
             { student_id },
-            { $set: updatedData },
+            { 
+                $set: { 
+                    ...updatedData,
+                    is_Won: isWinner // Update the is_Won field based on the provided data
+                } 
+            },
             { new: true, runValidators: true }
         );
 
@@ -211,5 +259,9 @@ router.put('/documents/:student_id', async (req, res) => {
         res.status(400).json({ message: 'Error updating document', error: err });
     }
 });
+
+
+
+
 
 module.exports = router;
