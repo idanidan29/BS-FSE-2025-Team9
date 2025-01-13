@@ -28,7 +28,7 @@ export default function Page({ params }) {
       first_name: "",
       last_name: "",
       email: "",
-      student_id:  parseInt(localStorage.getItem('student_id'), 10),
+      student_id:  parseInt(localStorage.getItem('student_id'), 20),
       phone_number: "",
       Study_Department: "",
       car_type: "",
@@ -279,7 +279,7 @@ export default function Page({ params }) {
                 value={parkingData.parking_application.student_id}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
-                type="text"
+                type="string"
                 placeholder="ID"
               />
             </div>
@@ -365,6 +365,6 @@ export default function Page({ params }) {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>
+  );
 }
