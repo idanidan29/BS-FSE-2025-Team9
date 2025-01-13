@@ -35,7 +35,6 @@ const saveBase64Image = (base64String, student_id) => {
 
 // Route to create a new document
 router.post('/documents', async (req, res) => {
-    console.log("=== POST /documents request received ===");
     try {
         const { parking_application } = req.body;
 
@@ -91,11 +90,11 @@ router.post('/documents', async (req, res) => {
 
 router.get('/documents/excel', async (req, res) => {
     try {
-        // Fetch all documents from MongoDB
-        const documents = await Document.find();
+        // Fetch documents from MongoDB where is_Won is true
+        const documents = await Document.find({ is_Won: true });
 
         if (documents.length === 0) {
-            return res.status(404).json({ message: 'No documents found to generate Excel file.' });
+            return res.status(404).json({ message: 'No documents found with is_Won set to true.' });
         }
 
         // Create a new Excel workbook and worksheet
@@ -137,8 +136,7 @@ router.get('/documents/excel', async (req, res) => {
         );
         res.setHeader(
             'Content-Disposition',
-
-            'attachment; filename="users.xlsx"'
+            'attachment; filename="users_with_won_status.xlsx"'
         );
         await workbook.xlsx.write(res);
         res.end();
@@ -147,6 +145,7 @@ router.get('/documents/excel', async (req, res) => {
         res.status(500).send({ error: 'Failed to export users' });
     }
 });
+
 
 // Route to fetch a document by student ID
 router.get('/documents/:student_id', async (req, res) => {
