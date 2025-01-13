@@ -80,7 +80,6 @@ export default function EditUser({ params }) {
             <NavBar userRole={localStorage.getItem("userRole")}>
                 {localStorage.getItem("studentId")}
             </NavBar>
-<<<<<<< Updated upstream
             <div className="min-h-screen bg-gradient-to-br from-green-300 via-teal-200 to-cyan-300 flex items-center justify-center p-8">
                 <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl p-8 space-y-6 animate-fade-in">
                     <h1 className="text-4xl font-extrabold text-center text-cyan-700 tracking-wide">
@@ -118,33 +117,6 @@ export default function EditUser({ params }) {
                                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
                                 />
                             </div>
-=======
-        <div className="min-h-screen bg-gradient-to-br from-green-300 via-teal-200 to-cyan-300 flex items-center justify-center p-8">
-            
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl p-8 space-y-6 animate-fade-in">
-                <h1 className="text-4xl font-extrabold text-center text-cyan-700 tracking-wide">
-                    Edit Document
-                </h1>
-                {errorMessage && (
-                    <p className="text-red-600 bg-red-100 border-l-4 border-red-500 p-4 rounded-md text-center shadow-md">
-                        {errorMessage}
-                    </p>
-                )}
-                <form className="space-y-6">
-                    {/* Row for First Name and Last Name */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label htmlFor="first_name" className="block text-lg font-semibold text-gray-700">
-                                First Name
-                            </label>
-                            <input
-                                id="first_name"
-                                name="first_name"
-                                value={userData?.first_name || ""} // Bind value to state
-                                onChange={handleChange} // Handle input change
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
-                            />
->>>>>>> Stashed changes
                         </div>
 
                         {/* Row for Student ID and Email */}
