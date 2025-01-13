@@ -80,6 +80,8 @@ export default function Page({ params }) {
   const Navigation = () => {
     router.push('/');
   };
+ 
+
 
   const handleChange = (e) => {
     const { id, value, type, files } = e.target;

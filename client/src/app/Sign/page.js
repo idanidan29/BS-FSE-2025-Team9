@@ -2,6 +2,8 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { isValidId,isValidEmail } from '../UnitTest/validation'; 
+
 
 
 export default function Page() {
@@ -22,6 +24,7 @@ export default function Page() {
     });
 
     const [emailError, setEmailError] = useState("");
+    
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -38,6 +41,19 @@ export default function Page() {
             alert("Please fill in all fields!");
             return;
         }
+        
+    const { isValid: isValidid, error: idError } = isValidId(student_id);
+    if (!isValidid) {
+        alert(idError); 
+        return;
+    }
+
+    const { isValid: isValidemail, error: emailError } = isValidEmail(email);
+    if (!isValidemail) {
+        alert(emailError);
+        return;
+    }
+    
 
         try {
             const response = await fetch("https://bs-fse-2025-team9.onrender.com/users", {
