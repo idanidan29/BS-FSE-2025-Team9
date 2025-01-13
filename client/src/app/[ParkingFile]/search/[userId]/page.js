@@ -5,51 +5,69 @@ import NavBar from "../../../components/NavBar";
 
 export default function EditUser({ params }) {
     const router = useRouter();
-    const [userId, setUserId] = useState(null); // State to hold userId from params
-    const [parkingFile, setParkingFile] = useState(""); // State to hold ParkingFile from params
-    const [userData, setUserData] = useState(null); // State to hold user data
-    const [errorMessage, setErrorMessage] = useState(""); // State to display error messages
+    const [userId, setUserId] = useState(null);
+    const [parkingFile, setParkingFile] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [parkingData, setParkingData] = useState({
+        parking_application: {
+            first_name: "",
+            last_name: "",
+            email: "",
+            student_id: parseInt(localStorage.getItem("student_id"), 10),
+            phone_number: "",
+            Study_Department: "",
+            car_type: "",
+            car_number: "",
+            license_image: null,
+            is_Won: false,
+        },
+    });
 
     // Resolve params and set userId and ParkingFile
     useEffect(() => {
         (async () => {
-            const resolvedParams = await params; // Resolve params (in case it's a Promise)
-            setUserId(resolvedParams.userId); // Extract and store the userId
-            setParkingFile(resolvedParams.ParkingFile); // Extract and store the ParkingFile
+            const resolvedParams = await params;
+            setUserId(resolvedParams.userId);
+            setParkingFile(resolvedParams.ParkingFile);
         })();
     }, [params]);
 
-    // Function to fetch user data
+    // Fetch user data from the API
     const fetchUser = async () => {
         if (!userId) return;
 
         try {
-            // API call to fetch user data
             const response = await fetch(`https://bs-fse-2025-team9.onrender.com/documents/${userId}`);
-            if (!response.ok) throw new Error("documents not found");
+            if (!response.ok) throw new Error("Document not found");
             const data = await response.json();
-            setUserData(data); // Update state with user data
+            setParkingData((prev) => ({
+                parking_application: {
+                    ...prev.parking_application,
+                    ...data,
+                },
+            }));
         } catch (error) {
             console.error("Error fetching user:", error);
-            setErrorMessage("Failed to load user data."); // Set error message on failure
+            setErrorMessage("Failed to load user data.");
         }
     };
 
-    // Fetch user data when userId is available
     useEffect(() => {
         fetchUser();
     }, [userId]);
 
-    // Handle input change for both text fields and file inputs
+    // Handle input changes
     const handleChange = (e) => {
-        const { name, value, files } = e.target;
-        setUserData((prev) => ({
-            ...prev,
-            [name]: files ? files[0] : value, // If the input is a file, store the file object
+        const { name, value, type, checked, files } = e.target;
+        setParkingData((prev) => ({
+            parking_application: {
+                ...prev.parking_application,
+                [name]: type === "checkbox" ? checked : files ? files[0] : value,
+            },
         }));
     };
 
-    // Handle form submission to save user data
+    // Save updated user data to the backend
     const handleSave = async () => {
         try {
             const response = await fetch(`https://bs-fse-2025-team9.onrender.com/documents/${userId}`, {
@@ -57,20 +75,16 @@ export default function EditUser({ params }) {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(userData),
+                body: JSON.stringify(parkingData.parking_application),
             });
 
-            if (!response.ok) throw new Error("Failed to save user data");
+            if (!response.ok) throw new Error("Failed to save data");
 
-            alert("User updated successfully!");
-
-            // Update UI after successful save
+            alert("Document updated successfully!");
             await fetchUser();
-
-            // Navigate back to the search page
             router.push(`/${parkingFile}/search`);
         } catch (error) {
-            console.error("Error saving user data:", error);
+            console.error("Error saving data:", error);
             setErrorMessage("Failed to save changes.");
         }
     };
@@ -91,7 +105,6 @@ export default function EditUser({ params }) {
                         </p>
                     )}
                     <form className="space-y-6">
-                        {/* Row for First Name and Last Name */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label htmlFor="first_name" className="block text-lg font-semibold text-gray-700">
@@ -100,9 +113,9 @@ export default function EditUser({ params }) {
                                 <input
                                     id="first_name"
                                     name="first_name"
-                                    value={userData?.first_name || ""}
+                                    value={parkingData.parking_application.first_name || ""}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400"
                                 />
                             </div>
                             <div>
@@ -112,14 +125,12 @@ export default function EditUser({ params }) {
                                 <input
                                     id="last_name"
                                     name="last_name"
-                                    value={userData?.last_name || ""}
+                                    value={parkingData.parking_application.last_name || ""}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400"
                                 />
                             </div>
                         </div>
-
-                        {/* Row for Student ID and Email */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label htmlFor="student_id" className="block text-lg font-semibold text-gray-700">
@@ -128,9 +139,9 @@ export default function EditUser({ params }) {
                                 <input
                                     id="student_id"
                                     name="student_id"
-                                    value={userData?.student_id || ""}
+                                    value={parkingData.parking_application.student_id || ""}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400"
                                 />
                             </div>
                             <div>
@@ -140,14 +151,12 @@ export default function EditUser({ params }) {
                                 <input
                                     id="email"
                                     name="email"
-                                    value={userData?.email || ""}
+                                    value={parkingData.parking_application.email || ""}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400"
                                 />
                             </div>
                         </div>
-
-                        {/* Row for Phone Number and Study Department */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label htmlFor="phone_number" className="block text-lg font-semibold text-gray-700">
@@ -156,9 +165,9 @@ export default function EditUser({ params }) {
                                 <input
                                     id="phone_number"
                                     name="phone_number"
-                                    value={userData?.phone_number || ""}
+                                    value={parkingData.parking_application.phone_number || ""}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400"
                                 />
                             </div>
                             <div>
@@ -168,9 +177,9 @@ export default function EditUser({ params }) {
                                 <select
                                     id="Study_Department"
                                     name="Study_Department"
-                                    value={userData?.Study_Department || ""}
+                                    value={parkingData.parking_application.Study_Department || ""}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400"
                                 >
                                     <option value="">Select your department</option>
                                     <option value="Computer Science">Computer Science</option>
@@ -180,8 +189,6 @@ export default function EditUser({ params }) {
                                 </select>
                             </div>
                         </div>
-
-                        {/* Row for Car Type and Car Number */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label htmlFor="car_type" className="block text-lg font-semibold text-gray-700">
@@ -190,9 +197,9 @@ export default function EditUser({ params }) {
                                 <input
                                     id="car_type"
                                     name="car_type"
-                                    value={userData?.car_type || ""}
+                                    value={parkingData.parking_application.car_type || ""}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400"
                                 />
                             </div>
                             <div>
@@ -202,40 +209,39 @@ export default function EditUser({ params }) {
                                 <input
                                     id="car_number"
                                     name="car_number"
-                                    value={userData?.car_number || ""}
+                                    value={parkingData.parking_application.car_number || ""}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400"
                                 />
                             </div>
                         </div>
-
-                        {/* Drivers License */}
-                        <div className="grid grid-cols-1">
-                            <div>
-                                <label htmlFor="drivers_license" className="block text-lg font-semibold text-gray-700">
-                                    Drivers License
-                                </label>
-                                <input
-                                    id="drivers_license"
-                                    name="drivers_license"
-                                    type="file"
-                                    onChange={(e) => handleChange({ name: "drivers_license", value: e.target.files[0] })}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400 focus:outline-none shadow transition duration-300 hover:scale-105"
-                                />
-                            </div>
+                        <div>
+                            <label htmlFor="license_image" className="block text-lg font-semibold text-gray-700">
+                                Driver's License
+                            </label>
+                            <input
+                                id="license_image"
+                                name="license_image"
+                                type="file"
+                                onChange={handleChange}
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-4 focus:ring-cyan-400"
+                            />
                         </div>
-
-                        {/* Save Button */}
+                        <div>
+                            <label htmlFor="is_Won" className="block text-lg font-semibold text-gray-700">
+                                Won Parking Slot
+                            </label>
+                        </div>
                         <button
                             type="button"
                             onClick={handleSave}
-                            className="w-full py-3 bg-gradient-to-r from-green-400 to-cyan-500 text-white font-bold rounded-xl hover:from-cyan-500 hover:to-green-400 shadow-lg transform hover:scale-105 transition-all duration-300"
+                            className="w-full py-3 bg-gradient-to-r from-green-400 to-cyan-500 text-white font-bold rounded-xl shadow-lg hover:scale-105 transition-all"
                         >
                             Save Changes
                         </button>
                     </form>
                 </div>
             </div>
-        </div>
-    );
+        </div>
+    );
 }
