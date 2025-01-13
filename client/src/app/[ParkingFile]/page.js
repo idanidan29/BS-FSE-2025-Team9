@@ -74,7 +74,7 @@ export default function Page({ params }) {
     };
 
     fetchParkingData();
-  }, []); // השאר את התלות ריקה כדי שזה יקרה פעם אחת כשמטעינים את הקומפוננטה
+  }, []); 
 
 
   const Navigation = () => {
@@ -126,7 +126,7 @@ export default function Page({ params }) {
         const data = await response.json();
         if (response.ok) {
           alert('Application updated successfully!');
-          localStorage.setItem('parkingData', JSON.stringify(parkingData)); // Save updated data
+          localStorage.setItem('parkingData', JSON.stringify(parkingData)); 
         } else {
           alert(`Error: ${data.message}`);
         }
@@ -177,7 +177,7 @@ export default function Page({ params }) {
         if (response.ok) {
           alert('Application submitted successfully!');
           localStorage.setItem('parkingData', JSON.stringify(parkingData)); // Save submitted data
-          router.push('/');
+         
         } else {
           alert(`Error: ${data.message}`);
         }
@@ -228,7 +228,7 @@ export default function Page({ params }) {
   }, []); 
   
   if (isWon === null) {
-    return <div>Loading...</div>; // הצגת הודעת טעינה אם הערך עדיין לא הגיע
+    return <div>Loading...</div>; 
   }
   
   
