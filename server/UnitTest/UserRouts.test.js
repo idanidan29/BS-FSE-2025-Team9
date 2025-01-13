@@ -9,7 +9,6 @@ chai.use(chaiHttp);
 describe("User Routes", () => {
   beforeEach(async () => {
     await User.deleteMany({});
-    console.log("Database cleared");
   });
 
   it("should create a new user", async () => {
