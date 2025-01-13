@@ -185,30 +185,7 @@ router.use((req, res, next) => {
 });
 
 
-router.put('/documents/update-winners', async (req, res) => {
-    console.log('Handling /documents/update-winners');
-    try {
-        const { winners } = req.body;
 
-        if (!winners || !Array.isArray(winners) || winners.length === 0) {
-            return res.status(400).json({ message: 'Invalid or empty winners list.' });
-        }
-
-        // עדכון הסטטוס של הסטודנטים שהוזכרו ברשימה
-        const result = await Document.updateMany(
-            { student_id: { $in: winners } },
-            { $set: { is_Won: true } } // עדכון רק את השדה is_Won
-        );
-
-        res.status(200).json({
-            message: 'Winners updated successfully.',
-            updatedCount: result.modifiedCount,
-        });
-    } catch (err) {
-        console.error('Error updating winners:', err);
-        res.status(500).json({ message: 'Error updating winners.', error: err });
-    }
-});
 
 
 
@@ -220,15 +197,19 @@ router.put('/documents/update-winners', async (req, res) => {
             return res.status(400).json({ message: 'Invalid or empty winners list.' });
         }
         console.log('Winners list:', winners);
+        
+        // המתן עד שהעדכון יושלם
         const result = await Document.updateMany(
             { student_id: { $in: winners } },
-            { $set: { is_won: true } }
+            { $set: { is_Won: true } }
         );
+
         console.log('Update result:', result);
 
+        // שלח תשובה אחרי שהשינוי בוצע
         res.status(200).json({
-            message: 'Winners updated successfully test .',
-            updatedCount: result.modifiedCount, // Ensure this is correctly returned
+            message: 'Winners updated successfully.',
+            updatedCount: result.modifiedCount, // מספר המסמכים שהשתנו
         });
     } catch (err) {
         console.error('Error updating winners:', err);
