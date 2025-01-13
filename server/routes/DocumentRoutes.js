@@ -3,11 +3,9 @@ const Document = require('../models/Document');
 const ExcelJS = require('exceljs'); // Import ExcelJS
 const fs = require('fs');
 const path = require('path');
-<<<<<<< HEAD
-const ExcelJS = require('exceljs'); // Required for creating Excel files
-=======
+
 const router = express.Router();
->>>>>>> main
+
 
 // Helper function to decode and save base64 image
 const saveBase64Image = (base64String, student_id) => {
@@ -73,10 +71,8 @@ router.post('/documents', async (req, res) => {
             car_type: parking_application.car_type,
             car_number: parking_application.car_number,
             licenseImage: fileName,
-<<<<<<< HEAD
-=======
             is_won: false            
->>>>>>> main
+
         });
 
         await newDocument.save();
@@ -92,26 +88,7 @@ router.post('/documents', async (req, res) => {
     }
 });
 
-<<<<<<< HEAD
-// Route to export all users as Excel (Admin only)
-router.get('/export-users', async (req, res) => {
-    const isAdmin = req.user?.is_admin; // Assuming user data is retrieved from session or JWT
-    if (!isAdmin) {
-        return res.status(403).send({ error: 'Access denied' });
-    }
 
-    try {
-        // Fetch all users from the database
-        const users = await Document.find();
-        const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet('Users');
-
-        // Define worksheet columns
-        worksheet.columns = [
-            { header: 'Full Name', key: 'full_name', width: 30 },
-            { header: 'Student ID', key: 'student_id', width: 20 },
-            { header: 'Email', key: 'email', width: 30 },
-=======
 router.get('/documents/excel', async (req, res) => {
     try {
         // Fetch all documents from MongoDB
@@ -131,31 +108,10 @@ router.get('/documents/excel', async (req, res) => {
             { header: 'Last Name', key: 'last_name', width: 20 },
             { header: 'Email', key: 'email', width: 30 },
             { header: 'Student ID', key: 'student_id', width: 15 },
->>>>>>> main
             { header: 'Phone Number', key: 'phone_number', width: 20 },
             { header: 'Study Department', key: 'Study_Department', width: 25 },
             { header: 'Car Type', key: 'car_type', width: 20 },
             { header: 'Car Number', key: 'car_number', width: 15 },
-<<<<<<< HEAD
-            { header: 'Is Admin', key: 'is_admin', width: 10 },
-        ];
-
-        // Populate worksheet rows with user data
-        users.forEach((user) => {
-            worksheet.addRow({
-                full_name: `${user.first_name} ${user.last_name}`,
-                student_id: user.student_id,
-                email: user.email,
-                phone_number: user.phone_number,
-                Study_Department: user.Study_Department,
-                car_type: user.car_type,
-                car_number: user.car_number,
-                is_admin: user.is_admin ? 'Yes' : 'No',
-            });
-        });
-
-        // Set headers and send the Excel file
-=======
             { header: 'License Image', key: 'licenseImage', width: 30 },
         ];
 
@@ -175,14 +131,13 @@ router.get('/documents/excel', async (req, res) => {
         });
 
         // Set the response headers for Excel file download
->>>>>>> main
         res.setHeader(
             'Content-Type',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         );
         res.setHeader(
             'Content-Disposition',
-<<<<<<< HEAD
+
             'attachment; filename="users.xlsx"'
         );
         await workbook.xlsx.write(res);
@@ -210,21 +165,7 @@ router.get('/documents/:student_id', async (req, res) => {
     }
 });
 
-=======
-            'attachment; filename=Documents.xlsx'
-        );
 
-        // Write the workbook to the response stream
-        await workbook.xlsx.write(res);
-
-        // End the response
-        res.status(200).end();
-    } catch (error) {
-        console.error('Error generating Excel file:', error);
-        res.status(500).json({ message: 'Error generating Excel file', error: error.message });
-    }
-});
->>>>>>> main
 // Route to fetch all documents
 router.get('/documents', async (req, res) => {
     try {
@@ -236,7 +177,7 @@ router.get('/documents', async (req, res) => {
     }
 });
 
-<<<<<<< HEAD
+
 // Route to update a document by student ID
 router.put('/documents/:student_id', async (req, res) => {
     try {
@@ -272,63 +213,5 @@ router.put('/documents/:student_id', async (req, res) => {
     }
 });
 
-=======
-// Route to fetch document by student_id
-router.get('/documents/:student_id', async (req, res) => {
-    try {
-        const { student_id } = req.params;
-        console.log("Fetching document for student_id:", student_id);
-        const updatedDocument = await Document.findOne({ student_id });
 
-        if (!updatedDocument) {
-            return res.status(404).json({ message: 'No document found for this student.' });
-        }
-
-        res.status(200).json(updatedDocument);
-    } catch (err) {
-        console.error("Error fetching document:", err);
-        res.status(400).json({ message: 'Error updating document', error: err });
-    }
-});
-
-// Route to update document by student_id
-router.put('/documents/:student_id', async (req, res) => {
-  try {
-    const { student_id } = req.params;
-    const updatedData = req.body;
-
-    // Validate required fields
-    if (!updatedData.first_name ||
-        !updatedData.last_name ||
-        !updatedData.email ||
-        !updatedData.phone_number ||
-        !updatedData.Study_Department ||
-        !updatedData.car_type ||
-        !updatedData.car_number ||
-        !updatedData.license_image) {
-        return res.status(400).json({ message: 'All fields are required.' });
-    }
-
-    // Find and update the document by student_id
-    const updatedDocument = await Document.findOneAndUpdate(
-      { student_id },
-      { $set: updatedData },
-      { new: true, runValidators: true }
-    );
-
-    if (!updatedDocument) {
-      return res.status(404).json({ message: 'Document not found' });
-    }
-
-    res.status(200).json(updatedDocument);
-  } catch (err) {
-    res.status(400).json({ message: 'Error updating document', error: err });
-  }
-});
-
-// Route to generate Excel file from all documents
-
-
-
->>>>>>> main
 module.exports = router;
