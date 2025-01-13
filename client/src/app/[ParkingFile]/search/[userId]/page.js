@@ -217,7 +217,7 @@ export default function EditUser({ params }) {
                         </div>
                         <div>
                             <label htmlFor="license_image" className="block text-lg font-semibold text-gray-700">
-                                Driver's License
+                                Drivers License
                             </label>
                             <input
                                 id="license_image"
