@@ -93,7 +93,7 @@ router.post('/documents', async (req, res) => {
 router.get('/documents/excel', async (req, res) => {
     try {
         // Fetch documents from MongoDB where is_Won is true
-        const documents = await Document.find({ is_Won: true });
+        const documents = await Document.find({ is_won: true });
 
         if (documents.length === 0) {
             return res.status(404).json({ message: 'No documents found with is_Won set to true.' });
@@ -259,9 +259,6 @@ router.put('/documents/:student_id', async (req, res) => {
         res.status(400).json({ message: 'Error updating document', error: err });
     }
 });
-
-
-
 
 
 module.exports = router;
