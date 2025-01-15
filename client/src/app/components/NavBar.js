@@ -221,7 +221,7 @@ const Navbar = ({ children, userRole, isWon }) => {
                             key={index} 
                             onClick={onClick || (() => router.push(path))} 
                             title={title} 
-                            className="flex items-center p-4 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200"
+                            className="flex w-full items-center p-4 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200"
                         >
                             <span className="mr-2">{icon}</span> <span>{title}</span>
                         </button>
@@ -230,7 +230,7 @@ const Navbar = ({ children, userRole, isWon }) => {
                     <button
                         title="Delete Account"
                         onClick={sideListDelete.onClick} 
-                        className="flex items-center p-4 text-gray-300 hover:bg-red-700 hover:text-white transition-colors duration-200"
+                        className="absolute bottom-12 left-0 w-full p-2 flex justify-center items-center font-medium text-center bg-red-500 text-white  hover:bg-red-700 focus:outline-none"
                     >
                         <span>{sideListDelete.icon}</span> 
                         <span>{sideListDelete.title}</span> 
@@ -238,7 +238,7 @@ const Navbar = ({ children, userRole, isWon }) => {
                     <button
                         title="Delete All Accounts"
                         onClick={sideListDelete.onClick} // Attach the delete handler
-                        className="flex items-center p-4 text-gray-300 hover:bg-red-700 hover:text-white transition-colors duration-200"
+                        className="absolute bottom-1 left-0 w-full p-2 flex justify-center items-center font-medium text-center bg-red-500 text-white  hover:bg-red-700 focus:outline-none"
                     >
                         <span>{sideListDeleteAll.icon}</span> 
                         <span>{sideListDeleteAll.title}</span> 
@@ -250,6 +250,15 @@ const Navbar = ({ children, userRole, isWon }) => {
                     className={`transform top-0 left-0 w-64 bg-gray-900 fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30 ${isOpen ? "translate-x-0" : "-translate-x-full"
                         }`}
                 >
+                    <span className="flex w-full items-center p-4 border-b border-gray-700">
+                        <Image
+                            src="/SCE_logo.png"
+                            alt="Logo"
+                            className="h-auto w-24"
+                            width={96} // Next.js requires width and height attributes
+                            height={24}
+                        />
+                    </span>
 
 
                     <Link href={sideListSignoutStudent.path} passHref>

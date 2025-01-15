@@ -89,7 +89,6 @@ router.post('/documents', async (req, res) => {
     }
 });
 
-
 router.get('/documents/excel', async (req, res) => {
     try {
         // Fetch documents from MongoDB where is_Won is true
@@ -148,7 +147,6 @@ router.get('/documents/excel', async (req, res) => {
     }
 });
 
-
 // Route to fetch a document by student ID
 router.get('/documents/:student_id', async (req, res) => {
     try {
@@ -166,7 +164,6 @@ router.get('/documents/:student_id', async (req, res) => {
     }
 });
 
-
 // Route to fetch all documents
 router.get('/documents', async (req, res) => {
     try {
@@ -177,16 +174,6 @@ router.get('/documents', async (req, res) => {
         res.status(400).json({ message: 'Error fetching documents', error: err });
     }
 });
-
-router.use((req, res, next) => {
-    console.log(`Incoming request: ${req.method} ${req.originalUrl}`);
-    next();
-});
-
-
-
-
-
 
 router.put('/documents/update-winners', async (req, res) => {
     try {
@@ -215,7 +202,6 @@ router.put('/documents/update-winners', async (req, res) => {
         res.status(500).json({ message: 'Error updating winners.', error: err });
     }
 });
-
 
 // Route to update a document by student ID
 router.put('/documents/:student_id', async (req, res) => {

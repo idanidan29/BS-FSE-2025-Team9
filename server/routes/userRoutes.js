@@ -64,8 +64,6 @@ router.post('/users/login', async (req, res) => {
 
 });
 
-
-
 // Route to get all users who are not admins (is_admin: false)
 router.get('/students', async (req, res) => {
   try {
@@ -84,8 +82,6 @@ router.get('/students', async (req, res) => {
     res.status(400).json({ message: 'Error fetching students', error: err });
   }
 });
-
-
 
 // Route to get all users
 router.get('/users', async (req, res) => {
@@ -126,8 +122,6 @@ router.delete('/users', async (req, res) => {
   }
 });
 
-
-
 // Route to update a user
 router.put('/users/:username', async (req, res) => {
   try {
@@ -152,8 +146,6 @@ router.put('/users/:username', async (req, res) => {
   }
 });
 
-
-
 router.delete('/users/:id', async (req, res) => {
   const { id } = req.params;
   try {
@@ -166,8 +158,6 @@ router.delete('/users/:id', async (req, res) => {
       res.status(400).json({ message: 'Error deleting user', error: error.message });
   }
 });
-
-
 
 
 module.exports = router;
