@@ -48,7 +48,7 @@ export default function EditUser({ params }) {
             }));
         } catch (error) {
             console.error("Error fetching user:", error);
-            setErrorMessage("Failed to load user data.");
+            setErrorMessage("this user dosnt have a document");
         }
     };
 
