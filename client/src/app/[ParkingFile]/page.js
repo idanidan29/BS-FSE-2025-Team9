@@ -2,6 +2,8 @@
 import NavBar from '../components/NavBar';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { isValidEmail} from '../UnitTest/validation'; 
+
 
 export default function Page({ params }) {
   const router = useRouter();
@@ -38,18 +40,7 @@ export default function Page({ params }) {
     }
   });
 
-  // Authorization check
-  useEffect(() => {
-    (async () => {
-      const userLoggedIn = localStorage.getItem('username');
-      const resolvedParams = await params;
-      if (userLoggedIn === resolvedParams.ParkingFile) {
-        setIsAuthorized(true);
-      } else {
-        router.push('/');
-      }
-    })();
-  }, [params, router]);
+
 
   // Load parking data from the server based on student_id
   useEffect(() => {
@@ -108,6 +99,7 @@ export default function Page({ params }) {
         }
       }));
     }
+   
   };
 
   const handleUpdate = async () => {
@@ -140,6 +132,7 @@ export default function Page({ params }) {
       console.error('Error updating parking application:', err);
       alert('An unexpected error occurred. Please try again later.');
     }
+    
   };
 
   const handleSignUp = async () => {
@@ -156,6 +149,15 @@ export default function Page({ params }) {
       alert("Please fill in all fields!");
       return;
     }
+    //const { isValid: isValidCar, error: carnumberError } = isValidcarNumber(car_number);
+    const emailValue = parking_application.email.trim(); // value of email
+
+    const { isValid: isValidemail, error: emailError } = isValidEmail(emailValue); 
+    if (!isValidemail) {
+        alert(emailError);
+        return;
+    }
+     
 
     if (!parking_application.license_image) {
       alert("Please select a license file!");

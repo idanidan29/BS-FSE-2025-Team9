@@ -14,3 +14,13 @@ export const isValidEmail = (email) => {
     }
     return { isValid: true };
 };
+
+export const  isValidcarNumber = (carNumber) => {
+    const carNumberStr = String(carNumber);
+
+    if (carNumber.length < 7 || carNumber.length > 8) {
+        return { isValid: false, error: "Car number must be 7 or 8 digits long." };
+    }
+    return { isValid: true};
+
+};
