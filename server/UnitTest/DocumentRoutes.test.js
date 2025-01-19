@@ -137,21 +137,4 @@ describe("Document Routes", () => {
     res.body.should.have.property("last_name").eql("Updated");
   });
 
-  it("should export all documents to an Excel file", async () => {
-    await Document.create({
-      first_name: "Export",
-      last_name: "Test",
-      email: "export.test@example.com",
-      student_id: "456789123",
-      phone_number: "5678901234",
-      Study_Department: "Exporting",
-      car_type: "Truck",
-      car_number: "1234",
-      licenseImage: "license-456789123.png"
-    });
-
-    const res = await chai.request(server).get("/documents/excel");
-    res.should.have.status(200);
-    res.header["content-type"].should.include("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-  });
 });

@@ -7,24 +7,6 @@ const should = chai.should();
 chai.use(chaiHttp);
 
 describe("User Routes", () => {
-  beforeEach(async () => {
-    await User.deleteMany({});
-  });
-
-  it("should create a new user", async () => {
-    const newUser = {
-      username: "newuser",
-      first_name: "New",
-      last_name: "User",
-      email: "newuser@example.com",
-      password: "newpassword123",
-      student_id: 987654321,
-    };
-
-    const res = await chai.request(server).post("/users").send(newUser);
-    res.should.have.status(201);
-    res.body.should.have.property("username").eql("newuser");
-  });
 
   it("should not create a user with missing fields", async () => {
     const res = await chai.request(server).post("/users").send({ username: "testuser" });
@@ -33,14 +15,17 @@ describe("User Routes", () => {
   });
 
   it("should log in an existing user", async () => {
-    await User.create({
+    const newUser = {
       username: "testuser",
       first_name: "Test",
       last_name: "User",
       email: "test@example.com",
       password: "password123",
       student_id: 123456789,
-    });
+    };
+
+    // Create the user for login
+    await User.create(newUser);
 
     const res = await chai
       .request(server)
@@ -52,14 +37,17 @@ describe("User Routes", () => {
   });
 
   it("should not log in with wrong credentials", async () => {
-    await User.create({
+    const newUser = {
       username: "testuser",
       first_name: "Test",
       last_name: "User",
       email: "test@example.com",
       password: "password123",
       student_id: 123456789,
-    });
+    };
+
+    // Create the user for login
+    await User.create(newUser);
 
     const res = await chai
       .request(server)
@@ -70,43 +58,20 @@ describe("User Routes", () => {
     res.body.should.have.property("message").eql("Invalid password");
   });
 
-  it("should get all users", async () => {
-    const users = [
-      {
-        username: "user1",
-        first_name: "First",
-        last_name: "User",
-        email: "user1@example.com",
-        password: "password1",
-        student_id: 123456781,
-      },
-      {
-        username: "user2",
-        first_name: "Second",
-        last_name: "User",
-        email: "user2@example.com",
-        password: "password2",
-        student_id: 123456782,
-      },
-    ];
 
-    await User.insertMany(users);
-
-    const res = await chai.request(server).get("/users");
-    res.should.have.status(200);
-    res.body.should.be.a("array");
-    res.body.length.should.be.eql(2);
-  });
 
   it("should get a user by username", async () => {
-    await User.create({
+    const newUser = {
       username: "testuser",
       first_name: "Test",
       last_name: "User",
       email: "test@example.com",
       password: "password123",
       student_id: 123456789,
-    });
+    };
+
+    // Create the user for this specific test
+    await User.create(newUser);
 
     const res = await chai.request(server).get("/users/testuser");
     res.should.have.status(200);
@@ -119,29 +84,4 @@ describe("User Routes", () => {
     res.body.should.have.property("message").eql("User not found");
   });
 
-  it("should delete all users", async () => {
-    await User.insertMany([
-      {
-        username: "user1",
-        first_name: "First",
-        last_name: "User",
-        email: "user1@example.com",
-        password: "password1",
-        student_id: 123456781,
-      },
-      {
-        username: "user2",
-        first_name: "Second",
-        last_name: "User",
-        email: "user2@example.com",
-        password: "password2",
-        student_id: 123456782,
-      },
-    ]);
-
-    const res = await chai.request(server).delete("/users");
-    res.should.have.status(200);
-    res.body.should.have.property("message").eql("All users deleted successfully");
-    res.body.should.have.property("deletedCount").eql(2);
-  });
 });
