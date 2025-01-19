@@ -16,11 +16,20 @@ export const isValidEmail = (email) => {
 };
 
 export const  isValidcarNumber = (carNumber) => {
-    const carNumberStr = String(carNumber);
+    const carNumberStr = String(carNumber).trim();
+    console.log('Processed Car Number:', carNumberStr); // בדיקת ערך
 
-    if (carNumber.length < 7 || carNumber.length > 8) {
+    if (carNumberStr.length < 7 || carNumberStr.length > 8) {
+        console.log('Length Error:', carNumberStr.length);
         return { isValid: false, error: "Car number must be 7 or 8 digits long." };
     }
-    return { isValid: true};
+    if (!/^\d+$/.test(carNumberStr)) {
+        console.log('Non-digit Error:', carNumberStr);
+        return { isValid: false, error: "Car number must contain only digits." };
+    }
 
+    return { isValid: true };
 };
+
+
+

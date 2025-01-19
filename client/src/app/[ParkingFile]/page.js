@@ -2,7 +2,7 @@
 import NavBar from '../components/NavBar';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { isValidEmail} from '../UnitTest/validation'; 
+import { isValidEmail,isValidcarNumber} from '../UnitTest/validation'; 
 
 
 export default function Page({ params }) {
@@ -108,6 +108,19 @@ export default function Page({ params }) {
         },
         body: JSON.stringify(parking_application),
       });
+   // const emailValue = parking_application.email.trim(); // value of email
+
+   /* const { isValid: isValidemail, error: emailError } = isValidEmail(emailValue); 
+    if (!isValidemail) {
+        alert(emailError);
+        return;
+    }
+    const carNumberValue = parking_application.car_number.trim(); // value of car number
+    const {isValid: isCarNunmerValid, error: carnumberError} = isValidcarNumber(carNumberValue);
+    if (!isCarNunmerValid) {
+      alert(carnumberError);
+      return;
+    }*/
 
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.indexOf("application/json") !== -1) {
@@ -127,6 +140,7 @@ export default function Page({ params }) {
       alert('An unexpected error occurred. Please try again later.');
     }
     
+    
   };
 
   const handleSignUp = async () => {
@@ -143,7 +157,6 @@ export default function Page({ params }) {
       alert("Please fill in all fields!");
       return;
     }
-    //const { isValid: isValidCar, error: carnumberError } = isValidcarNumber(car_number);
     const emailValue = parking_application.email.trim(); // value of email
 
     const { isValid: isValidemail, error: emailError } = isValidEmail(emailValue); 
@@ -151,6 +164,14 @@ export default function Page({ params }) {
         alert(emailError);
         return;
     }
+    const carNumberValue = parking_application.car_number.trim(); // value of car number
+    const {isValid: isCarNunmerValid, error: carnumberError} = isValidcarNumber(carNumberValue);
+    console.log('Validation Result:', { isValid: isCarNunmerValid, error: carnumberError });
+    if (!isCarNunmerValid) {
+      alert(carnumberError);
+      return;
+    }
+
      
 
     if (!parking_application.license_image) {
