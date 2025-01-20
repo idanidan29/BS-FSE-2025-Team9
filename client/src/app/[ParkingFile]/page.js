@@ -50,7 +50,7 @@ export default function Page({ params }) {
 
       if (studentId) {
         try {
-          const response = await fetch(`https://bs-fse-2025-team9.onrender.com/documents/${studentId}`);
+          const response = await fetch(`https://bs-fse-2025-team9.onrender.com/documents/${parkingData.parking_application.student_id}`);
           if (response.ok) {
             const data = await response.json();
             setParkingData({ parking_application: data });
