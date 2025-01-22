@@ -8,7 +8,7 @@ import { isValidEmail,isValidcarNumber} from '../UnitTest/validation';
 export default function Page({ params }) {
   const router = useRouter();
   const [isAuthorized, setIsAuthorized] = useState(false);
-
+  const studentId = localStorage.getItem('student_id');
   // Authorization check
   useEffect(() => {
     (async () => {
@@ -22,7 +22,7 @@ export default function Page({ params }) {
     })();
   }, [params, router]);
 
-  // JSON structured state
+
   const [isEditing, setIsEditing] = useState(false); // מצב לעריכת טופס
 
   const [parkingData, setParkingData] = useState({
@@ -30,7 +30,7 @@ export default function Page({ params }) {
       first_name: "",
       last_name: "",
       email: "",
-      student_id:  parseInt(localStorage.getItem('student_id'), 20),
+      student_id:  parseInt(studentId),
       phone_number: "",
       Study_Department: "",
       car_type: "",
@@ -45,12 +45,12 @@ export default function Page({ params }) {
   // Load parking data from the server based on student_id
   useEffect(() => {
     const fetchParkingData = async () => {
-      const studentId = localStorage.getItem('studentId');
+      const studentId = localStorage.getItem('student_id');
       console.log('Current studentId:', studentId);
 
       if (studentId) {
         try {
-          const response = await fetch(`https://bs-fse-2025-team9.onrender.com/documents/${parkingData.parking_application.student_id}`);
+          const response = await fetch(`https://bs-fse-2025-team9.onrender.com/documents/${studentId}`);
           if (response.ok) {
             const data = await response.json();
             setParkingData({ parking_application: data });
@@ -97,7 +97,7 @@ export default function Page({ params }) {
   };
 
   const handleUpdate = async () => {
-    const studentId = localStorage.getItem('studentId');
+    const studentId = localStorage.getItem('student_id');
     const { parking_application } = parkingData;
 
     try {
@@ -221,7 +221,6 @@ export default function Page({ params }) {
 
   useEffect(() => {
     const checkIfFormExists = async () => {
-      const studentId = localStorage.getItem('studentId');
       if (studentId) {
         try {
           const response = await fetch(`https://bs-fse-2025-team9.onrender.com/documents/${studentId}`);
@@ -260,7 +259,7 @@ export default function Page({ params }) {
 
 
       <NavBar userRole={localStorage.getItem('userRole')} isWon={isWon}>
-        {localStorage.getItem('studentId')}
+        {localStorage.getItem('student_id')}
       </NavBar>
       <div className="flex flex-col items-center justify-center p-5 min-h-screen bg-gradient-to-br from-green-300 via-teal-200 to-cyan-300 rtl px-4 sm:px-6">
         <div className="bg-white rounded-2xl box-border min-h-[600px] p-5 w-full sm:w-[520px]">

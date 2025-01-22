@@ -65,6 +65,8 @@ export default function Page() {
             });
 
             if (response.ok) {
+                
+
 
                 const data = await response.json();
                 localStorage.setItem('student_id', data.student_id);
