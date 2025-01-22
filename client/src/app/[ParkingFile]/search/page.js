@@ -182,7 +182,6 @@ export default function Page() {
                                                                     )}
                                                                 </button>
 
-                                                                {/* Dropdown Menu */}
                                                                 {dropdownOpen === user.student_id && (
                                                                     <div className="absolute right-[100px] top-[-40px] w-30 bg-white border border-gray-300 rounded-lg shadow-md z-10">
                                                                         <button
