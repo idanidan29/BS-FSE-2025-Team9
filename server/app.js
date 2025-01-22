@@ -24,7 +24,7 @@ app.use(express.urlencoded({ limit: '7mb', extended: true }));
 
 
 // Connect to MongoDB
-mongoose.connect("mongodb+srv://system:NzEo6pKiK9Kq9d9O@filesystem.5cw90.mongodb.net/File_System", { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connected to MongoDB'))
   .catch((error) => console.error('Error connecting to MongoDB:', error));
 
