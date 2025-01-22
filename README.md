@@ -18,14 +18,23 @@ The Parking File Management System is a web application designed to manage and o
 - **MongoDB Atlas**: Cloud database service for MongoDB
 - **Vercel**: Deployment platform for static sites and serverless functions
 - **Render**: Cloud platform for running web services
+- **Chai**: Assertion library for testing
+- **Mocha**: JavaScript test framework
 
 ## Installation
-
+To install React Icons, mocha and Chai, run:
+```bash
+npm install react-icons 
+```
+```bash
+npm install chai mocha
+```
 ### Prerequisites
 - Node.js and npm installed
 - MongoDB Atlas account
 - Vercel account
 - Render account
+  
 
 ### Steps
 1. Clone the repository:
