@@ -12,7 +12,7 @@ const app = express();
 // Configuration for PORT and MongoDB URI
 const PORT = 5000;
 const mongoUri = process.env.MONGO_URI;
-const secretKey = process.env.SECRET_KEY;
+
 
 
 // Middleware for CORS and JSON parsing
