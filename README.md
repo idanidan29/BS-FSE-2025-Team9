@@ -24,6 +24,9 @@ The Parking File Management System is a web application designed to manage and o
 ## Installation
 To install React Icons, mocha and Chai, run:
 ```bash
+npm install
+```
+```bash
 npm install react-icons 
 ```
 ```bash
