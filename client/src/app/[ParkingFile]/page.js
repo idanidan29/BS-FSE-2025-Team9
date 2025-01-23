@@ -2,7 +2,7 @@
 import NavBar from '../components/NavBar';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { isValidEmail,isValidcarNumber} from '../UnitTest/validation'; 
+import { isValidEmail,isValidcarNumber} from '../utiltis/validation'; 
 
 
 export default function Page({ params }) {

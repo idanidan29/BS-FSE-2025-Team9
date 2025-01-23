@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { isValidId,isValidEmail } from '../UnitTest/validation'; 
+import { isValidId,isValidEmail } from '../utiltis/validation'; 
 
 
 
