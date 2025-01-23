@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import sinon from "sinon";
 import nock from "nock";
 import fetch from "node-fetch";
 
@@ -72,4 +73,45 @@ describe("User Management Page Tests", function () {
 
         expect(constructedURL).to.equal("/admin/search/1");
     });
+
+
+
+describe("handleDropdownToggle", () => {
+    let setDropdownOpen;
+    let dropdownOpen;
+    let handleDropdownToggle;
+
+    beforeEach(() => {
+        // הגדרת משתנים ומוקי state לפני כל בדיקה
+        dropdownOpen = null;
+        setDropdownOpen = sinon.stub();
+        
+        // הגדרת הפונקציה לבדיקה
+        handleDropdownToggle = (userId) => {
+            setDropdownOpen(dropdownOpen === userId ? null : userId);
+        };
+    });
+
+    it("should open the dropdown if it is currently closed", () => {
+        const userId = 1;
+        handleDropdownToggle(userId);
+        expect(setDropdownOpen.calledWith(userId)).to.be.true;
+    });
+
+    it("should close the dropdown if it is currently open for the same user", () => {
+        dropdownOpen = 1;
+        const userId = 1;
+        handleDropdownToggle(userId);
+        expect(setDropdownOpen.calledWith(null)).to.be.true;
+    });
+
+    it("should open the dropdown for a different user", () => {
+        dropdownOpen = 2;
+        const userId = 1;
+        handleDropdownToggle(userId);
+        expect(setDropdownOpen.calledWith(userId)).to.be.true;
+    });
+});
+
+
 });
