@@ -60,6 +60,11 @@ describe("Validation Functions", () => {
       const result = isValidId("123-45-6789");
       expect(result.isValid).to.be.true;
     });
+
+    it("should return true after removing non-digit characters from a valid ID", () => {
+      const result = isValidId("123-456-789");
+      expect(result.isValid).to.be.true;
+    });
   });
 
   // Tests for isValidEmail function
@@ -78,6 +83,12 @@ describe("Validation Functions", () => {
 
     it("should return false for email missing @sce.il", () => {
       const result = isValidEmail("user@gmail.com");
+      expect(result.isValid).to.be.false;
+      expect(result.error).to.equal("Invalid email format. It must end with @sce.il");
+    });
+
+    it("should return false for email with special characters not allowed", () => {
+      const result = isValidEmail("user@@sce.il");
       expect(result.isValid).to.be.false;
       expect(result.error).to.equal("Invalid email format. It must end with @sce.il");
     });
@@ -113,6 +124,18 @@ describe("Validation Functions", () => {
       const result = isValidcarNumber("12345678");
       expect(result.isValid).to.be.true;
     });
+
+    it("should return false for a valid length but containing letters", () => {
+      const result = isValidcarNumber("1234abc7");
+      expect(result.isValid).to.be.false;
+      expect(result.error).to.equal("Car number must contain only digits.");
+    });
+
+    it("should return true for a valid car number with spaces at the ends", () => {
+      const result = isValidcarNumber(" 1234567 ");
+      expect(result.isValid).to.be.true;
+    });
+
   });
 
 });
