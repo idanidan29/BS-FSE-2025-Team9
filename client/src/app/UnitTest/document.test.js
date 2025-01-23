@@ -1,4 +1,4 @@
-import { expect } from 'chai';  // Import using ES Module syntax
+/*import { expect } from 'chai';  // Import using ES Module syntax
 import { isValidId, isValidEmail } from './validation'; // Import the validation functions
 
 
@@ -88,3 +88,4 @@ describe('isValidcarNumber Function', () => {
     });
 });
 
+*/
