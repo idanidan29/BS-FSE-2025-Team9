@@ -255,7 +255,7 @@ const Navbar = ({ children, userRole, isWon }) => {
                             src="/SCE_logo.png"
                             alt="Logo"
                             className="h-auto w-24"
-                            width={96} // Next.js requires width and height attributes
+                            width={96} 
                             height={24}
                         />
                     </span>
@@ -286,7 +286,7 @@ const Navbar = ({ children, userRole, isWon }) => {
 
            <div>
             שלום: {children}
-            {isWon && <span> זכית במקום חניה</span>}
+            {isWon && <span>  זכית במקום חניה אנה פנה לדיקנאט</span>}
 
 
           </div>

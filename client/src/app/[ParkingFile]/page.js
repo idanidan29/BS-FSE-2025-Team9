@@ -2,7 +2,7 @@
 import NavBar from '../components/NavBar';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { isValidEmail,isValidcarNumber} from '../UnitTest/validation'; 
+import { isValidEmail,isValidcarNumber} from '../utiltis/validation'; 
 
 
 export default function Page({ params }) {
@@ -54,7 +54,7 @@ export default function Page({ params }) {
           if (response.ok) {
             const data = await response.json();
             setParkingData({ parking_application: data });
-            setIsEditing(true); // נכנסים למצב עריכה אם נתונים טוענים בהצלחה
+            setIsEditing(true);
           } else {
             console.log('No document found for this student.');
           }
@@ -108,20 +108,7 @@ export default function Page({ params }) {
         },
         body: JSON.stringify(parking_application),
       });
-   // const emailValue = parking_application.email.trim(); // value of email
-
-   /* const { isValid: isValidemail, error: emailError } = isValidEmail(emailValue); 
-    if (!isValidemail) {
-        alert(emailError);
-        return;
-    }
-    const carNumberValue = parking_application.car_number.trim(); // value of car number
-    const {isValid: isCarNunmerValid, error: carnumberError} = isValidcarNumber(carNumberValue);
-    if (!isCarNunmerValid) {
-      alert(carnumberError);
-      return;
-    }*/
-
+  
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.indexOf("application/json") !== -1) {
         const data = await response.json();
@@ -256,8 +243,6 @@ export default function Page({ params }) {
   return (
     
     <div>
-
-
       <NavBar userRole={localStorage.getItem('userRole')} isWon={isWon}>
         {localStorage.getItem('student_id')}
       </NavBar>
@@ -289,7 +274,6 @@ export default function Page({ params }) {
             />
           </div>
 
-          {/* Conditionally render the ID input */}
           {showStudentIdInput && (
             <div className="relative w-full mt-4">
               <input

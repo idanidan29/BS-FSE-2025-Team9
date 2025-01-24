@@ -9,7 +9,6 @@ require('dotenv').config();
 
 const app = express();
 
-// Configuration for PORT and MongoDB URI
 const PORT = 5000;
 const mongoUri = process.env.MONGO_URI;
 
@@ -17,7 +16,7 @@ const mongoUri = process.env.MONGO_URI;
 
 // Middleware for CORS and JSON parsing
 app.use(cors({
-  origin: '*'  // Allow all origins (adjust for production as needed)
+  origin: '*'  // Allow all origins
 }));
 app.use(express.json({ limit: '7mb' }));
 app.use(express.urlencoded({ limit: '7mb', extended: true }));
@@ -30,9 +29,7 @@ mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
 
 // Route handling
 app.use('/', userRoutes);  // Use user routes
-app.use('/', documentRoutes); // Use document routes (adjust as necessary)
-module.exports = app;
-
-// Start the server
+app.use('/', documentRoutes); // Use document routes
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
+module.exports = app;

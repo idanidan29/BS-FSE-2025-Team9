@@ -8,9 +8,9 @@ export const isValidId = (id) => {
 };
 
 export const isValidEmail = (email) => {
-    const sceEmailRegex = /^[a-zA-Z0-9._%+-]+@sce\.edu$/;  // ביטוי רגולרי לבדוק אימיילים
+    const sceEmailRegex = /^[a-zA-Z0-9._%+-]+@sce\.il$/;  // Regex for SCE email
     if (!sceEmailRegex.test(email)) {
-        return { isValid: false, error: "Invalid email format. It must end with @sce.edu"};
+        return { isValid: false, error: "Invalid email format. It must end with @sce.il"};
     }
     return { isValid: true };
 };
