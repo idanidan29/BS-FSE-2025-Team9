@@ -64,25 +64,6 @@ router.post('/users/login', async (req, res) => {
 
 });
 
-// Route to get all users who are not admins (is_admin: false)
-router.get('/students', async (req, res) => {
-  try {
-    // סינון המשתמשים לפי is_admin: false
-    const students = await User.find({ is_admin: false });
-
-    // אם לא נמצאו משתמשים, מחזירים הודעת שגיאה
-    if (students.length === 0) {
-      return res.status(404).json({ message: 'No students found.' });
-    }
-
-    // מחזירים את כל המשתמשים שאינם אדמינים
-    res.status(200).json(students);
-  } catch (err) {
-    // אם יש שגיאה בשאילתא, מחזירים הודעת שגיאה
-    res.status(400).json({ message: 'Error fetching students', error: err });
-  }
-});
-
 // Route to get all users
 router.get('/users', async (req, res) => {
   try {
