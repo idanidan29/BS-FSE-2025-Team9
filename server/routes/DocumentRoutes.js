@@ -187,7 +187,7 @@ router.put('/documents/update-winners', async (req, res) => {
         // המתן עד שהעדכון יושלם
         const result = await Document.updateMany(
             { student_id: { $in: winners } },
-            { $set: { is_Won: true } }
+            { $set: { is_won: true } }
         );
 
         console.log('Update result:', result);
