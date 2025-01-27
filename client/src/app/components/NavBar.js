@@ -245,7 +245,7 @@ const Navbar = ({ children, userRole, isWon }) => {
                     </button>
                     <button
                         title="Delete All Accounts"
-                        onClick= {handleDeleteDocuments()}
+                        onClick= {handleDeleteDocuments}
                         className="absolute bottom-1 left-0 w-full p-2 flex justify-center items-center font-medium text-center bg-red-500 text-white  hover:bg-red-700 focus:outline-none"
                     >
                         <span>{sideListDeleteAll.icon}</span> 
