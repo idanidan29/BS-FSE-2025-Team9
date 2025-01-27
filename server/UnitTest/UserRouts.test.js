@@ -9,6 +9,7 @@ chai.use(chaiHttp);
 
 describe("User Routes", () => {
   before(async () => {
+    MONGO_URI='mongodb+srv://system:NzEo6pKiK9Kq9d9O@filesystem.5cw90.mongodb.net/File_System';
     const uri = MONGO_URI; // Update if using a different test database URI
     await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   });
