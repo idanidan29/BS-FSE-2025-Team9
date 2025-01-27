@@ -7,7 +7,6 @@ const path = require('path');
 const router = express.Router();
 
 
-// Helper function to decode and save base64 image
 const saveBase64Image = (base64String, student_id) => {
     // Validate and decode the base64 string
     const matches = base64String.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
@@ -245,6 +244,28 @@ router.put('/documents/:student_id', async (req, res) => {
         res.status(400).json({ message: 'Error updating document', error: err });
     }
 });
+
+// Other routes...
+
+// Route to delete all documents
+router.delete('/documents', async (req, res) => {
+    try {
+        const result = await Document.deleteMany(); // Deletes all documents in the collection
+
+        res.status(200).json({
+            message: 'All documents deleted successfully.',
+            deletedCount: result.deletedCount, // Number of deleted documents
+        });
+    } catch (err) {
+        console.error('Error deleting documents:', err);
+        res.status(500).json({
+            message: 'Error deleting documents.',
+            error: err.message,
+        });
+    }
+});
+
+module.exports = router;
 
 
 module.exports = router;

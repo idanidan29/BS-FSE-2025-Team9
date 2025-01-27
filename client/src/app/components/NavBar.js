@@ -16,7 +16,6 @@ const Navbar = ({ children, userRole, isWon }) => {
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
 
-
     const sideList = [
         {
             icon: <FaRegFilePowerpoint className="text-2xl mr-2" />,
@@ -71,7 +70,22 @@ const Navbar = ({ children, userRole, isWon }) => {
         
     ];
 
-
+    const handleDeleteDocuments = async () => {
+        try {
+            const response = await fetch(
+                'https://bs-fse-2025-team9.onrender.com/documents',
+                {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                }
+            );
+            if (!response.ok) throw new Error('Failed to delete documents.');
+            alert('All documents deleted successfully!');
+        } catch (error) {
+            console.error('Error deleting documents:', error);
+            alert('Error deleting documents.');
+        }
+    };
 
 
     const handleDeleteAccount = async () => {
@@ -113,11 +127,9 @@ const Navbar = ({ children, userRole, isWon }) => {
 
     const sideListDeleteAll = {
         icon: <MdOutlineDeleteForever className="text-2xl mr-2" />,
-        title: "Delete All Accounts",
+        title: "Delete All Docmuents",
         onClick: async () => {
-            router.push('/Sign'); // Redirect after action
-            await handleDeleteAccount(children); // Perform delete
-
+            await handleDeleteDocuments(); // Perform delete
         },
     };
 
@@ -128,11 +140,7 @@ const Navbar = ({ children, userRole, isWon }) => {
         path: "/"
     };
 
-
-
-    const navList = [
-
-    ];
+    const navList = [];
 
     const handleDrawer = () => {
         setIsOpen(!isOpen);
@@ -279,17 +287,13 @@ const Navbar = ({ children, userRole, isWon }) => {
                         <span>{sideListDelete.icon}</span> 
                         <span>{sideListDelete.title}</span> 
                     </button>
-
                 </aside>
-
             )}
 
            <div>
             שלום: {children}
-            {isWon && <span>  זכית במקום חניה אנה פנה לדיקנאט</span>}
-
-
-          </div>
+            {isWon && <span>  זכית במקום חניה, אנא פנה לדיקנאט</span>}
+           </div>
         </nav>
     );
 
