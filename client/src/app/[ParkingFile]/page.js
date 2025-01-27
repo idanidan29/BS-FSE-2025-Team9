@@ -7,132 +7,130 @@ import { isValidEmail,isValidcarNumber} from '../utiltis/validation';
 
 export default function Page({ params }) {
   const router = useRouter();
-  const [isAuthorized, setIsAuthorized] = useState(false);
-  const studentId = localStorage.getItem('student_id');
+  const [isAuthorized, setIsAuthorized] = useState(false); // State to track if the user is authorized
+  const studentId = localStorage.getItem('student_id'); // Retrieve the student ID from localStorage
+
   // Authorization check
   useEffect(() => {
     (async () => {
-      const userLoggedIn = localStorage.getItem('username');
-      const resolvedParams = await params;
+      const userLoggedIn = localStorage.getItem('username'); // Check who is currently logged in
+      const resolvedParams = await params; // Resolve dynamic route parameters
       if (userLoggedIn === resolvedParams.ParkingFile) {
-        setIsAuthorized(true);
+        setIsAuthorized(true); // User is authorized if their username matches the ParkingFile
       } else {
-        router.push('/');
+        router.push('/'); // Redirect unauthorized users to the homepage
       }
     })();
   }, [params, router]);
 
-
-  const [isEditing, setIsEditing] = useState(false); // מצב לעריכת טופס
+  const [isEditing, setIsEditing] = useState(false); // Track if the user is editing an existing form
 
   const [parkingData, setParkingData] = useState({
     parking_application: {
-      first_name: "",
-      last_name: "",
-      email: "",
-      student_id:  parseInt(studentId),
-      phone_number: "",
-      Study_Department: "",
-      car_type: "",
-      car_number: "",
-      license_image: null, // Will store base64 string
-      is_Won: false
+      first_name: "", 
+      last_name: "", 
+      email: "", 
+      student_id: parseInt(studentId), // Retrieve and parse student ID from localStorage
+      phone_number: "", 
+      Study_Department: "", 
+      car_type: "", 
+      car_number: "", 
+      license_image: null, 
+      is_Won: false 
     }
   });
 
-
-
-  // Load parking data from the server based on student_id
+  // Fetch parking data based on the student ID
   useEffect(() => {
     const fetchParkingData = async () => {
-      const studentId = localStorage.getItem('student_id');
+      const studentId = localStorage.getItem('student_id'); // Get student ID from localStorage
       console.log('Current studentId:', studentId);
 
       if (studentId) {
         try {
           const response = await fetch(`https://bs-fse-2025-team9.onrender.com/documents/${studentId}`);
           if (response.ok) {
-            const data = await response.json();
-            setParkingData({ parking_application: data });
-            setIsEditing(true);
+            const data = await response.json(); // Parse the server response
+            setParkingData({ parking_application: data }); // Populate form fields with existing data
+            setIsEditing(true); // Indicate that the user is editing an existing form
           } else {
-            console.log('No document found for this student.');
+            console.log('No document found for this student.'); // Log if no form exists
           }
         } catch (err) {
-          console.error('Error fetching parking data:', err);
+          console.error('Error fetching parking data:', err); // Log any fetch errors
         }
       }
     };
 
-    fetchParkingData();
-  }, []); 
+    fetchParkingData(); // Fetch data when the component loads
+  }, []);
 
-
+  // Handle changes in form inputs
   const handleChange = (e) => {
     const { id, value, type, files } = e.target;
 
-    if (type === 'file') {
+    if (type === 'file') { // Check if the input is a file upload
       const file = files[0];
       if (file) {
-        const reader = new FileReader();
+        const reader = new FileReader(); // Create a FileReader to handle the file
         reader.onloadend = () => {
           setParkingData(prev => ({
             parking_application: {
               ...prev.parking_application,
-              license_image: reader.result // This will be base64 string
+              license_image: reader.result // Save the base64-encoded image
             }
           }));
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(file); // Read the file as a Data URL
       }
     } else {
       setParkingData(prev => ({
         parking_application: {
           ...prev.parking_application,
-          [id]: value
+          [id]: value // Update the corresponding field in the form state
         }
       }));
     }
-   
   };
 
+  // Handle form updates
   const handleUpdate = async () => {
-    const studentId = localStorage.getItem('student_id');
+    const studentId = localStorage.getItem('student_id'); // Retrieve student ID from localStorage
     const { parking_application } = parkingData;
 
     try {
       const response = await fetch(`https://bs-fse-2025-team9.onrender.com/documents/${studentId}`, {
-        method: 'PUT',
+        method: 'PUT', // Use PUT to update existing data
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json', // Send JSON data to the server
         },
-        body: JSON.stringify(parking_application),
+        body: JSON.stringify(parking_application), // Convert parking data to JSON
       });
-  
+
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.indexOf("application/json") !== -1) {
         const data = await response.json();
         if (response.ok) {
-          alert('Application updated successfully!');
-          localStorage.setItem('parkingData', JSON.stringify(parkingData)); 
+          alert('Application updated successfully!'); // Notify the user of success
+          localStorage.setItem('parkingData', JSON.stringify(parkingData)); // Save the updated data locally
         } else {
-          alert(`Error: ${data.message}`);
+          alert(`Error: ${data.message}`); // Notify the user of errors
         }
       } else {
         const text = await response.text();
-        alert(`Unexpected response from server: ${text}`);
+        alert(`Unexpected response from server: ${text}`); // Handle unexpected server responses
       }
     } catch (err) {
-      console.error('Error updating parking application:', err);
+      console.error('Error updating parking application:', err); // Log update errors
       alert('An unexpected error occurred. Please try again later.');
     }
-    
-    
   };
 
+  // Handle form submission for new applications
   const handleSignUp = async () => {
     const { parking_application } = parkingData;
 
+    // Validate that all required fields are filled
     if (!parking_application.first_name ||
       !parking_application.last_name ||
       !parking_application.student_id ||
@@ -141,71 +139,50 @@ export default function Page({ params }) {
       !parking_application.Study_Department ||
       !parking_application.car_type ||
       !parking_application.car_number) {
-      alert("Please fill in all fields!");
+      alert("Please fill in all fields!"); // Notify the user if fields are missing
       return;
     }
-    const emailValue = parking_application.email.trim(); // value of email
-
-    const { isValid: isValidemail, error: emailError } = isValidEmail(emailValue); 
-    if (!isValidemail) {
-        alert(emailError);
-        return;
-    }
-    const carNumberValue = parking_application.car_number.trim(); // value of car number
-    const {isValid: isCarNunmerValid, error: carnumberError} = isValidcarNumber(carNumberValue);
-    console.log('Validation Result:', { isValid: isCarNunmerValid, error: carnumberError });
-    if (!isCarNunmerValid) {
-      alert(carnumberError);
-      return;
-    }
-
-     
 
     if (!parking_application.license_image) {
-      alert("Please select a license file!");
+      alert("Please select a license file!"); // Notify the user if the license file is missing
       return;
     }
 
     try {
-      console.log('Sending data:', JSON.stringify(parkingData));
-
       const response = await fetch('https://bs-fse-2025-team9.onrender.com/documents', {
-        method: 'POST',
+        method: 'POST', // Use POST to create new data
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json', // Send JSON data to the server
         },
-        body: JSON.stringify(parkingData)
+        body: JSON.stringify(parkingData) // Convert the data to JSON format
       });
 
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.indexOf("application/json") !== -1) {
         const data = await response.json();
         if (response.ok) {
-          alert('Application submitted successfully!');
-          localStorage.setItem('parkingData', JSON.stringify(parkingData)); // Save submitted data
-         
+          alert('Application submitted successfully!'); // Notify the user of success
+          localStorage.setItem('parkingData', JSON.stringify(parkingData)); // Save the submitted data locally
         } else {
-          alert(`Error: ${data.message}`);
+          alert(`Error: ${data.message}`); // Notify the user of server errors
         }
       } else {
         const text = await response.text();
-        throw new Error(text);
+        throw new Error(text); // Handle unexpected responses
       }
     } catch (err) {
-      console.error('Error details:', err);
+      console.error('Error details:', err); // Log submission errors
       alert('An unexpected error occurred. Please try again later.');
     }
   };
 
+  // Conditionally show or hide the student ID input
+  const userRole = localStorage.getItem('userRole'); // Get the user's role
+  const showStudentIdInput = userRole !== 'false'; // Show the input only if the role is not 'false'
 
-  // Conditionally hide the ID input based on userRole
-  const userRole = localStorage.getItem('userRole');
-  const showStudentIdInput = userRole !== 'false'; // If userRole is not 'false', show the input
+  const [isWon, setIsWon] = useState(localStorage.getItem('is_won') === 'true'); // Track if the user has won parking
 
-
- 
-  const [isWon, setIsWon] = useState(localStorage.getItem('is_won') === 'true');
-
+  // Check if a form already exists for the student
   useEffect(() => {
     const checkIfFormExists = async () => {
       if (studentId) {
@@ -214,30 +191,27 @@ export default function Page({ params }) {
           if (response.ok) {
             const data = await response.json();
             if (data) {
-              const isWonFromDB = data.is_won;
-              localStorage.setItem('is_won', isWonFromDB.toString());
-              setIsWon(isWonFromDB);
+              const isWonFromDB = data.is_won; // Retrieve the is_won value from the database
+              localStorage.setItem('is_won', isWonFromDB.toString()); // Save it in localStorage
+              setIsWon(isWonFromDB); // Update the state
             }
           } else {
-            console.log('No form found for this student.');
-            setIsWon(false);  // אם לא נמצא טופס, אתחיל את isWon ל-false
-            localStorage.setItem('is_won', 'false'); // לאחסן את הערך ב-localStorage
+            setIsWon(false); // If no form exists, set isWon to false
+            localStorage.setItem('is_won', 'false'); // Save the default value in localStorage
           }
         } catch (err) {
-          console.error('Error fetching parking data:', err);
+          console.error('Error fetching parking data:', err); // Log errors during fetch
         }
       }
     };
 
-    checkIfFormExists();
-  }, []); 
-  
+    checkIfFormExists(); // Check if a form exists when the component loads
+  }, []);
+
+  // If isWon is still null, show a loading state
   if (isWon === null) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>; // Display a loading message until the data is ready
   }
-  
-  
-  
 
 
   return (

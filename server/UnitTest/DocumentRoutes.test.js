@@ -9,8 +9,8 @@ chai.use(chaiHttp);
 
 describe("Document Routes", () => {
   before(async () => {
-    const uri = MONGI_URI; // Update if using a different test database URI
-    await mongoose.connect(uri); // Updated: Removed deprecated options
+    const uri = ''; // Update if using a different test database URI
+    await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   });
 
   beforeEach(async () => {
