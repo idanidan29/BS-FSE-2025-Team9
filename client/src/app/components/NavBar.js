@@ -16,7 +16,6 @@ const Navbar = ({ children, userRole, isWon }) => {
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
 
-
     const sideList = [
         {
             icon: <FaRegFilePowerpoint className="text-2xl mr-2" />,
