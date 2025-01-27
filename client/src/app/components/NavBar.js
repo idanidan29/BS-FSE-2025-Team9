@@ -70,7 +70,22 @@ const Navbar = ({ children, userRole, isWon }) => {
         
     ];
 
-
+    const handleDeleteDocuments = async () => {
+        try {
+            const response = await fetch(
+                'https://bs-fse-2025-team9.onrender.com/documents',
+                {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                }
+            );
+            if (!response.ok) throw new Error('Failed to delete documents.');
+            alert('All documents deleted successfully!');
+        } catch (error) {
+            console.error('Error deleting documents:', error);
+            alert('Error deleting documents.');
+        }
+    };
 
 
     const handleDeleteAccount = async () => {
@@ -112,11 +127,9 @@ const Navbar = ({ children, userRole, isWon }) => {
 
     const sideListDeleteAll = {
         icon: <MdOutlineDeleteForever className="text-2xl mr-2" />,
-        title: "Delete All Accounts",
+        title: "Delete All Docmuents",
         onClick: async () => {
-            router.push('/Sign'); // Redirect after action
-            await handleDeleteAccount(children); // Perform delete
-
+            await handleDeleteDocuments(); // Perform delete
         },
     };
 
@@ -127,11 +140,7 @@ const Navbar = ({ children, userRole, isWon }) => {
         path: "/"
     };
 
-
-
-    const navList = [
-
-    ];
+    const navList = [];
 
     const handleDrawer = () => {
         setIsOpen(!isOpen);
@@ -236,7 +245,7 @@ const Navbar = ({ children, userRole, isWon }) => {
                     </button>
                     <button
                         title="Delete All Accounts"
-                        onClick={sideListDelete.onClick} // Attach the delete handler
+                        onClick= {handleDeleteDocuments()}
                         className="absolute bottom-1 left-0 w-full p-2 flex justify-center items-center font-medium text-center bg-red-500 text-white  hover:bg-red-700 focus:outline-none"
                     >
                         <span>{sideListDeleteAll.icon}</span> 
@@ -278,17 +287,13 @@ const Navbar = ({ children, userRole, isWon }) => {
                         <span>{sideListDelete.icon}</span> 
                         <span>{sideListDelete.title}</span> 
                     </button>
-
                 </aside>
-
             )}
 
            <div>
             שלום: {children}
             {isWon && <span>  זכית במקום חניה, אנא פנה לדיקנאט</span>}
-
-
-          </div>
+           </div>
         </nav>
     );
 
