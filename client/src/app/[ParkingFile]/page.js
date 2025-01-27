@@ -163,6 +163,8 @@ export default function Page({ params }) {
         if (response.ok) {
           alert('Application submitted successfully!'); // Notify the user of success
           localStorage.setItem('parkingData', JSON.stringify(parkingData)); // Save the submitted data locally
+          window.location.reload();
+
         } else {
           alert(`Error: ${data.message}`); // Notify the user of server errors
         }
