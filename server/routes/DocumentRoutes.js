@@ -245,8 +245,6 @@ router.put('/documents/:student_id', async (req, res) => {
     }
 });
 
-// Other routes...
-
 // Route to delete all documents
 router.delete('/documents', async (req, res) => {
     try {
@@ -267,5 +265,3 @@ router.delete('/documents', async (req, res) => {
 
 module.exports = router;
 
-
-module.exports = router;
