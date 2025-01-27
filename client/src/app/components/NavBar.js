@@ -286,7 +286,7 @@ const Navbar = ({ children, userRole, isWon }) => {
 
            <div>
             שלום: {children}
-            {isWon && <span>  זכית במקום חניה אנה פנה לדיקנאט</span>}
+            {isWon && <span>  זכית במקום חניה, אנא פנה לדיקנאט</span>}
 
 
           </div>

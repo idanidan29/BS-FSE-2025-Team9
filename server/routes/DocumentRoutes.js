@@ -7,7 +7,6 @@ const path = require('path');
 const router = express.Router();
 
 
-// Helper function to decode and save base64 image
 const saveBase64Image = (base64String, student_id) => {
     // Validate and decode the base64 string
     const matches = base64String.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
