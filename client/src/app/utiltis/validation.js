@@ -28,7 +28,23 @@ export const  isValidcarNumber = (carNumber) => {
         return { isValid: false, error: "Car number must contain only digits." }; // Return error if non-digits found
     }
 
-    return { isValid: true }; // Return valid if length and digits are correct
+    return { isValid: true }; 
+};
+
+export const isValidPhoneNumber = (phoneNumber) => {
+    const phoneRegex = /^05\d{8}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+        return { isValid: false, error: "Phone number must start with 05 and be 10 digits long." };
+    }
+    return { isValid: true };
+};
+
+export const isValidName = (name) => {
+    const nameRegex = /^[a-zA-Z\s]+$/;
+    if (!nameRegex.test(name.trim())) {
+        return { isValid: false, error: "Name must only contain letters and spaces." };
+    }
+    return { isValid: true };
 };
 
 
