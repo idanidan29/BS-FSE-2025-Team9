@@ -228,9 +228,6 @@ export default function EditUser({ params }) {
                             />
                         </div>
                         <div>
-                            <label htmlFor="is_Won" className="block text-lg font-semibold text-gray-700">
-                                Won Parking Slot
-                            </label>
                         </div>
                         <button
                             type="button"

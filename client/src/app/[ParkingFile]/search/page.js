@@ -103,9 +103,9 @@ export default function Page() {
 
     return (
         <div>
-            <NavBar userRole={localStorage.getItem('userRole')}>
-                {localStorage.getItem('studentId')}
-            </NavBar>
+            <NavBar userRole={localStorage.getItem('userRole')} isWon={false}>
+        {localStorage.getItem('student_id')}
+      </NavBar>
             <div className="w-full min-h-screen bg-gradient-to-br from-green-300 via-teal-200 to-cyan-300 flex items-center justify-center p-4 sm:p-8 w-full space-y-2 animate-fade-in">
                 <div className="w-full max-w-6xl space-y-2 animate-fade-in p-0">
                     <div className="flex flex-col items-center space-y-4 pt-5 px-4">
