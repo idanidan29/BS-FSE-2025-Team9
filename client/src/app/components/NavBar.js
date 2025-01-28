@@ -41,7 +41,7 @@ const Navbar = ({ children, userRole, isWon }) => {
                     // Create a link element to simulate file download
                     const link = document.createElement('a');
                     link.href = url;
-                    link.download = 'document.xlsx';  // You can set the filename here
+                    link.download = 'Winner_Info.xlsx';  
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);

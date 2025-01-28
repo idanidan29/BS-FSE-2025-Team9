@@ -2,7 +2,7 @@
 import NavBar from '../components/NavBar';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { isValidEmail,isValidcarNumber} from '../utiltis/validation'; 
+import { isValidEmail,isValidcarNumber,isValidPhoneNumber,isValidName } from '../utiltis/validation';
 
 
 export default function Page({ params }) {
@@ -97,6 +97,36 @@ export default function Page({ params }) {
   const handleUpdate = async () => {
     const studentId = localStorage.getItem('student_id'); // Retrieve student ID from localStorage
     const { parking_application } = parkingData;
+    const { isValid: isValidemail, error: emailError } = isValidEmail(parking_application.email);
+    if (!isValidemail) {
+        alert(emailError);
+        return;
+    }
+
+    const { isValid: isValidcarnumber, error: carerror  } = isValidcarNumber(parking_application.car_number);
+    if (!isValidcarnumber) {
+        alert(carerror);
+        return;
+    }
+
+    const { isValid: isValidphone, error: phoneError } = isValidPhoneNumber(parking_application.phone_number);
+    if (!isValidphone) {
+
+        alert(phoneError);
+        return;
+    }
+
+    const { isValid: isValidname, error: nameError } = isValidName(parking_application.first_name);
+    if (!isValidname) {
+        alert(nameError);
+        return;
+    }
+
+    const { isValid: isValidname2, error: nameError2 } = isValidName(parking_application.last_name);
+    if (!isValidname2) {
+        alert(nameError2);
+        return;
+    }
 
     try {
       const response = await fetch(`https://bs-fse-2025-team9.onrender.com/documents/${studentId}`, {
@@ -142,11 +172,43 @@ export default function Page({ params }) {
       alert("Please fill in all fields!"); // Notify the user if fields are missing
       return;
     }
+    const { isValid: isValidemail, error: emailError } = isValidEmail(parking_application.email);
+    if (!isValidemail) {
+        alert(emailError);
+        return;
+    }
+
+    const { isValid: isValidcarnumber, error: carerror  } = isValidcarNumber(parking_application.car_number);
+    if (!isValidcarnumber) {
+        alert(carerror);
+        return;
+    }
+
+    const { isValid: isValidphone, error: phoneError } = isValidPhoneNumber(parking_application.phone_number);
+    if (!isValidphone) {
+
+        alert(phoneError);
+        return;
+    }
+
+    const { isValid: isValidname, error: nameError } = isValidName(parking_application.first_name);
+    if (!isValidname) {
+        alert(nameError);
+        return;
+    }
+
+    const { isValid: isValidname2, error: nameError2 } = isValidName(parking_application.last_name);
+    if (!isValidname2) {
+        alert(nameError2);
+        return;
+    }
 
     if (!parking_application.license_image) {
       alert("Please select a license file!"); // Notify the user if the license file is missing
       return;
     }
+
+
 
     try {
       const response = await fetch('https://bs-fse-2025-team9.onrender.com/documents', {
@@ -163,6 +225,8 @@ export default function Page({ params }) {
         if (response.ok) {
           alert('Application submitted successfully!'); // Notify the user of success
           localStorage.setItem('parkingData', JSON.stringify(parkingData)); // Save the submitted data locally
+          window.location.reload();
+
         } else {
           alert(`Error: ${data.message}`); // Notify the user of server errors
         }
@@ -222,7 +286,7 @@ export default function Page({ params }) {
       </NavBar>
       <div className="flex flex-col items-center justify-center p-5 min-h-screen bg-gradient-to-br from-green-300 via-teal-200 to-cyan-300 rtl px-4 sm:px-6">
         <div className="bg-white rounded-2xl box-border min-h-[600px] p-5 w-full sm:w-[520px]">
-          <div className="text-[#eee] font-sans text-2xl sm:text-4xl font-semibold mt-3 text-center text-green-500">
+          <div className="font-sans text-2xl sm:text-4xl font-semibold mt-3 text-center text-green-500">
             Application Form
           </div>
 

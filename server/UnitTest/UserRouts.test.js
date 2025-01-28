@@ -9,7 +9,9 @@ chai.use(chaiHttp);
 
 describe("User Routes", () => {
   before(async () => {
-    const uri = ''; // Update if using a different test database URI
+
+    const uri = MONGO_URI; // Update if using a different test database URI
+    
     await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   });
 

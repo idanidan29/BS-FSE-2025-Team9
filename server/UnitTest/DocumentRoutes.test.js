@@ -68,7 +68,7 @@ describe("Document Routes", () => {
 
   /*** Tests for Fetching Documents ***/
   it("should get a document by student ID", async () => {
-    const base64Image = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA..."; // Use a valid base64 string
+    const base64Image = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA..."; 
 
     const newDocument = {
       parking_application: {

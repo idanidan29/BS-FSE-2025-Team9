@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { isValidId,isValidEmail } from '../utiltis/validation'; 
+import { isValidId,isValidEmail,isValidName, } from '../utiltis/validation'; 
 
 
 
@@ -54,6 +54,18 @@ export default function Page() {
         return;
     }
     
+    
+    const { isValid: isValidname, error: nameError } = isValidName(first_name);
+        if (!isValidname) {
+            alert(nameError);
+            return;
+        }
+    
+    const { isValid: isValidname2, error: nameError2 } = isValidName(last_name);
+        if (!isValidname2) {
+            alert(nameError2);
+            return;
+        }
 
         try {
             const response = await fetch("https://bs-fse-2025-team9.onrender.com/users", {
