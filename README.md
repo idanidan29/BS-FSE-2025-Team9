@@ -29,9 +29,7 @@ npm install
 ```bash
 npm install react-icons 
 ```
-```bash
-npm install chai mocha
-```
+
 ### Prerequisites
 - Node.js and npm installed
 - MongoDB Atlas account
