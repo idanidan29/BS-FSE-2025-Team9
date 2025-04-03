@@ -42,3 +42,5 @@ npm install react-icons
    ```bash
    git clone https://github.com/yourusername/parking-file-management-system.git
    cd parking-file-management-system
+
+![image](https://github.com/user-attachments/assets/42b7e787-c0c2-44fa-b3de-03269b9cb1b0)
